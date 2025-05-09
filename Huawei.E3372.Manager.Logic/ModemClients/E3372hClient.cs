@@ -4,6 +4,8 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System.Collections.Frozen;
 using System.Net;
+using System.Net.Mime;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -24,11 +26,7 @@ public class E3372hClient(
         CancellationToken cancellationToken = default)
         where TModemGetResponse : IModemGetResponse
     {
-        using var httpClientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer() };
-        using var httpClient = new HttpClient(httpClientHandler) { BaseAddress = baseUri };
-
-        var sessionId = await GetSessionIdAsync(baseUri, httpClient, cancellationToken);
-        httpClientHandler.CookieContainer.Add(baseUri, new Cookie("SessionID", sessionId));
+        using var httpClient = await CreateHttpClientAsync(baseUri, cancellationToken);
 
         var relativeUri = ModemUriConstants.TypeToRelativeUri[typeof(TModemGetResponse)];
         var request = new HttpRequestMessage(HttpMethod.Get, relativeUri);
@@ -64,15 +62,15 @@ public class E3372hClient(
         where TModelPostRequest : IModemPostRequest
         where TModelPostResponse : IModemPostResponse
     {
-        using var httpClientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer() };
-        using var httpClient = new HttpClient(httpClientHandler) { BaseAddress = baseUri };
-
-        var sessionId = await GetSessionIdAsync(baseUri, httpClient, cancellationToken);
-        httpClientHandler.CookieContainer.Add(baseUri, new Cookie("SessionID", sessionId));
+        using var httpClient = await CreateHttpClientAsync(baseUri, cancellationToken);
 
         var relativeUri = ModemUriConstants.TypeToRelativeUri[typeof(TModelPostResponse)];
         var request = new HttpRequestMessage(HttpMethod.Post, relativeUri);
-        request.Content = new StringContent("");
+
+        var xmlRequestSerializer = new XmlSerializer(model.GetType());
+        using var writer = new StringWriter();
+        xmlRequestSerializer.Serialize(writer, model);
+        request.Content = new StringContent(writer.ToString(), Encoding.UTF8, MediaTypeNames.Application.Xml);
 
         using var response = await httpClient.SendAsync(request, cancellationToken);
         response.EnsureSuccessStatusCode();
@@ -80,10 +78,10 @@ public class E3372hClient(
 
         using var reader = new StringReader(responseText);
         using var xmlReader = XmlReader.Create(reader);
-        var xmlSerializer = TypeToXmlSerializer[typeof(TModelPostResponse)];
+        var xmlResponseSerializer = TypeToXmlSerializer[typeof(TModelPostResponse)];
 
-        if (xmlSerializer.CanDeserialize(xmlReader))
-            return (TModelPostResponse)xmlSerializer.Deserialize(xmlReader)!;
+        if (xmlResponseSerializer.CanDeserialize(xmlReader))
+            return (TModelPostResponse)xmlResponseSerializer.Deserialize(xmlReader)!;
 
         if (ErrorXmlSerializer.CanDeserialize(xmlReader))
         {
@@ -96,8 +94,19 @@ public class E3372hClient(
         }
 
         throw new HttpRequestException("Failed to deserialize data from modem", null, response.StatusCode);
+    }
 
+    internal async Task<HttpClient> CreateHttpClientAsync(
+        Uri baseUri,
+        CancellationToken cancellationToken = default)
+    {
+        var httpClientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer() };
+        var httpClient = new HttpClient(httpClientHandler) { BaseAddress = baseUri };
 
+        var sessionId = await GetSessionIdAsync(baseUri, httpClient, cancellationToken);
+        httpClientHandler.CookieContainer.Add(baseUri, new Cookie("SessionID", sessionId));
+
+        return httpClient;
     }
 
     internal async ValueTask<string> GetSessionIdAsync(
