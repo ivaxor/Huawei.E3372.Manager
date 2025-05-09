@@ -1,9 +1,9 @@
 ﻿using System.Xml.Serialization;
 
-namespace Huawei.E3372.Manager.Domain.Modem;
+namespace Huawei.E3372.Manager.Domain.Modem.Api.Monitoring;
 
 [XmlRoot("response")]
-public record Status : IModemResponse
+public record Status : IModemGetResponse
 {
     [XmlElement("ConnectionStatus")]
     public int ConnectionStatus { get; init; }

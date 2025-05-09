@@ -3,7 +3,7 @@
 namespace Huawei.E3372.Manager.Domain.Modem;
 
 [XmlRoot("response")]
-public record StateLogin : IModemResponse
+public record StateLogin : IModemGetResponse
 {
     [XmlElement("State")]
     public int State { get; init; }

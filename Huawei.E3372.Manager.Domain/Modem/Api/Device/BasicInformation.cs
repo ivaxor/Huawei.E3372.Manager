@@ -1,9 +1,9 @@
 ﻿using System.Xml.Serialization;
 
-namespace Huawei.E3372.Manager.Domain.Modem;
+namespace Huawei.E3372.Manager.Domain.Modem.Api.Device;
 
 [XmlRoot("response")]
-public record BasicInformation : IModemResponse
+public record BasicInformation : IModemGetResponse
 {
     [XmlElement("productfamily")]
     public string? ProductFamily { get; init; }

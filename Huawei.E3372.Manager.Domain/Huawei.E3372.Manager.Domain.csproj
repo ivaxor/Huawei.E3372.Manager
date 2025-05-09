@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Modem\StateLogin.cs" />
+    <None Include="Modem\Api\User\StateLogin.cs" />
   </ItemGroup>
 
 </Project>

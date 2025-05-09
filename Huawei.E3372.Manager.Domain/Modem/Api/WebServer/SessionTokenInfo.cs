@@ -1,9 +1,9 @@
 ﻿using System.Xml.Serialization;
 
-namespace Huawei.E3372.Manager.Domain.Modem;
+namespace Huawei.E3372.Manager.Domain.Modem.Api.WebServer;
 
 [XmlRoot("response")]
-public record SessionTokenInfo : IModemResponse
+public record SessionTokenInfo : IModemGetResponse
 {
     [XmlElement("SesInfo")]
 
