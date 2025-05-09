@@ -104,8 +104,8 @@ public class E3372hClient(
         var httpClient = new HttpClient(httpClientHandler) { BaseAddress = baseUri };
 
         var sessionTokenInfo = await GetCachedSessionTokenInfoAsync(baseUri, httpClient, cancellationToken);
-        var sessionId = sessionTokenInfo.SessionInfo!.Substring("SessionID=".Length);
-        httpClientHandler.CookieContainer.Add(baseUri, new Cookie("SessionID", sessionId));
+        var SessionInfoSplits = sessionTokenInfo.SessionInfo.Split("=");
+        httpClientHandler.CookieContainer.Add(baseUri, new Cookie(SessionInfoSplits[0], SessionInfoSplits[1]));
 
         return httpClient;
     }
@@ -118,8 +118,8 @@ public class E3372hClient(
         var httpClient = new HttpClient(httpClientHandler) { BaseAddress = baseUri };
 
         var sessionTokenInfo = await GetSessionTokenInfoAsync(httpClient, cancellationToken);
-        var sessionId = sessionTokenInfo.SessionInfo!.Substring("SessionID=".Length);
-        httpClientHandler.CookieContainer.Add(baseUri, new Cookie("SessionID", sessionId));
+        var SessionInfoSplits = sessionTokenInfo.SessionInfo.Split("=");
+        httpClientHandler.CookieContainer.Add(baseUri, new Cookie(SessionInfoSplits[0], SessionInfoSplits[1]));
         httpClient.DefaultRequestHeaders.Add("__requestverificationtoken", sessionTokenInfo.TokenInfo);
 
         return httpClient;
