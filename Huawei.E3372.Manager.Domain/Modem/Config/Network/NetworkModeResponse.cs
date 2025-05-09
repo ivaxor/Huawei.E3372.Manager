@@ -21,5 +21,5 @@ public record NetworkModeResponse : IModemGetResponse
 public record NetworkModes
 {
     [XmlElement("Mode")]
-    public int[] Modes { get; init; }
+    public required int[] Modes { get; init; }
 }

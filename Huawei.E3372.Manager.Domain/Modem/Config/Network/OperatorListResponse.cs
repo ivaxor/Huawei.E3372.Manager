@@ -12,11 +12,11 @@ public record OperatorListResponse : IModemGetResponse
 public record OperatorListItem
 {
     [XmlAttribute("plmn")]
-    public string Plmn { get; init; }
+    public required string Plmn { get; init; }
 
     [XmlAttribute("shortdescr")]
-    public string ShortDescription { get; init; }
+    public required string ShortDescription { get; init; }
 
     [XmlAttribute("picture")]
-    public string Picture { get; init; }
+    public required string Picture { get; init; }
 }

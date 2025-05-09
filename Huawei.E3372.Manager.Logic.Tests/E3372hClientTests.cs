@@ -11,6 +11,7 @@ using Huawei.E3372.Manager.Domain.Modem.Api.Pin;
 using Huawei.E3372.Manager.Domain.Modem.Api.SdCard;
 using Huawei.E3372.Manager.Domain.Modem.Api.Security;
 using Huawei.E3372.Manager.Domain.Modem.Api.Sms;
+using Huawei.E3372.Manager.Domain.Modem.Api.Stk;
 using Huawei.E3372.Manager.Domain.Modem.Api.User;
 using Huawei.E3372.Manager.Domain.Modem.Api.WebServer;
 using Huawei.E3372.Manager.Domain.Modem.Config;
@@ -80,6 +81,8 @@ public sealed class E3372hClientTests
     [DataRow(typeof(SmsCountResponse))]
     [DataRow(typeof(SmsFeatureSwitchResponse))]
     [DataRow(typeof(SplitInfoSmsResponse))]
+
+    [DataRow(typeof(StkQueryResponse))]
 
     [DataRow(typeof(HiLinkLoginResponse))]
     [DataRow(typeof(StateLoginResponse))]

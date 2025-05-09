@@ -21,13 +21,13 @@ public record TrafficStatisticsResponse : IModemGetResponse
     public required bool CurrentUploadRate { get; init; }
 
     [XmlElement("TotalUpload")]
-    public long TotalUpload { get; init; }
+    public required long TotalUpload { get; init; }
 
     [XmlElement("TotalDownload")]
-    public long TotalDownload { get; init; }
+    public required long TotalDownload { get; init; }
 
     [XmlElement("TotalConnectTime")]
-    public long TotalConnectTime { get; init; }
+    public required long TotalConnectTime { get; init; }
 
     [XmlElement("showtraffic")]
     public required bool ShowTraffic { get; init; }

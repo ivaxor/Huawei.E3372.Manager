@@ -57,8 +57,8 @@ public record NetModeNetModes
 public record NetWorkModeItem
 {
     [XmlElement("index")]
-    public int Index { get; init; }
+    public required int Index { get; init; }
 
     [XmlElement("networktype")]
-    public string Networktype { get; init; }
+    public required string Networktype { get; init; }
 }

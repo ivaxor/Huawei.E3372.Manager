@@ -11,6 +11,7 @@ using Huawei.E3372.Manager.Domain.Modem.Api.Pin;
 using Huawei.E3372.Manager.Domain.Modem.Api.SdCard;
 using Huawei.E3372.Manager.Domain.Modem.Api.Security;
 using Huawei.E3372.Manager.Domain.Modem.Api.Sms;
+using Huawei.E3372.Manager.Domain.Modem.Api.Stk;
 using Huawei.E3372.Manager.Domain.Modem.Api.User;
 using Huawei.E3372.Manager.Domain.Modem.Api.WebServer;
 using Huawei.E3372.Manager.Domain.Modem.Config;
@@ -77,6 +78,9 @@ internal static class ModemUriConstants
         { typeof(SmsFeatureSwitchResponse), "/api/sms/sms-feature-switch" },
         { typeof(SmsListResponse), "/api/sms/sms-list" },
         { typeof(SplitInfoSmsResponse), "/api/sms/splitinfo-sms" },
+
+        { typeof(StkGetMainResponse), "/api/stk/stk-get-main" },
+        { typeof(StkQueryResponse), "/api/stk/stk-query" },
 
         { typeof(HiLinkLoginResponse), "/api/user/hilink_login" },
         { typeof(StateLoginResponse), "/api/user/state-login" },
