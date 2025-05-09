@@ -6,29 +6,29 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Device;
 public record BasicInformationResponse : IModemGetResponse
 {
     [XmlElement("productfamily")]
-    public string? ProductFamily { get; init; }
+    public required string ProductFamily { get; init; }
 
     [XmlElement("classify")]
-    public string? Classify { get; init; }
+    public required string Classify { get; init; }
 
     [XmlElement("multimode")]
-    public int Multimode { get; init; }
+    public required int Multimode { get; init; }
 
     [XmlElement("restore_default_status")]
-    public int RestoreDefaultStatus { get; init; }
+    public required int RestoreDefaultStatus { get; init; }
 
     [XmlElement("autoupdate_guide_status")]
-    public int AutoupdateGuideStatus { get; init; }
+    public required int AutoupdateGuideStatus { get; init; }
 
     [XmlElement("sim_save_pin_enable")]
-    public int SimSavePinEnable { get; init; }
+    public required int SimSavePinEnable { get; init; }
 
     [XmlElement("devicename")]
-    public string? DeviceName { get; init; }
+    public required string DeviceName { get; init; }
 
     [XmlElement("SoftwareVersion")]
-    public string? SoftwareVersion { get; init; }
+    public required string SoftwareVersion { get; init; }
 
     [XmlElement("WebUIVersion")]
-    public string? WebUIVersion { get; init; }
+    public required string WebUIVersion { get; init; }
 }

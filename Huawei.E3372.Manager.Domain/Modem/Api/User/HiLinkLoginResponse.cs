@@ -6,5 +6,5 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.User;
 public record HiLinkLoginResponse : IModemGetResponse
 {
     [XmlElement("hilink_login")]
-    public int HiLinkLogin { get; init; }
+    public required int HiLinkLogin { get; init; }
 }

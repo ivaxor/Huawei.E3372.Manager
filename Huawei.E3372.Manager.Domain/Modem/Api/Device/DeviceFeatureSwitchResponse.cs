@@ -6,8 +6,8 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Device;
 public record DeviceFeatureSwitchResponse : IModemGetResponse
 {
     [XmlElement("coulometer_enabled")]
-    public int CouloMeterEnabled { get; init; }
+    public required int CouloMeterEnabled { get; init; }
 
     [XmlElement("copyright_enabled")]
-    public int CopyrightEnabled { get; init; }
+    public required int CopyrightEnabled { get; init; }
 }

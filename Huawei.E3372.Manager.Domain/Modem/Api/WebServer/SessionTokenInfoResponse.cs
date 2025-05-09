@@ -7,8 +7,8 @@ public record SessionTokenInfoResponse : IModemGetResponse
 {
     [XmlElement("SesInfo")]
 
-    public string? SessionInfo { get; init; }
+    public required string SessionInfo { get; init; }
 
     [XmlElement("TokInfo")]
-    public string? TokenInfo { get; init; }
+    public required string TokenInfo { get; init; }
 }

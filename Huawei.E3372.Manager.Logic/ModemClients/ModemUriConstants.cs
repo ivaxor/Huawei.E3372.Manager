@@ -51,6 +51,7 @@ internal static class ModemUriConstants
 
         { typeof(SdCardResponse), "/api/sdcard/sdcard" },
 
+        { typeof(SetReadRequest), "/api/sms/set-read" },
         { typeof(SmsCountResponse), "/api/sms/sms-count" },
         { typeof(SmsFeatureSwitchResponse), "/api/sms/sms-feature-switch" },
         { typeof(SmsListResponse), "/api/sms/sms-list" },

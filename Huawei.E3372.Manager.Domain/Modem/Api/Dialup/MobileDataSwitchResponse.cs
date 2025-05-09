@@ -6,5 +6,5 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Dialup;
 public record MobileDataSwitchResponse : IModemGetResponse
 {
     [XmlElement("dataswitch")]
-    public int DataSwitch { get; init; }
+    public required int DataSwitch { get; init; }
 }

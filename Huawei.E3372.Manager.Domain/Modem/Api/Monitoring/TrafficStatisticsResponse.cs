@@ -6,19 +6,19 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Monitoring;
 public record TrafficStatisticsResponse : IModemGetResponse
 {
     [XmlElement("CurrentConnectTime")]
-    public int CurrentConnectTime { get; init; }
+    public required int CurrentConnectTime { get; init; }
 
     [XmlElement("CurrentUpload")]
-    public int CurrentUpload { get; init; }
+    public required int CurrentUpload { get; init; }
 
     [XmlElement("CurrentDownload")]
-    public int CurrentDownload { get; init; }
+    public required int CurrentDownload { get; init; }
 
     [XmlElement("CurrentDownloadRate")]
-    public int CurrentDownloadRate { get; init; }
+    public required int CurrentDownloadRate { get; init; }
 
     [XmlElement("CurrentUploadRate")]
-    public int CurrentUploadRate { get; init; }
+    public required int CurrentUploadRate { get; init; }
 
     [XmlElement("TotalUpload")]
     public long TotalUpload { get; init; }
@@ -30,5 +30,5 @@ public record TrafficStatisticsResponse : IModemGetResponse
     public long TotalConnectTime { get; init; }
 
     [XmlElement("showtraffic")]
-    public int ShowTraffic { get; init; }
+    public required int ShowTraffic { get; init; }
 }

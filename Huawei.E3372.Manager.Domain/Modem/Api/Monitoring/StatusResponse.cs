@@ -6,89 +6,89 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Monitoring;
 public record StatusResponse : IModemGetResponse
 {
     [XmlElement("ConnectionStatus")]
-    public int ConnectionStatus { get; init; }
+    public required int ConnectionStatus { get; init; }
 
     [XmlElement("WifiConnectionStatus")]
-    public string? WiFiConnectionStatus { get; init; }
+    public required string WiFiConnectionStatus { get; init; }
 
     [XmlElement("SignalStrength")]
-    public string? SignalStrength { get; init; }
+    public required string SignalStrength { get; init; }
 
     [XmlElement("SignalIcon")]
-    public int SignalIcon { get; init; }
+    public required int SignalIcon { get; init; }
 
     [XmlElement("CurrentNetworkType")]
-    public int CurrentNetworkType { get; init; }
+    public required int CurrentNetworkType { get; init; }
 
     [XmlElement("CurrentServiceDomain")]
-    public int CurrentServiceDomain { get; init; }
+    public required int CurrentServiceDomain { get; init; }
 
     [XmlElement("RoamingStatus")]
-    public int RoamingStatus { get; init; }
+    public required int RoamingStatus { get; init; }
 
     [XmlElement("BatteryStatus")]
-    public string? BatteryStatus { get; init; }
+    public required string BatteryStatus { get; init; }
 
     [XmlElement("BatteryLevel")]
-    public string? BatteryLevel { get; init; }
+    public required string BatteryLevel { get; init; }
 
     [XmlElement("BatteryPercent")]
-    public string? BatteryPercent { get; init; }
+    public required string BatteryPercent { get; init; }
 
     [XmlElement("simlockStatus")]
-    public int SimlockStatus { get; init; }
+    public required int SimlockStatus { get; init; }
 
     [XmlElement("PrimaryDns")]
-    public string? PrimaryDns { get; init; }
+    public required string PrimaryDns { get; init; }
 
     [XmlElement("SecondaryDns")]
-    public string? SecondaryDns { get; init; }
+    public required string SecondaryDns { get; init; }
 
     [XmlElement("PrimaryIPv6Dns")]
-    public string? PrimaryIPv6Dns { get; init; }
+    public required string PrimaryIPv6Dns { get; init; }
 
     [XmlElement("SecondaryIPv6Dns")]
-    public string? SecondaryIPv6Dns { get; init; }
+    public required string SecondaryIPv6Dns { get; init; }
 
     [XmlElement("CurrentWifiUser")]
-    public string? CurrentWiFiUser { get; init; }
+    public required string CurrentWiFiUser { get; init; }
 
     [XmlElement("TotalWifiUser")]
-    public string? TotalWiFiUser { get; init; }
+    public required string TotalWiFiUser { get; init; }
 
     [XmlElement("currenttotalwifiuser")]
-    public int CurrentTotalWiFiUser { get; init; }
+    public required int CurrentTotalWiFiUser { get; init; }
 
     [XmlElement("ServiceStatus")]
-    public int ServiceStatus { get; init; }
+    public required int ServiceStatus { get; init; }
 
     [XmlElement("SimStatus")]
-    public int SimStatus { get; init; }
+    public required int SimStatus { get; init; }
 
     [XmlElement("WifiStatus")]
-    public string? WiFiStatus { get; init; }
+    public required string WiFiStatus { get; init; }
 
     [XmlElement("CurrentNetworkTypeEx")]
-    public int CurrentNetworkTypeEx { get; init; }
+    public required int CurrentNetworkTypeEx { get; init; }
 
     [XmlElement("maxsignal")]
-    public int MaxSignal { get; init; }
+    public required int MaxSignal { get; init; }
 
     [XmlElement("wifiindooronly")]
-    public int WiFiIndoorOnly { get; init; }
+    public required int WiFiIndoorOnly { get; init; }
 
     [XmlElement("wififrequence")]
-    public int WiFifrequence { get; init; }
+    public required int WiFifrequence { get; init; }
 
     [XmlElement("classify")]
-    public string? Classify { get; init; }
+    public required string Classify { get; init; }
 
     [XmlElement("flymode")]
-    public int FlyMode { get; init; }
+    public required int FlyMode { get; init; }
 
     [XmlElement("cellroam")]
-    public int CellRoaming { get; init; }
+    public required int CellRoaming { get; init; }
 
     [XmlElement("ltecastatus")]
-    public int LteCaStatus { get; init; }
+    public required int LteCaStatus { get; init; }
 }

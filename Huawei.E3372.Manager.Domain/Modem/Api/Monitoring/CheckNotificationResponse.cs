@@ -6,11 +6,11 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Monitoring;
 public record CheckNotificationResponse : IModemGetResponse
 {
     [XmlElement("UnreadMessage")]
-    public int UnreadMessage { get; init; }
+    public required int UnreadMessage { get; init; }
 
     [XmlElement("SmsStorageFull")]
-    public int SmsStorageFull { get; init; }
+    public required int SmsStorageFull { get; init; }
 
     [XmlElement("OnlineUpdateStatus")]
-    public int OnlineUpdateStatus { get; init; }
+    public required int OnlineUpdateStatus { get; init; }
 }

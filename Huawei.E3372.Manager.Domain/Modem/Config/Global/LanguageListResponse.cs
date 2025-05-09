@@ -6,158 +6,158 @@ namespace Huawei.E3372.Manager.Domain.Modem.Config.Global;
 public record LanguageListResponse : IModemGetResponse
 {
     [XmlElement("languages")]
-    public LanguageListLanguages Languages { get; init; }
+    public required LanguageListLanguages Languages { get; init; }
 
     [XmlElement("privacy_policy_url")]
-    public LanguageListPrivacyPolicyUrl PrivacyPolicyUrl { get; init; }
+    public required LanguageListPrivacyPolicyUrl PrivacyPolicyUrl { get; init; }
 
     [XmlElement("usermanual_language")]
-    public LanguageListUserManual UserManual { get; init; }
+    public required LanguageListUserManual UserManual { get; init; }
 }
 
 public record LanguageListLanguages
 {
     [XmlElement("language")]
-    public List<string> Language { get; init; }
+    public required string[] Languages { get; init; }
 }
 
 public record LanguageListPrivacyPolicyUrl
 {
     [XmlElement("default_url")]
-    public string DefaultUrl { get; init; }
+    public required string DefaultUrl { get; init; }
 
     [XmlElement("en_us")]
-    public string EnUs { get; init; }
+    public required string EnUs { get; init; }
 
     [XmlElement("zh_cn")]
-    public string ZhCn { get; init; }
+    public required string ZhCn { get; init; }
 
     [XmlElement("ar_sa")]
-    public string ArSa { get; init; }
+    public required string ArSa { get; init; }
 
     [XmlElement("pt_br")]
-    public string PtBr { get; init; }
+    public required string PtBr { get; init; }
 
     [XmlElement("bg_bg")]
-    public string BgBg { get; init; }
+    public required string BgBg { get; init; }
 
     [XmlElement("hr_hr")]
-    public string HrHr { get; init; }
+    public required string HrHr { get; init; }
 
     [XmlElement("cs_cz")]
-    public string CsCz { get; init; }
+    public required string CsCz { get; init; }
 
     [XmlElement("da_dk")]
-    public string DaDk { get; init; }
+    public required string DaDk { get; init; }
 
     [XmlElement("nl_nl")]
-    public string NlNl { get; init; }
+    public required string NlNl { get; init; }
 
     [XmlElement("et_ee")]
-    public string EtEe { get; init; }
+    public required string EtEe { get; init; }
 
     [XmlElement("fa_fa")]
-    public string FaFa { get; init; }
+    public required string FaFa { get; init; }
 
     [XmlElement("fi_fi")]
-    public string FiFi { get; init; }
+    public required string FiFi { get; init; }
 
     [XmlElement("fr_fr")]
-    public string FrFr { get; init; }
+    public required string FrFr { get; init; }
 
     [XmlElement("de_de")]
-    public string DeDe { get; init; }
+    public required string DeDe { get; init; }
 
     [XmlElement("el_gr")]
-    public string ElGr { get; init; }
+    public required string ElGr { get; init; }
 
     [XmlElement("hu_hu")]
-    public string HuHu { get; init; }
+    public required string HuHu { get; init; }
 
     [XmlElement("he_il")]
-    public string HeIl { get; init; }
+    public required string HeIl { get; init; }
 
     [XmlElement("id_id")]
-    public string IdId { get; init; }
+    public required string IdId { get; init; }
 
     [XmlElement("it_it")]
-    public string ItIt { get; init; }
+    public required string ItIt { get; init; }
 
     [XmlElement("ja_jp")]
-    public string JaJp { get; init; }
+    public required string JaJp { get; init; }
 
     [XmlElement("ko_kr")]
-    public string KoKr { get; init; }
+    public required string KoKr { get; init; }
 
     [XmlElement("lv_lv")]
-    public string LvLv { get; init; }
+    public required string LvLv { get; init; }
 
     [XmlElement("lt_lt")]
-    public string LtLt { get; init; }
+    public required string LtLt { get; init; }
 
     [XmlElement("mk_mk")]
-    public string MkMk { get; init; }
+    public required string MkMk { get; init; }
 
     [XmlElement("no_no")]
-    public string NoNo { get; init; }
+    public required string NoNo { get; init; }
 
     [XmlElement("pl_pl")]
-    public string PlPl { get; init; }
+    public required string PlPl { get; init; }
 
     [XmlElement("pt_pt")]
-    public string PtPt { get; init; }
+    public required string PtPt { get; init; }
 
     [XmlElement("ro_ro")]
-    public string RoRo { get; init; }
+    public required string RoRo { get; init; }
 
     [XmlElement("ru_ru")]
-    public string RuRu { get; init; }
+    public required string RuRu { get; init; }
 
     [XmlElement("sr_cs")]
-    public string SrCs { get; init; }
+    public required string SrCs { get; init; }
 
     [XmlElement("sk_sk")]
-    public string SkSk { get; init; }
+    public required string SkSk { get; init; }
 
     [XmlElement("sl_sl")]
-    public string SlSl { get; init; }
+    public required string SlSl { get; init; }
 
     [XmlElement("es_es")]
-    public string EsEs { get; init; }
+    public required string EsEs { get; init; }
 
     [XmlElement("es_ar")]
-    public string EsAr { get; init; }
+    public required string EsAr { get; init; }
 
     [XmlElement("sv_se")]
-    public string SvSe { get; init; }
+    public required string SvSe { get; init; }
 
     [XmlElement("zh_tw")]
-    public string ZhTw { get; init; }
+    public required string ZhTw { get; init; }
 
     [XmlElement("zh_hk")]
-    public string ZhHk { get; init; }
+    public required string ZhHk { get; init; }
 
     [XmlElement("tr_tr")]
-    public string TrTr { get; init; }
+    public required string TrTr { get; init; }
 
     [XmlElement("uk_ua")]
-    public string UkUa { get; init; }
+    public required string UkUa { get; init; }
 
     [XmlElement("vi_vn")]
-    public string ViVn { get; init; }
+    public required string ViVn { get; init; }
 }
 
 public record LanguageListUserManual
 {
     [XmlElement("default_language")]
-    public string DefaultLanguage { get; init; }
+    public required string DefaultLanguage { get; init; }
 
     [XmlElement("support_language")]
-    public LanguageListUserManualSupport Support { get; init; }
+    public required LanguageListUserManualSupport Support { get; init; }
 }
 
 public record LanguageListUserManualSupport
 {
     [XmlElement("language")]
-    public List<string> Language { get; init; }
+    public required string[] Languages { get; init; }
 }

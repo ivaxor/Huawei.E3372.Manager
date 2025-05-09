@@ -6,5 +6,5 @@ namespace Huawei.E3372.Manager.Domain.Modem;
 public record DeviceNameResponse : IModemGetResponse
 {
     [XmlElement("DeviceName")]
-    public string? Name { get; init; }
+    public required string Name { get; init; }
 }

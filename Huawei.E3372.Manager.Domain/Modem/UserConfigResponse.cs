@@ -7,19 +7,19 @@ public record UserConfigResponse : IModemGetResponse
 {
 
     [XmlElement("datalock")]
-    public string? Datalock { get; init; }
+    public required string Datalock { get; init; }
 
     [XmlElement("autounlock")]
     public bool Autounlock { get; init; }
 
     [XmlElement("pinautovalidate")]
-    public string? Pinautovalidate { get; init; }
+    public required string Pinautovalidate { get; init; }
 
     [XmlElement("imei_generator_model")]
-    public string? ImeiGeneratorModel { get; init; }
+    public required string ImeiGeneratorModel { get; init; }
 
     [XmlElement("backup_imei")]
-    public string? BackupImei { get; init; }
+    public required string BackupImei { get; init; }
 
     [XmlElement("autorun_imei_generator")]
     public bool AutorunImeiGenerator { get; init; }
@@ -43,40 +43,40 @@ public record UserConfigResponse : IModemGetResponse
     public bool Watchcat { get; init; }
 
     [XmlElement("watchcat_mode")]
-    public string? WatchcatMode { get; init; }
+    public required string WatchcatMode { get; init; }
 
     [XmlElement("watchcat_period")]
-    public string? WatchcatPeriod { get; init; }
+    public required string WatchcatPeriod { get; init; }
 
     [XmlElement("watchcat_forcedelay")]
-    public int WatchcatForcedelay { get; init; }
+    public required int WatchcatForcedelay { get; init; }
 
     [XmlElement("watchcat_pinghosts")]
-    public string? WatchcatPinghosts { get; init; }
+    public required string WatchcatPinghosts { get; init; }
 
     [XmlElement("watchcat_pingperiod")]
-    public string? WatchcatPingperiod { get; init; }
+    public required string WatchcatPingperiod { get; init; }
 
     [XmlElement("webui_mode")]
-    public string? WebuiMode { get; init; }
+    public required string WebuiMode { get; init; }
 
     [XmlElement("automaterial")]
     public bool Automaterial { get; init; }
 
     [XmlElement("search")]
-    public string? Search { get; init; }
+    public required string Search { get; init; }
 
     [XmlElement("main_bg")]
     public bool MainBg { get; init; }
 
     [XmlElement("force_new")]
-    public string? ForceNew { get; init; }
+    public required string ForceNew { get; init; }
 
     [XmlElement("force_old")]
-    public string? ForceOld { get; init; }
+    public required string ForceOld { get; init; }
 
     [XmlElement("force_both")]
-    public string? ForceBoth { get; init; }
+    public required string ForceBoth { get; init; }
 
     [XmlElement("force_new_home")]
     public bool ForceNewHome { get; init; }

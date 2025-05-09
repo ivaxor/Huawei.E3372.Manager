@@ -6,8 +6,8 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.WebServer;
 public record PublicKeyResponse : IModemGetResponse
 {
     [XmlElement("encpubkeyn")]
-    public string? EncPublicKey { get; init; }
+    public required string EncPublicKey { get; init; }
 
     [XmlElement("encpubkeye")]
-    public string? EncPublicEye { get; init; }
+    public required string EncPublicEye { get; init; }
 }

@@ -6,8 +6,8 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Sms;
 public record SplitInfoSmsResponse : IModemGetResponse
 {
     [XmlElement("splitinfo")]
-    public int SplitInfo { get; init; }
+    public required int SplitInfo { get; init; }
 
     [XmlElement("convert_type")]
-    public int ConvertType { get; init; }
+    public required int ConvertType { get; init; }
 }

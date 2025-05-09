@@ -6,17 +6,17 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Pin;
 public record SimLockResponse : IModemGetResponse
 {
     [XmlElement("SimLockEnable")]
-    public int SimLockEnable { get; init; }
+    public required int SimLockEnable { get; init; }
 
     [XmlElement("SimLockRemainTimes")]
-    public int SimLockRemainTimes { get; init; }
+    public required int SimLockRemainTimes { get; init; }
 
     [XmlElement("SimLockVersion")]
-    public int SimLockVersion { get; init; }
+    public required int SimLockVersion { get; init; }
 
     [XmlElement("pSimLockEnable")]
-    public string? PSimLockEnable { get; init; }
+    public required string PSimLockEnable { get; init; }
 
     [XmlElement("pSimLockRemainTimes")]
-    public string? PSimLockRemainTimes { get; init; }
+    public required string PSimLockRemainTimes { get; init; }
 }

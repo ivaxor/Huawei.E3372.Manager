@@ -6,5 +6,5 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Pb;
 public record PbMatchResponse : IModemPostResponse
 {
     [XmlElement("Name")]
-    public List<string?> Name { get; init; }
+    public required string[] Names { get; init; }
 }

@@ -6,41 +6,41 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Device;
 public record SignalResponse : IModemGetResponse
 {
     [XmlElement("pci")]
-    public int Pci { get; init; }
+    public required int Pci { get; init; }
 
     [XmlElement("sc")]
-    public string? Sc { get; init; }
+    public required string Sc { get; init; }
 
     [XmlElement("cell_id")]
     public long CellId { get; init; }
 
     [XmlElement("rsrq")]
-    public string? Rsrq { get; init; }
+    public required string Rsrq { get; init; }
 
     [XmlElement("rsrp")]
-    public string? Rsrp { get; init; }
+    public required string Rsrp { get; init; }
 
     [XmlElement("rssi")]
-    public string? Rssi { get; init; }
+    public required string Rssi { get; init; }
 
     [XmlElement("sinr")]
-    public string? Sinr { get; init; }
+    public required string Sinr { get; init; }
 
     [XmlElement("rscp")]
-    public string? Rscp { get; init; }
+    public required string Rscp { get; init; }
 
     [XmlElement("ecio")]
-    public string? Ecio { get; init; }
+    public required string Ecio { get; init; }
 
     [XmlElement("psatt")]
-    public int Psatt { get; init; }
+    public required int Psatt { get; init; }
 
     [XmlElement("mode")]
-    public int Mode { get; init; }
+    public required int Mode { get; init; }
 
     [XmlElement("lte_bandwidth")]
-    public string? LteBandwidth { get; init; }
+    public required string LteBandwidth { get; init; }
 
     [XmlElement("lte_bandinfo")]
-    public string? LteBandInfo { get; init; }
+    public required string LteBandInfo { get; init; }
 }

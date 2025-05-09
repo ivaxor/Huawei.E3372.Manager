@@ -6,14 +6,14 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Pin;
 public record PinStatusResponse : IModemGetResponse
 {
     [XmlElement("SimState")]
-    public int SimState { get; init; }
+    public required int SimState { get; init; }
 
     [XmlElement("PinOptState")]
-    public int PinOptState { get; init; }
+    public required int PinOptState { get; init; }
 
     [XmlElement("SimPinTimes")]
-    public int SimPinTimes { get; init; }
+    public required int SimPinTimes { get; init; }
 
     [XmlElement("SimPukTimes")]
-    public int SimPukTimes { get; init; }
+    public required int SimPukTimes { get; init; }
 }

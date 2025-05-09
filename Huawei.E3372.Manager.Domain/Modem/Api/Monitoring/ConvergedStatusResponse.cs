@@ -6,11 +6,11 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Monitoring;
 public record ConvergedStatusResponse : IModemGetResponse
 {
     [XmlElement("SimState")]
-    public int SimState { get; init; }
+    public required int SimState { get; init; }
 
     [XmlElement("SimLockEnable")]
-    public int SimLockEnable { get; init; }
+    public required int SimLockEnable { get; init; }
 
     [XmlElement("CurrentLanguage")]
-    public string? CurrentLanguage { get; init; }
+    public required string CurrentLanguage { get; init; }
 }

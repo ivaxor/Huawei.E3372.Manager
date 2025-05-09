@@ -6,8 +6,8 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Net;
 public record SignalParaResponse : IModemGetResponse
 {
     [XmlElement("Rscp")]
-    public int Rscp { get; init; }
+    public required int Rscp { get; init; }
 
     [XmlElement("Ecio")]
-    public int Ecio { get; init; }
+    public required int Ecio { get; init; }
 }

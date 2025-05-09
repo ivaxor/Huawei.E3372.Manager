@@ -6,8 +6,8 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.OnlineUpdate;
 public record AutoUpdateConfigResponse : IModemGetResponse
 {
     [XmlElement("auto_update")]
-    public int AutoUpdate { get; init; }
+    public required int AutoUpdate { get; init; }
 
     [XmlElement("ui_download")]
-    public int UiDownload { get; init; }
+    public required int UiDownload { get; init; }
 }
