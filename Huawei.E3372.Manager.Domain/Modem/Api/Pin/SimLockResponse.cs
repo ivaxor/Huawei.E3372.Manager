@@ -15,8 +15,8 @@ public record SimLockResponse : IModemGetResponse
     public required int SimLockVersion { get; init; }
 
     [XmlElement("pSimLockEnable")]
-    public required string? PSimLockEnable { get; init; }
+    public required string PSimLockEnable { get; init; }
 
     [XmlElement("pSimLockRemainTimes")]
-    public required string? PSimLockRemainTimes { get; init; }
+    public required string PSimLockRemainTimes { get; init; }
 }

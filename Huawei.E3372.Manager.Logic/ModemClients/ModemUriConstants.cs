@@ -1,5 +1,6 @@
 ﻿using Huawei.E3372.Manager.Domain.Modem;
 using Huawei.E3372.Manager.Domain.Modem.Api.Device;
+using Huawei.E3372.Manager.Domain.Modem.Api.Dhcp;
 using Huawei.E3372.Manager.Domain.Modem.Api.Dialup;
 using Huawei.E3372.Manager.Domain.Modem.Api.Global;
 using Huawei.E3372.Manager.Domain.Modem.Api.Monitoring;
@@ -8,12 +9,14 @@ using Huawei.E3372.Manager.Domain.Modem.Api.OnlineUpdate;
 using Huawei.E3372.Manager.Domain.Modem.Api.Pb;
 using Huawei.E3372.Manager.Domain.Modem.Api.Pin;
 using Huawei.E3372.Manager.Domain.Modem.Api.SdCard;
+using Huawei.E3372.Manager.Domain.Modem.Api.Security;
 using Huawei.E3372.Manager.Domain.Modem.Api.Sms;
 using Huawei.E3372.Manager.Domain.Modem.Api.User;
 using Huawei.E3372.Manager.Domain.Modem.Api.WebServer;
 using Huawei.E3372.Manager.Domain.Modem.Config;
 using Huawei.E3372.Manager.Domain.Modem.Config.DeviceInformation;
 using Huawei.E3372.Manager.Domain.Modem.Config.Global;
+using Huawei.E3372.Manager.Domain.Modem.Config.Network;
 using Huawei.E3372.Manager.Domain.Modem.Config.PcAssistant;
 using Huawei.E3372.Manager.Domain.Modem.Config.Ussd;
 using System.Collections.Frozen;
@@ -29,15 +32,23 @@ internal static class ModemUriConstants
         { typeof(InformationResponse), "/api/device/information" },
         { typeof(SignalResponse), "/api/device/signal" },
 
+        { typeof(DhcpSettingsResponse), "/api/dhcp/settings" },
+
         { typeof(MobileDataSwitchResponse), "/api/dialup/mobile-dataswitch" },
 
         { typeof(ModuleSwitchResponse), "/api/global/module-switch" },
 
         { typeof(CheckNotificationResponse), "/api/monitoring/check-notifications" },
         { typeof(ConvergedStatusResponse), "/api/monitoring/converged-status" },
+        { typeof(MonthStatisticsResponse), "/api/monitoring/month_statistics" },
+        { typeof(StartDateResponse), "/api/monitoring/start_date" },
         { typeof(StatusResponse), "/api/monitoring/status" },
         { typeof(TrafficStatisticsResponse), "/api/monitoring/traffic-statistics" },
 
+        { typeof(NetFeatureSwitchReponse), "/api/net/net-feature-switch" },
+        { typeof(NetModeListResponse), "/api/net/net-mode-list" },
+        { typeof(Domain.Modem.Api.Net.NetModeResponse), "/api/net/net-mode" },
+        { typeof(RegisterResponse), "/api/net/register" },
         { typeof(SignalParaResponse), "/api/net/signal-para" },
 
         { typeof(AutoUpdateConfigResponse), "/api/online-update/autoupdate-config" },
@@ -47,11 +58,21 @@ internal static class ModemUriConstants
         { typeof(PbMatchResponse), "/api/pb/pb-match" },
 
         { typeof(PinStatusResponse), "/api/pin/status" },
+        { typeof(SavePinResponse), "/api/pin/save-pin" },
         { typeof(SimLockResponse), "/api/pin/simlock" },
 
         { typeof(SdCardResponse), "/api/sdcard/sdcard" },
 
-        { typeof(SetReadRequest), "/api/sms/set-read" },
+        { typeof(DmzResponse), "/api/security/dmz" },
+        { typeof(FirewallSwitchResponse), "/api/security/firewall-switch" },
+        { typeof(LanIpFilterResponse), "/api/security/lan-ip-filter" },
+        { typeof(NatResponse), "/api/security/nat" },
+        { typeof(SipResponse), "/api/security/sip" },
+        { typeof(SpecialApplicationsResponse), "/api/security/special-applications" },
+        { typeof(UpnpResponse), "/api/security/upnp" },
+        { typeof(VirtualServersResponse), "/api/security/virtual-servers" },
+
+        { typeof(SetReadResponse), "/api/sms/set-read" },
         { typeof(SmsCountResponse), "/api/sms/sms-count" },
         { typeof(SmsFeatureSwitchResponse), "/api/sms/sms-feature-switch" },
         { typeof(SmsListResponse), "/api/sms/sms-list" },
@@ -69,6 +90,10 @@ internal static class ModemUriConstants
         { typeof(ConfigResponse), "/config/global/config.xml" },
         { typeof(LanguageListResponse), "/config/global/languagelist.xml" },
         { typeof(NetTypeResponse), "/config/global/net-type.xml" },
+
+        { typeof(Domain.Modem.Config.Network.NetModeResponse), "/config/network/net-mode.xml" },
+        { typeof(NetworkModeResponse), "/config/network/networkmode.xml" },
+        { typeof(OperatorListResponse), "/config/network/operatorlist.xml" },
 
         { typeof(PcAssistantConfigResponse), "/config/pcassistant/config.xml" },
 

@@ -70,13 +70,13 @@ public record UserConfigResponse : IModemGetResponse
     public required bool MainBg { get; init; }
 
     [XmlElement("force_new")]
-    public required string? ForceNew { get; init; }
+    public required string ForceNew { get; init; }
 
     [XmlElement("force_old")]
-    public required string? ForceOld { get; init; }
+    public required string ForceOld { get; init; }
 
     [XmlElement("force_both")]
-    public required string? ForceBoth { get; init; }
+    public required string ForceBoth { get; init; }
 
     [XmlElement("force_new_home")]
     public required bool ForceNewHome { get; init; }

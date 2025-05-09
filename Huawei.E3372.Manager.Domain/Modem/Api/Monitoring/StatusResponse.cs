@@ -9,10 +9,10 @@ public record StatusResponse : IModemGetResponse
     public required int ConnectionStatus { get; init; }
 
     [XmlElement("WifiConnectionStatus")]
-    public required string? WiFiConnectionStatus { get; init; }
+    public required string WiFiConnectionStatus { get; init; }
 
     [XmlElement("SignalStrength")]
-    public required string? SignalStrength { get; init; }
+    public required string SignalStrength { get; init; }
 
     [XmlElement("SignalIcon")]
     public required int SignalIcon { get; init; }
@@ -27,10 +27,10 @@ public record StatusResponse : IModemGetResponse
     public required int RoamingStatus { get; init; }
 
     [XmlElement("BatteryStatus")]
-    public required string? BatteryStatus { get; init; }
+    public required string BatteryStatus { get; init; }
 
     [XmlElement("BatteryLevel")]
-    public required string? BatteryLevel { get; init; }
+    public required string BatteryLevel { get; init; }
 
     [XmlElement("BatteryPercent")]
     public required string BatteryPercent { get; init; }
@@ -51,10 +51,10 @@ public record StatusResponse : IModemGetResponse
     public required string SecondaryIPv6Dns { get; init; }
 
     [XmlElement("CurrentWifiUser")]
-    public required string? CurrentWiFiUser { get; init; }
+    public required string CurrentWiFiUser { get; init; }
 
     [XmlElement("TotalWifiUser")]
-    public required string? TotalWiFiUser { get; init; }
+    public required string TotalWiFiUser { get; init; }
 
     [XmlElement("currenttotalwifiuser")]
     public required int CurrentTotalWiFiUser { get; init; }
@@ -66,7 +66,7 @@ public record StatusResponse : IModemGetResponse
     public required int SimStatus { get; init; }
 
     [XmlElement("WifiStatus")]
-    public required string? WiFiStatus { get; init; }
+    public required string WiFiStatus { get; init; }
 
     [XmlElement("CurrentNetworkTypeEx")]
     public required int CurrentNetworkTypeEx { get; init; }
