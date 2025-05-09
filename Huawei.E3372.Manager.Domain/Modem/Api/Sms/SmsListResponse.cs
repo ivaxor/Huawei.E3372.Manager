@@ -6,7 +6,7 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Sms;
 public record SmsListResponse : IModemPostResponse
 {
     [XmlElement("Count")]
-    public required bool Count { get; init; }
+    public required int Count { get; init; }
 
     [XmlElement("Messages")]
     public required SmsListMessages Messages { get; init; }
@@ -21,10 +21,10 @@ public record SmsListMessages
 public record SmsListMessage
 {
     [XmlElement("Smstat")]
-    public required SmsListMessageStatus Status { get; init; }
+    public required int Status { get; init; }
 
     [XmlElement("Index")]
-    public required bool Index { get; init; }
+    public required int Index { get; init; }
 
     [XmlElement("Phone")]
     public required string Phone { get; init; }
@@ -33,23 +33,17 @@ public record SmsListMessage
     public required string Content { get; init; }
 
     [XmlElement("Date")]
-    public required DateTime Date { get; init; }
+    public required string Date { get; init; }
 
     [XmlElement("Sca")]
     public required string Sca { get; init; }
 
     [XmlElement("SaveType")]
-    public required bool SaveType { get; init; }
+    public required int SaveType { get; init; }
 
     [XmlElement("Priority")]
     public required bool Priority { get; init; }
 
     [XmlElement("SmsType")]
-    public required bool SmsType { get; init; }
-}
-
-public enum SmsListMessageStatus
-{
-    Unread = 0,
-    Read = 1,
+    public required int SmsType { get; init; }
 }

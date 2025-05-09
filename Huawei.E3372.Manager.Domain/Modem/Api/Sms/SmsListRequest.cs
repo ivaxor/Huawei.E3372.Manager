@@ -15,11 +15,11 @@ public record SmsListRequest : IModemPostRequest
     public required int BoxType { get; init; }
 
     [XmlElement("SortType")]
-    public required int SortType { get; init; }
+    public int SortType { get; init; }
 
     [XmlElement("Ascending")]
-    public required bool Ascending { get; init; }
+    public bool Ascending { get; init; }
 
     [XmlElement("UnreadPreferred")]
-    public required bool UnreadPreferred { get; init; }
+    public bool UnreadPreferred { get; init; }
 }

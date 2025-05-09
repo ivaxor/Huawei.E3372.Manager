@@ -4,12 +4,12 @@ namespace Huawei.E3372.Manager.Logic.ModemClients;
 
 public interface IModemClient
 {
-    public Task<IModemGetResponse> GetAsync<TModemGetResponse>(
+    public Task<TModemGetResponse> GetAsync<TModemGetResponse>(
         Uri baseUri,
         CancellationToken cancellationToken = default)
         where TModemGetResponse : IModemGetResponse;
 
-    public Task<IModemPostResponse> PostAsync<TModelPostRequest, TModelPostResponse>(
+    public Task<TModelPostResponse> PostAsync<TModelPostRequest, TModelPostResponse>(
         Uri baseUri,
         TModelPostRequest model,
         CancellationToken cancellationToken = default)

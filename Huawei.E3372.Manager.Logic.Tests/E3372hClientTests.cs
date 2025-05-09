@@ -111,13 +111,41 @@ public sealed class E3372hClientTests
     [DataRow(typeof(OperatorResponse))]
     [DataRow(typeof(UserConfigResponse))]
     [DataTestMethod]
-    public async Task GetAsync(Type type)
+    public async Task GetAsync_All_ReturnsValidType(Type type)
     {
-        var methodInfo = typeof(E3372hClient).GetMethod("GetAsync").MakeGenericMethod(type);
-
+        var methodInfo = typeof(E3372hClient).GetMethod("GetAsync")!.MakeGenericMethod(type);
         var baseUri = new Uri("http://192.168.41.1");
-        var response = await (Task<IModemGetResponse>)methodInfo.Invoke(client, [baseUri, default(CancellationToken)])!;
+
+        var task = methodInfo.Invoke(client, [baseUri, default(CancellationToken)])!;
+        var response = await GetTaskResult(task);
 
         Assert.IsTrue(response.GetType() == type);
+    }
+
+    [TestMethod]
+    public async Task PostAsync_SmsList_ReturnsValidType()
+    {
+        var methodInfo = typeof(E3372hClient).GetMethod("PostAsync")!.MakeGenericMethod(typeof(SmsListRequest), typeof(SmsListResponse));
+        var baseUri = new Uri("http://192.168.41.1");                
+        var model = new SmsListRequest()
+        {
+            PageIndex = 1,
+            ReadCount = 50,
+            BoxType = 1,
+        };
+
+        var task = methodInfo.Invoke(client, [baseUri, model, default(CancellationToken)])!;
+        var response = await GetTaskResult(task);
+
+        Assert.IsTrue(response is SmsListResponse);
+    }
+
+    internal static async Task<object> GetTaskResult(object taskObject)
+    {
+        var task = (Task)taskObject;
+        await task;
+
+        var resultProperty = task.GetType().GetProperty("Result");
+        return resultProperty!.GetValue(taskObject)!;
     }
 }

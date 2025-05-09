@@ -21,12 +21,12 @@ public class E3372hClient(
         .ToFrozenDictionary();
     internal static readonly XmlSerializer ErrorXmlSerializer = new XmlSerializer(typeof(ErrorResponse));
 
-    public async Task<IModemGetResponse> GetAsync<TModemGetResponse>(
+    public async Task<TModemGetResponse> GetAsync<TModemGetResponse>(
         Uri baseUri,
         CancellationToken cancellationToken = default)
         where TModemGetResponse : IModemGetResponse
     {
-        using var httpClient = await CreateHttpClientAsync(baseUri, cancellationToken);
+        using var httpClient = await CreateHttpClientForGetAsync(baseUri, cancellationToken);
 
         var relativeUri = ModemUriConstants.TypeToRelativeUri[typeof(TModemGetResponse)];
         var request = new HttpRequestMessage(HttpMethod.Get, relativeUri);
@@ -55,14 +55,14 @@ public class E3372hClient(
         throw new HttpRequestException("Failed to deserialize data from modem", null, response.StatusCode);
     }
 
-    public async Task<IModemPostResponse> PostAsync<TModelPostRequest, TModelPostResponse>(
+    public async Task<TModelPostResponse> PostAsync<TModelPostRequest, TModelPostResponse>(
         Uri baseUri,
         TModelPostRequest model,
         CancellationToken cancellationToken = default)
         where TModelPostRequest : IModemPostRequest
         where TModelPostResponse : IModemPostResponse
     {
-        using var httpClient = await CreateHttpClientAsync(baseUri, cancellationToken);
+        using var httpClient = await CreateHttpClientForPostAsync(baseUri, cancellationToken);
 
         var relativeUri = ModemUriConstants.TypeToRelativeUri[typeof(TModelPostResponse)];
         var request = new HttpRequestMessage(HttpMethod.Post, relativeUri);
@@ -96,29 +96,49 @@ public class E3372hClient(
         throw new HttpRequestException("Failed to deserialize data from modem", null, response.StatusCode);
     }
 
-    internal async Task<HttpClient> CreateHttpClientAsync(
+    internal async Task<HttpClient> CreateHttpClientForGetAsync(
         Uri baseUri,
         CancellationToken cancellationToken = default)
     {
         var httpClientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer() };
         var httpClient = new HttpClient(httpClientHandler) { BaseAddress = baseUri };
 
-        var sessionId = await GetSessionIdAsync(baseUri, httpClient, cancellationToken);
+        var sessionTokenInfo = await GetCachedSessionTokenInfoAsync(baseUri, httpClient, cancellationToken);
+        var sessionId = sessionTokenInfo.SessionInfo!.Substring("SessionID=".Length);
         httpClientHandler.CookieContainer.Add(baseUri, new Cookie("SessionID", sessionId));
 
         return httpClient;
     }
 
-    internal async ValueTask<string> GetSessionIdAsync(
+    internal async Task<HttpClient> CreateHttpClientForPostAsync(
+        Uri baseUri,
+        CancellationToken cancellationToken = default)
+    {
+        var httpClientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer() };
+        var httpClient = new HttpClient(httpClientHandler) { BaseAddress = baseUri };
+
+        var sessionTokenInfo = await GetSessionTokenInfoAsync(httpClient, cancellationToken);
+        var sessionId = sessionTokenInfo.SessionInfo!.Substring("SessionID=".Length);
+        httpClientHandler.CookieContainer.Add(baseUri, new Cookie("SessionID", sessionId));
+        httpClient.DefaultRequestHeaders.Add("__requestverificationtoken", sessionTokenInfo.TokenInfo);
+
+        return httpClient;
+    }
+
+    internal Task<SessionTokenInfoResponse> GetCachedSessionTokenInfoAsync(
         Uri baseUri,
         HttpClient httpClient,
         CancellationToken cancellationToken = default)
     {
-        var key = $"SessionID_{baseUri.Host}";
+        return memoryCache.GetOrCreateAsync(
+            $"{nameof(SessionTokenInfoResponse)}_{baseUri.Host}",
+            c => GetSessionTokenInfoAsync(httpClient, cancellationToken))!;
+    }
 
-        if (memoryCache.TryGetValue(key, out string sessionId))
-            return sessionId!;
-
+    internal async Task<SessionTokenInfoResponse> GetSessionTokenInfoAsync(
+        HttpClient httpClient,
+        CancellationToken cancellationToken = default)
+    {
         var relativeUri = ModemUriConstants.TypeToRelativeUri[typeof(SessionTokenInfoResponse)];
         var request = new HttpRequestMessage(HttpMethod.Get, relativeUri);
 
@@ -130,10 +150,6 @@ public class E3372hClient(
         using var xmlReader = XmlReader.Create(reader);
         var xmlSerializer = TypeToXmlSerializer[typeof(SessionTokenInfoResponse)];
 
-        var sessionTokenInfo = (SessionTokenInfoResponse)xmlSerializer.Deserialize(xmlReader)!;
-        sessionId = sessionTokenInfo.SessionInfo!.Substring("SessionID=".Length);
-        memoryCache.Set(key, sessionId);
-
-        return sessionId;
+        return (SessionTokenInfoResponse)xmlSerializer.Deserialize(xmlReader)!;
     }
 }
