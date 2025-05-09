@@ -11,6 +11,7 @@ using Huawei.E3372.Manager.Domain.Modem.Api.SdCard;
 using Huawei.E3372.Manager.Domain.Modem.Api.Sms;
 using Huawei.E3372.Manager.Domain.Modem.Api.User;
 using Huawei.E3372.Manager.Domain.Modem.Api.WebServer;
+using Huawei.E3372.Manager.Domain.Modem.Config;
 using Huawei.E3372.Manager.Domain.Modem.Config.DeviceInformation;
 using Huawei.E3372.Manager.Domain.Modem.Config.Global;
 using Huawei.E3372.Manager.Domain.Modem.Config.PcAssistant;
@@ -29,58 +30,58 @@ public sealed class E3372hClientTests
     private static readonly ILogger<E3372hClient> logger = NullLogger<E3372hClient>.Instance;
     private static readonly E3372hClient client = new E3372hClient(memoryCache, logger);
 
-    [DataRow(typeof(BasicInformation))]
-    [DataRow(typeof(DeviceFeatureSwitch))]
-    [DataRow(typeof(Information))]
-    [DataRow(typeof(Signal))]
+    [DataRow(typeof(BasicInformationResponse))]
+    [DataRow(typeof(DeviceFeatureSwitchResponse))]
+    [DataRow(typeof(InformationResponse))]
+    [DataRow(typeof(SignalResponse))]
 
-    [DataRow(typeof(MobileDataSwitch))]
+    [DataRow(typeof(MobileDataSwitchResponse))]
 
-    [DataRow(typeof(ModuleSwitch))]
+    [DataRow(typeof(ModuleSwitchResponse))]
 
-    [DataRow(typeof(CheckNotification))]
-    [DataRow(typeof(ConvergedStatus))]
-    [DataRow(typeof(Status))]
-    [DataRow(typeof(TrafficStatistics))]
+    [DataRow(typeof(CheckNotificationResponse))]
+    [DataRow(typeof(ConvergedStatusResponse))]
+    [DataRow(typeof(StatusResponse))]
+    [DataRow(typeof(TrafficStatisticsResponse))]
 
-    [DataRow(typeof(SignalPara))]
+    [DataRow(typeof(SignalParaResponse))]
 
-    [DataRow(typeof(AutoUpdateConfig))]
-    [DataRow(typeof(OnlineUpdateConfiguration))]
+    [DataRow(typeof(AutoUpdateConfigResponse))]
+    [DataRow(typeof(OnlineUpdateConfigurationResponse))]
 
-    [DataRow(typeof(PbCount))]
+    [DataRow(typeof(PbCountResponse))]
 
-    [DataRow(typeof(PinStatus))]
-    [DataRow(typeof(SimLock))]
+    [DataRow(typeof(PinStatusResponse))]
+    [DataRow(typeof(SimLockResponse))]
 
-    [DataRow(typeof(SdCard))]
+    [DataRow(typeof(SdCardResponse))]
 
-    [DataRow(typeof(SmsCount))]
-    [DataRow(typeof(SmsFeatureSwitch))]
-    [DataRow(typeof(SplitInfoSms))]
+    [DataRow(typeof(SmsCountResponse))]
+    [DataRow(typeof(SmsFeatureSwitchResponse))]
+    [DataRow(typeof(SplitInfoSmsResponse))]
 
-    [DataRow(typeof(HiLinkLogin))]
-    [DataRow(typeof(StateLogin))]
+    [DataRow(typeof(HiLinkLoginResponse))]
+    [DataRow(typeof(StateLoginResponse))]
 
-    [DataRow(typeof(PublicKey))]
-    [DataRow(typeof(SessionTokenInfo))]
-    [DataRow(typeof(WhiteListSwitch))]
+    [DataRow(typeof(PublicKeyResponse))]
+    [DataRow(typeof(SessionTokenInfoResponse))]
+    [DataRow(typeof(WhiteListSwitchResponse))]
 
-    [DataRow(typeof(AddParam))]
+    [DataRow(typeof(AddParamResponse))]
 
-    [DataRow(typeof(Config))]
-    [DataRow(typeof(LanguageList))]
-    [DataRow(typeof(NetType))]
+    [DataRow(typeof(ConfigResponse))]
+    [DataRow(typeof(LanguageListResponse))]
+    [DataRow(typeof(NetTypeResponse))]
 
-    [DataRow(typeof(PcAssistantConfig))]
+    [DataRow(typeof(PcAssistantConfigResponse))]
 
-    [DataRow(typeof(PrePaidUssd))]
+    [DataRow(typeof(PrePaidUssdResponse))]
 
-    [DataRow(typeof(Domain.Modem.Config.Version))]
+    [DataRow(typeof(VersionResponse))]
 
-    [DataRow(typeof(DeviceName))]
-    [DataRow(typeof(Operator))]
-    [DataRow(typeof(UserConfig))]
+    [DataRow(typeof(DeviceNameResponse))]
+    [DataRow(typeof(OperatorResponse))]
+    [DataRow(typeof(UserConfigResponse))]
     [DataTestMethod]
     public async Task GetAsync(Type type)
     {

@@ -11,6 +11,7 @@ using Huawei.E3372.Manager.Domain.Modem.Api.SdCard;
 using Huawei.E3372.Manager.Domain.Modem.Api.Sms;
 using Huawei.E3372.Manager.Domain.Modem.Api.User;
 using Huawei.E3372.Manager.Domain.Modem.Api.WebServer;
+using Huawei.E3372.Manager.Domain.Modem.Config;
 using Huawei.E3372.Manager.Domain.Modem.Config.DeviceInformation;
 using Huawei.E3372.Manager.Domain.Modem.Config.Global;
 using Huawei.E3372.Manager.Domain.Modem.Config.PcAssistant;
@@ -23,60 +24,60 @@ internal static class ModemUriConstants
 {
     public readonly static IReadOnlyDictionary<Type, string> TypeToRelativeUri = new Dictionary<Type, string>()
     {
-        { typeof(BasicInformation), "/api/device/basic_information" },
-        { typeof(DeviceFeatureSwitch), "/api/device/device-feature-switch" },
-        { typeof(Information), "/api/device/information" },
-        { typeof(Signal), "/api/device/signal" },
+        { typeof(BasicInformationResponse), "/api/device/basic_information" },
+        { typeof(DeviceFeatureSwitchResponse), "/api/device/device-feature-switch" },
+        { typeof(InformationResponse), "/api/device/information" },
+        { typeof(SignalResponse), "/api/device/signal" },
 
-        { typeof(MobileDataSwitch), "/api/dialup/mobile-dataswitch" },
+        { typeof(MobileDataSwitchResponse), "/api/dialup/mobile-dataswitch" },
 
-        { typeof(ModuleSwitch), "/api/global/module-switch" },
+        { typeof(ModuleSwitchResponse), "/api/global/module-switch" },
 
-        { typeof(CheckNotification), "/api/monitoring/check-notifications" },
-        { typeof(ConvergedStatus), "/api/monitoring/converged-status" },
-        { typeof(Status), "/api/monitoring/status" },
-        { typeof(TrafficStatistics), "/api/monitoring/traffic-statistics" },
+        { typeof(CheckNotificationResponse), "/api/monitoring/check-notifications" },
+        { typeof(ConvergedStatusResponse), "/api/monitoring/converged-status" },
+        { typeof(StatusResponse), "/api/monitoring/status" },
+        { typeof(TrafficStatisticsResponse), "/api/monitoring/traffic-statistics" },
 
-        { typeof(SignalPara), "/api/net/signal-para" },
+        { typeof(SignalParaResponse), "/api/net/signal-para" },
 
-        { typeof(AutoUpdateConfig), "/api/online-update/autoupdate-config" },
-        { typeof(OnlineUpdateConfiguration), "/api/online-update/configuration" },
+        { typeof(AutoUpdateConfigResponse), "/api/online-update/autoupdate-config" },
+        { typeof(OnlineUpdateConfigurationResponse), "/api/online-update/configuration" },
 
-        { typeof(PbCount), "/api/pb/pb-count" },
-        { typeof(PbMatch), "/api/pb/pb-match" },
+        { typeof(PbCountResponse), "/api/pb/pb-count" },
+        { typeof(PbMatchResponse), "/api/pb/pb-match" },
 
-        { typeof(PinStatus), "/api/pin/status" },
-        { typeof(SimLock), "/api/pin/simlock" },
+        { typeof(PinStatusResponse), "/api/pin/status" },
+        { typeof(SimLockResponse), "/api/pin/simlock" },
 
-        { typeof(SdCard), "/api/sdcard/sdcard" },
+        { typeof(SdCardResponse), "/api/sdcard/sdcard" },
 
-        { typeof(SmsCount), "/api/sms/sms-count" },
-        { typeof(SmsFeatureSwitch), "/api/sms/sms-feature-switch" },
-        { typeof(SmsList), "/api/sms/sms-list" },
-        { typeof(SplitInfoSms), "/api/sms/splitinfo-sms" },
+        { typeof(SmsCountResponse), "/api/sms/sms-count" },
+        { typeof(SmsFeatureSwitchResponse), "/api/sms/sms-feature-switch" },
+        { typeof(SmsListResponse), "/api/sms/sms-list" },
+        { typeof(SplitInfoSmsResponse), "/api/sms/splitinfo-sms" },
 
-        { typeof(HiLinkLogin), "/api/user/hilink_login" },
-        { typeof(StateLogin), "/api/user/state-login" },
+        { typeof(HiLinkLoginResponse), "/api/user/hilink_login" },
+        { typeof(StateLoginResponse), "/api/user/state-login" },
 
-        { typeof(PublicKey), "/api/webserver/publickey" },
-        { typeof(SessionTokenInfo), "/api/webserver/SesTokInfo" },
-        { typeof(WhiteListSwitch), "/api/webserver/white_list_switch" },
+        { typeof(PublicKeyResponse), "/api/webserver/publickey" },
+        { typeof(SessionTokenInfoResponse), "/api/webserver/SesTokInfo" },
+        { typeof(WhiteListSwitchResponse), "/api/webserver/white_list_switch" },
 
-        { typeof(AddParam), "/config/deviceinformation/add_param.xml" },
+        { typeof(AddParamResponse), "/config/deviceinformation/add_param.xml" },
 
-        { typeof(Config), "/config/global/config.xml" },
-        { typeof(LanguageList), "/config/global/languagelist.xml" },
-        { typeof(NetType), "/config/global/net-type.xml" },
+        { typeof(ConfigResponse), "/config/global/config.xml" },
+        { typeof(LanguageListResponse), "/config/global/languagelist.xml" },
+        { typeof(NetTypeResponse), "/config/global/net-type.xml" },
 
-        { typeof(PcAssistantConfig), "/config/pcassistant/config.xml" },
+        { typeof(PcAssistantConfigResponse), "/config/pcassistant/config.xml" },
 
-        { typeof(PrePaidUssd), "/config/ussd/prepaidussd.xml" },
+        { typeof(PrePaidUssdResponse), "/config/ussd/prepaidussd.xml" },
 
-        { typeof(Domain.Modem.Config.Version), "/config/version.xml" },
+        { typeof(VersionResponse), "/config/version.xml" },
 
-        { typeof(DeviceName), "/devicename.cgi" },
-        { typeof(FactoryReset), "/factoryreset.cgi" },
-        { typeof(Operator), "/operator.cgi" },
-        { typeof(UserConfig), "/user_config.data" },
+        { typeof(DeviceNameResponse), "/devicename.cgi" },
+        { typeof(FactoryResetResponse), "/factoryreset.cgi" },
+        { typeof(OperatorResponse), "/operator.cgi" },
+        { typeof(UserConfigResponse), "/user_config.data" },
     }.ToFrozenDictionary();
 }

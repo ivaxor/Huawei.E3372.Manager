@@ -17,7 +17,7 @@ public class E3372hClient(
     internal static readonly IReadOnlyDictionary<Type, XmlSerializer> TypeToXmlSerializer = ModemUriConstants.TypeToRelativeUri
         .ToDictionary(kvp => kvp.Key, kvp => new XmlSerializer(kvp.Key))
         .ToFrozenDictionary();
-    internal static readonly XmlSerializer ErrorXmlSerializer = new XmlSerializer(typeof(Error));
+    internal static readonly XmlSerializer ErrorXmlSerializer = new XmlSerializer(typeof(ErrorResponse));
 
     public async Task<IModemGetResponse> GetAsync<TModemGetResponse>(
         Uri baseUri,
@@ -46,7 +46,7 @@ public class E3372hClient(
 
         if (ErrorXmlSerializer.CanDeserialize(xmlReader))
         {
-            var error = (Error)ErrorXmlSerializer.Deserialize(xmlReader)!;
+            var error = (ErrorResponse)ErrorXmlSerializer.Deserialize(xmlReader)!;
             logger.LogError("Error response returned by modem. Code: {Code}. Message: {Message}", error.Code, error.Message);
         }
         else
@@ -87,7 +87,7 @@ public class E3372hClient(
 
         if (ErrorXmlSerializer.CanDeserialize(xmlReader))
         {
-            var error = (Error)ErrorXmlSerializer.Deserialize(xmlReader)!;
+            var error = (ErrorResponse)ErrorXmlSerializer.Deserialize(xmlReader)!;
             logger.LogError("Error response returned by modem. Code: {Code}. Message: {Message}", error.Code, error.Message);
         }
         else
@@ -110,7 +110,7 @@ public class E3372hClient(
         if (memoryCache.TryGetValue(key, out string sessionId))
             return sessionId!;
 
-        var relativeUri = ModemUriConstants.TypeToRelativeUri[typeof(SessionTokenInfo)];
+        var relativeUri = ModemUriConstants.TypeToRelativeUri[typeof(SessionTokenInfoResponse)];
         var request = new HttpRequestMessage(HttpMethod.Get, relativeUri);
 
         using var response = await httpClient.SendAsync(request, cancellationToken);
@@ -119,9 +119,9 @@ public class E3372hClient(
 
         using var reader = new StringReader(responseText);
         using var xmlReader = XmlReader.Create(reader);
-        var xmlSerializer = TypeToXmlSerializer[typeof(SessionTokenInfo)];
+        var xmlSerializer = TypeToXmlSerializer[typeof(SessionTokenInfoResponse)];
 
-        var sessionTokenInfo = (SessionTokenInfo)xmlSerializer.Deserialize(xmlReader)!;
+        var sessionTokenInfo = (SessionTokenInfoResponse)xmlSerializer.Deserialize(xmlReader)!;
         sessionId = sessionTokenInfo.SessionInfo!.Substring("SessionID=".Length);
         memoryCache.Set(key, sessionId);
 
