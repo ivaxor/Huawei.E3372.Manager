@@ -1,0 +1,6 @@
+@Huawei.E3372.Manager.Runtime_HostAddress = http://localhost:5216
+
+GET {{Huawei.E3372.Manager.Runtime_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Huawei.E3372.Manager.Domain.Modem;
+namespace Huawei.E3372.Manager.Domain.Modem.Api.User;
 
 [XmlRoot("response")]
 public record StateLoginResponse : IModemGetResponse
