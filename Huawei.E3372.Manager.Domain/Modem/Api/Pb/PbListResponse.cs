@@ -6,10 +6,10 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Pb;
 public record PbListResponse : IModemPostResponse
 {
     [XmlElement("SumSize")]
-    public required int SumSize { get; init; }
+    public required bool SumSize { get; init; }
 
     [XmlElement("Count")]
-    public required int Count { get; init; }
+    public required bool Count { get; init; }
 
     [XmlElement("Phonebooks")]
     public required PbListPhonebooks Phonebooks { get; init; }
@@ -24,10 +24,10 @@ public record PbListPhonebooks
 public record PbListPhonebook
 {
     [XmlElement("GroupID")]
-    public required int GroupID { get; init; }
+    public required bool GroupID { get; init; }
 
     [XmlElement("Index")]
-    public required int Index { get; init; }
+    public required bool Index { get; init; }
 
     [XmlElement("Field")]
     public required PbListPhonebookField[] Field { get; init; }

@@ -9,8 +9,8 @@ public record OnlineUpdateConfigurationResponse : IModemGetResponse
     public required int AutoUpdateInterval { get; init; }
 
     [XmlElement("auto_update_enable")]
-    public required int AutoUpdateEnable { get; init; }
+    public required bool AutoUpdateEnable { get; init; }
 
     [XmlElement("server_force_enable")]
-    public required int ServerForceEnable { get; init; }
+    public required bool ServerForceEnable { get; init; }
 }

@@ -6,20 +6,20 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Sms;
 public record SmsListRequest : IModemPostRequest
 {
     [XmlElement("PageIndex")]
-    public required int PageIndex { get; init; }
+    public required bool PageIndex { get; init; }
 
     [XmlElement("ReadCount")]
-    public required int ReadCount { get; init; }
+    public required bool ReadCount { get; init; }
 
     [XmlElement("BoxType")]
-    public required int BoxType { get; init; }
+    public required bool BoxType { get; init; }
 
     [XmlElement("SortType")]
-    public required int SortType { get; init; }
+    public required bool SortType { get; init; }
 
     [XmlElement("Ascending")]
-    public required int Ascending { get; init; }
+    public required bool Ascending { get; init; }
 
     [XmlElement("UnreadPreferred")]
-    public required int UnreadPreferred { get; init; }
+    public required bool UnreadPreferred { get; init; }
 }

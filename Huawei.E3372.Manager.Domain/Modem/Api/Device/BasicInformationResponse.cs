@@ -12,16 +12,16 @@ public record BasicInformationResponse : IModemGetResponse
     public required string Classify { get; init; }
 
     [XmlElement("multimode")]
-    public required int Multimode { get; init; }
+    public required bool Multimode { get; init; }
 
     [XmlElement("restore_default_status")]
-    public required int RestoreDefaultStatus { get; init; }
+    public required bool RestoreDefaultStatus { get; init; }
 
     [XmlElement("autoupdate_guide_status")]
-    public required int AutoupdateGuideStatus { get; init; }
+    public required bool AutoupdateGuideStatus { get; init; }
 
     [XmlElement("sim_save_pin_enable")]
-    public required int SimSavePinEnable { get; init; }
+    public required bool SimSavePinEnable { get; init; }
 
     [XmlElement("devicename")]
     public required string DeviceName { get; init; }

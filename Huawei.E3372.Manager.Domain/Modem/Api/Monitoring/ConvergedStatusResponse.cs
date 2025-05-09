@@ -9,7 +9,7 @@ public record ConvergedStatusResponse : IModemGetResponse
     public required int SimState { get; init; }
 
     [XmlElement("SimLockEnable")]
-    public required int SimLockEnable { get; init; }
+    public required bool SimLockEnable { get; init; }
 
     [XmlElement("CurrentLanguage")]
     public required string CurrentLanguage { get; init; }

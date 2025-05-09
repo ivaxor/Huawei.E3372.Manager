@@ -6,5 +6,5 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.WebServer;
 public record WhiteListSwitchResponse : IModemGetResponse
 {
     [XmlElement("whitelist_enable")]
-    public required int WhiteListEnable { get; init; }
+    public required bool WhiteListEnable { get; init; }
 }

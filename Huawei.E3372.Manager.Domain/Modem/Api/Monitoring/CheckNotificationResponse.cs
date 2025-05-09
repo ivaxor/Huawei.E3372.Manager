@@ -9,7 +9,7 @@ public record CheckNotificationResponse : IModemGetResponse
     public required int UnreadMessage { get; init; }
 
     [XmlElement("SmsStorageFull")]
-    public required int SmsStorageFull { get; init; }
+    public required bool SmsStorageFull { get; init; }
 
     [XmlElement("OnlineUpdateStatus")]
     public required int OnlineUpdateStatus { get; init; }

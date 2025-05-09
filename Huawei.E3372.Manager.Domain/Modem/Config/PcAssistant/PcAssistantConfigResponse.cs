@@ -6,7 +6,7 @@ namespace Huawei.E3372.Manager.Domain.Modem.Config.PcAssistant;
 public record PcAssistantConfigResponse : IModemGetResponse
 {
     [XmlElement("enable")]
-    public required int Enable { get; init; }
+    public required bool Enable { get; init; }
 
     [XmlElement("winpath")]
     public required string WinPath { get; init; }

@@ -21,7 +21,7 @@ public record ConfigResponse : IModemGetResponse
     public required int UpdateInterval { get; init; }
 
     [XmlElement("ap_station_enabled")]
-    public required int ApStationEnabled { get; init; }
+    public required bool ApStationEnabled { get; init; }
 
     [XmlElement("title")]
     public required string Title { get; init; }
@@ -30,28 +30,28 @@ public record ConfigResponse : IModemGetResponse
     public required int Login { get; init; }
 
     [XmlElement("autoapn_enabled")]
-    public required int AutoApnEnabled { get; init; }
+    public required bool AutoApnEnabled { get; init; }
 
     [XmlElement("footer")]
-    public required int Footer { get; init; }
+    public required bool Footer { get; init; }
 
     [XmlElement("battery_enabled")]
-    public required int BatteryEnabled { get; init; }
+    public required bool BatteryEnabled { get; init; }
 
     [XmlElement("continue_button")]
-    public required int ContinueButton { get; init; }
+    public required bool ContinueButton { get; init; }
 
     [XmlElement("special_redirect")]
-    public required int SpecialRedirect { get; init; }
+    public required bool SpecialRedirect { get; init; }
 
     [XmlElement("menu_number")]
     public required int MenuNumber { get; init; }
 
     [XmlElement("special_debug_page")]
-    public required int SpecialDebugPage { get; init; }
+    public required bool SpecialDebugPage { get; init; }
 
     [XmlElement("roam_warn_enabled")]
-    public required int RoamWarnEnabled { get; init; }
+    public required bool RoamWarnEnabled { get; init; }
 
     [XmlElement("hotlinks")]
     public required ConfigHotlinks Hotlinks { get; init; }
@@ -75,7 +75,7 @@ public record ConfigResponse : IModemGetResponse
 public record ConfigHotlinks
 {
     [XmlElement("enable")]
-    public required int Enable { get; init; }
+    public required bool Enable { get; init; }
 
     [XmlElement("items")]
     public required ConfigHotlinksItems Items { get; init; }
@@ -90,7 +90,7 @@ public record ConfigHotlinksItems
 public record ConfigAppmanagements
 {
     [XmlElement("enabled")]
-    public required int Enabled { get; init; }
+    public required bool Enabled { get; init; }
 
     [XmlElement("hilink")]
     public required ConfigAppmanagementsHilink HiLink { get; init; }
@@ -144,7 +144,7 @@ public record ConfigAppmanagementsMobileDoctor
 public record ConfigConnection
 {
     [XmlElement("enable")]
-    public required int Enable { get; init; }
+    public required bool Enable { get; init; }
 
     [XmlElement("connectionstatus")]
     public required int ConnectionStatus { get; init; }

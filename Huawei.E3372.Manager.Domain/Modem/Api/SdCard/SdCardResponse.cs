@@ -12,20 +12,20 @@ public record SdCardResponse : IModemGetResponse
 public record SDCardInfo
 {
     [XmlElement("SDShareMode")]
-    public required int ShareMode { get; init; }
+    public required bool ShareMode { get; init; }
 
     [XmlElement("SDCardShareStatus")]
-    public required int ShareStatus { get; init; }
+    public required bool ShareStatus { get; init; }
 
     [XmlElement("SDShareFileMode")]
-    public required int ShareFileMode { get; init; }
+    public required bool ShareFileMode { get; init; }
 
     [XmlElement("SDAccessType")]
-    public required int AccessType { get; init; }
+    public required bool AccessType { get; init; }
 
     [XmlElement("SDSharePath")]
     public required string SharePath { get; init; }
 
     [XmlElement("SDCardStatus")]
-    public required int Status { get; init; }
+    public required bool Status { get; init; }
 }

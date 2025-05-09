@@ -6,5 +6,5 @@ namespace Huawei.E3372.Manager.Domain.Modem.Api.Sms;
 public record SetReadRequest : IModemPostRequest
 {
     [XmlElement("Index")]
-    public required int Index { get; init; }
+    public required bool Index { get; init; }
 }

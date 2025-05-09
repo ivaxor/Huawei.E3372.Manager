@@ -7,13 +7,13 @@ public record UserConfigResponse : IModemGetResponse
 {
 
     [XmlElement("datalock")]
-    public required string Datalock { get; init; }
+    public required string DataLock { get; init; }
 
     [XmlElement("autounlock")]
-    public bool Autounlock { get; init; }
+    public required bool AutoUnlock { get; init; }
 
     [XmlElement("pinautovalidate")]
-    public required string Pinautovalidate { get; init; }
+    public required string PinAutoValidate { get; init; }
 
     [XmlElement("imei_generator_model")]
     public required string ImeiGeneratorModel { get; init; }
@@ -22,25 +22,25 @@ public record UserConfigResponse : IModemGetResponse
     public required string BackupImei { get; init; }
 
     [XmlElement("autorun_imei_generator")]
-    public bool AutorunImeiGenerator { get; init; }
+    public required bool AutoRunImeiGenerator { get; init; }
 
     [XmlElement("autoimei")]
-    public bool Autoimei { get; init; }
+    public required bool AutoImei { get; init; }
 
     [XmlElement("hspa_locker")]
-    public bool HspaLocker { get; init; }
+    public required bool HspaLocker { get; init; }
 
     [XmlElement("add_param")]
-    public bool AddParam { get; init; }
+    public required bool AddParam { get; init; }
 
     [XmlElement("operator")]
-    public bool Operator { get; init; }
+    public required bool Operator { get; init; }
 
     [XmlElement("websd")]
-    public bool Websd { get; init; }
+    public required bool Websd { get; init; }
 
     [XmlElement("watchcat")]
-    public bool Watchcat { get; init; }
+    public required bool Watchcat { get; init; }
 
     [XmlElement("watchcat_mode")]
     public required string WatchcatMode { get; init; }
@@ -49,59 +49,59 @@ public record UserConfigResponse : IModemGetResponse
     public required string WatchcatPeriod { get; init; }
 
     [XmlElement("watchcat_forcedelay")]
-    public required int WatchcatForcedelay { get; init; }
+    public required int WatchcatForceDelay { get; init; }
 
     [XmlElement("watchcat_pinghosts")]
-    public required string WatchcatPinghosts { get; init; }
+    public required string WatchcatPingHosts { get; init; }
 
     [XmlElement("watchcat_pingperiod")]
-    public required string WatchcatPingperiod { get; init; }
+    public required string WatchcatPingPeriod { get; init; }
 
     [XmlElement("webui_mode")]
     public required string WebuiMode { get; init; }
 
     [XmlElement("automaterial")]
-    public bool Automaterial { get; init; }
+    public required bool AutoMaterial { get; init; }
 
     [XmlElement("search")]
     public required string Search { get; init; }
 
     [XmlElement("main_bg")]
-    public bool MainBg { get; init; }
+    public required bool MainBg { get; init; }
 
     [XmlElement("force_new")]
-    public required string ForceNew { get; init; }
+    public required string? ForceNew { get; init; }
 
     [XmlElement("force_old")]
-    public required string ForceOld { get; init; }
+    public required string? ForceOld { get; init; }
 
     [XmlElement("force_both")]
-    public required string ForceBoth { get; init; }
+    public required string? ForceBoth { get; init; }
 
     [XmlElement("force_new_home")]
-    public bool ForceNewHome { get; init; }
+    public required bool ForceNewHome { get; init; }
 
     [XmlElement("force_old_home")]
-    public bool ForceOldHome { get; init; }
+    public required bool ForceOldHome { get; init; }
 
     [XmlElement("force_new_statistic")]
-    public bool ForceNewStatistic { get; init; }
+    public required bool ForceNewStatistic { get; init; }
 
     [XmlElement("force_old_statistic")]
-    public bool ForceOldStatistic { get; init; }
+    public required bool ForceOldStatistic { get; init; }
 
     [XmlElement("force_both_statistic")]
-    public bool ForceBothStatistic { get; init; }
+    public required bool ForceBothStatistic { get; init; }
 
     [XmlElement("force_new_sms")]
-    public bool ForceNewSms { get; init; }
+    public required bool ForceNewSms { get; init; }
 
     [XmlElement("force_old_sms")]
-    public bool ForceOldSms { get; init; }
+    public required bool ForceOldSms { get; init; }
 
     [XmlElement("force_new_ussd")]
-    public bool ForceNewUssd { get; init; }
+    public required bool ForceNewUssd { get; init; }
 
     [XmlElement("force_old_ussd")]
-    public bool ForceOldUssd { get; init; }
+    public required bool ForceOldUssd { get; init; }
 }
