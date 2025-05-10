@@ -96,7 +96,7 @@ internal static class ModemUriConstants
         { typeof(LanguageListResponse), "/config/global/languagelist.xml" },
         { typeof(NetTypeResponse), "/config/global/net-type.xml" },
 
-        { typeof(NetModeResponse), "/config/network/net-mode.xml" },
+        { typeof(Models.Config.Network.NetModeResponse), "/config/network/net-mode.xml" },
         { typeof(NetworkModeResponse), "/config/network/networkmode.xml" },
         { typeof(OperatorListResponse), "/config/network/operatorlist.xml" },
 
