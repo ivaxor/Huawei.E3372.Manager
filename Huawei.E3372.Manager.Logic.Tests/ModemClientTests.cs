@@ -28,11 +28,11 @@ using Microsoft.Extensions.Logging.Abstractions;
 namespace Huawei.E3372.Manager.Logic.Tests;
 
 [TestClass]
-public sealed class E3372hClientTests
+public sealed class ModemClientTests
 {
     private static readonly IMemoryCache memoryCache = new MemoryCache(new MemoryCacheOptions());
-    private static readonly ILogger<E3372hClient> logger = NullLogger<E3372hClient>.Instance;
-    private static readonly E3372hClient client = new E3372hClient(memoryCache, logger);
+    private static readonly ILogger<ModemClient> logger = NullLogger<ModemClient>.Instance;
+    private static readonly ModemClient client = new ModemClient(memoryCache, logger);
 
     [DataRow(typeof(BasicInformationResponse))]
     [DataRow(typeof(DeviceFeatureSwitchResponse))]
@@ -113,7 +113,7 @@ public sealed class E3372hClientTests
     [DataTestMethod]
     public async Task GetAsync_All_ReturnsValidType(Type type)
     {
-        var methodInfo = typeof(E3372hClient).GetMethod("GetAsync")!.MakeGenericMethod(type);
+        var methodInfo = typeof(ModemClient).GetMethod("GetAsync")!.MakeGenericMethod(type);
         var baseUri = new Uri("http://192.168.41.1");
 
         var task = methodInfo.Invoke(client, [baseUri, default(CancellationToken)])!;
@@ -125,8 +125,8 @@ public sealed class E3372hClientTests
     [TestMethod]
     public async Task PostAsync_SmsList_ReturnsValidType()
     {
-        var methodInfo = typeof(E3372hClient).GetMethod("PostAsync")!.MakeGenericMethod(typeof(SmsListRequest), typeof(SmsListResponse));
-        var baseUri = new Uri("http://192.168.41.1");                
+        var methodInfo = typeof(ModemClient).GetMethod("PostAsync")!.MakeGenericMethod(typeof(SmsListRequest), typeof(SmsListResponse));
+        var baseUri = new Uri("http://192.168.41.1");
         var model = new SmsListRequest()
         {
             PageIndex = 1,

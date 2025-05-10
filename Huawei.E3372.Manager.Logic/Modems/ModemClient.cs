@@ -11,9 +11,9 @@ using System.Xml.Serialization;
 
 namespace Huawei.E3372.Manager.Logic.Modems;
 
-public class E3372hClient(
+public class ModemClient(
     IMemoryCache memoryCache,
-    ILogger<E3372hClient> logger)
+    ILogger<ModemClient> logger)
     : IModemClient
 {
     internal static readonly IReadOnlyDictionary<Type, XmlSerializer> TypeToXmlSerializer = ModemUriConstants.TypeToRelativeUri
@@ -152,4 +152,19 @@ public class E3372hClient(
 
         return (SessionTokenInfoResponse)xmlSerializer.Deserialize(xmlReader)!;
     }
+}
+
+public interface IModemClient
+{
+    public Task<TModemGetResponse> GetAsync<TModemGetResponse>(
+        Uri baseUri,
+        CancellationToken cancellationToken = default)
+        where TModemGetResponse : IModemGetResponse;
+
+    public Task<TModelPostResponse> PostAsync<TModelPostRequest, TModelPostResponse>(
+        Uri baseUri,
+        TModelPostRequest model,
+        CancellationToken cancellationToken = default)
+        where TModelPostRequest : IModemPostRequest
+        where TModelPostResponse : IModemPostResponse;
 }

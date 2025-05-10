@@ -11,13 +11,13 @@ public class ModemDiscoveryService(
     ApplicationDbContext dbContext)
     : IModemDiscoveryService
 {
-    public async Task<ServiceResult<Modem>> DiscoverAsync(
+    public async Task<ServiceDataResult<Modem>> DiscoverAsync(
         Uri host,
         CancellationToken cancellationToken = default)
     {
         var modem = await dbContext.Modems.AsNoTracking().SingleOrDefaultAsync(m => m.Host == host, cancellationToken);
         if (modem != null)
-            return ServiceResult<Modem>.Failure(ServiceResultErrorCode.Duplicate, modem);
+            return ServiceDataResult<Modem>.Failure(ServiceResultErrorCode.Duplicate, modem);
 
         try
         {
@@ -27,21 +27,21 @@ public class ModemDiscoveryService(
             await dbContext.AddAsync(modem, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
 
-            return ServiceResult<Modem>.Success(modem);
+            return ServiceDataResult<Modem>.Success(modem);
         }
         catch (HttpRequestException)
         {
-            return ServiceResult<Modem>.Failure(ServiceResultErrorCode.RemoteNotFound);
+            return ServiceDataResult<Modem>.Failure(ServiceResultErrorCode.RemoteNotFound);
         }
     }
 
-    public async Task<ServiceResult<Modem>> RediscoverAsync(
+    public async Task<ServiceDataResult<Modem>> RediscoverAsync(
         Guid id,
         CancellationToken cancellationToken = default)
     {
         var modem = await dbContext.Modems.AsNoTracking().SingleOrDefaultAsync(m => m.Id == id, cancellationToken);
         if (modem == null)
-            return ServiceResult<Modem>.Failure(ServiceResultErrorCode.LocalNotFound);
+            return ServiceDataResult<Modem>.Failure(ServiceResultErrorCode.LocalNotFound);
 
         try
         {
@@ -58,22 +58,22 @@ public class ModemDiscoveryService(
                 await dbContext.SaveChangesAsync(cancellationToken);
             }
 
-            return ServiceResult<Modem>.Success(modem);
+            return ServiceDataResult<Modem>.Success(modem);
         }
         catch (HttpRequestException)
         {
-            return ServiceResult<Modem>.Failure(ServiceResultErrorCode.RemoteNotFound);
+            return ServiceDataResult<Modem>.Failure(ServiceResultErrorCode.RemoteNotFound);
         }
     }
 }
 
 public interface IModemDiscoveryService
 {
-    public Task<ServiceResult<Modem>> DiscoverAsync(
+    public Task<ServiceDataResult<Modem>> DiscoverAsync(
         Uri host,
         CancellationToken cancellationToken = default);
 
-    public Task<ServiceResult<Modem>> RediscoverAsync(
+    public Task<ServiceDataResult<Modem>> RediscoverAsync(
         Guid id,
         CancellationToken cancellationToken = default);
 }

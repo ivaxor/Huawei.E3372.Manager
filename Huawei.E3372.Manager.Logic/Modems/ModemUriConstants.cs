@@ -74,6 +74,7 @@ internal static class ModemUriConstants
         { typeof(VirtualServersResponse), "/api/security/virtual-servers" },
 
         { typeof(DeleteSmsResponse), "/api/sms/delete-sms" },
+        { typeof(SendSmsResponse), "/api/sms/send-sms" },
         { typeof(SetReadResponse), "/api/sms/set-read" },
         { typeof(SmsCountResponse), "/api/sms/sms-count" },
         { typeof(SmsFeatureSwitchResponse), "/api/sms/sms-feature-switch" },

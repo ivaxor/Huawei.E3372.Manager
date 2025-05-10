@@ -8,8 +8,9 @@ namespace Huawei.E3372.Manager.Logic;
 public class ModemSmsService(
     IModemClient modemClient,
     ApplicationDbContext dbContext)
+    : IModemSmsService
 {
-    public async Task<ServiceResult<ModemSms[]>> PollIncomingAsync(
+    public async Task<ServiceDataResult<ModemSms[]>> PollIncomingAsync(
         Modem modem,
         bool setAsRead = true,
         bool delete = false,
@@ -28,7 +29,7 @@ public class ModemSmsService(
         return await PollAsync(modem, request, setAsRead, delete, cancellationToken);
     }
 
-    public async Task<ServiceResult<ModemSms[]>> PollOutgoingAsync(
+    public async Task<ServiceDataResult<ModemSms[]>> PollOutgoingAsync(
         Modem modem,
         bool delete = false,
         CancellationToken cancellationToken = default)
@@ -46,7 +47,28 @@ public class ModemSmsService(
         return await PollAsync(modem, request, setAsRead: false, delete, cancellationToken);
     }
 
-    internal async Task<ServiceResult<ModemSms[]>> PollAsync(
+    public async Task<ServiceResult> SendAsync(
+        Modem modem,
+        IEnumerable<string> phones,
+        string content,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new SendSmsRequest()
+        {
+            Index = -1,
+            Phones = new SendSmsPhones() { Phones = phones.ToArray() },
+            Content = content,
+            Length = content.Length,
+            Reserved = true,
+            Date = DateTime.UtcNow.ToString(),
+        };
+
+        await modemClient.PostAsync<SendSmsRequest, SendSmsResponse>(modem.Host, request, cancellationToken);
+
+        return ServiceResult.Success();
+    }
+
+    internal async Task<ServiceDataResult<ModemSms[]>> PollAsync(
         Modem modem,
         SmsListRequest request,
         bool setAsRead = true,
@@ -62,7 +84,7 @@ public class ModemSmsService(
         }
         catch (HttpRequestException)
         {
-            return ServiceResult<ModemSms[]>.Failure(ServiceResultErrorCode.RemoteNotFound);
+            return ServiceDataResult<ModemSms[]>.Failure(ServiceResultErrorCode.RemoteNotFound);
         }
 
         var smsIndexes = smsFromModem.Select(sms => sms.Index).ToHashSet();
@@ -108,6 +130,26 @@ public class ModemSmsService(
                 await modemClient.PostAsync<DeleteSmsRequest, DeleteSmsResponse>(modem.Host, smsDeleteRequest, cancellationToken);
         }
 
-        return ServiceResult<ModemSms[]>.Success(newSms.Concat(udpatedSms).ToArray());
+        return ServiceDataResult<ModemSms[]>.Success(newSms.Concat(udpatedSms).ToArray());
     }
+}
+
+public interface IModemSmsService
+{
+    public Task<ServiceDataResult<ModemSms[]>> PollIncomingAsync(
+        Modem modem,
+        bool setAsRead = true,
+        bool delete = false,
+        CancellationToken cancellationToken = default);
+
+    public Task<ServiceDataResult<ModemSms[]>> PollOutgoingAsync(
+        Modem modem,
+        bool delete = false,
+        CancellationToken cancellationToken = default);
+
+    public Task<ServiceResult> SendAsync(
+        Modem modem,
+        IEnumerable<string> phones,
+        string content,
+        CancellationToken cancellationToken = default);
 }
