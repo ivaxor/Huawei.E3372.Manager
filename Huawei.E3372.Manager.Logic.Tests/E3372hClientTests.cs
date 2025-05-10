@@ -1,26 +1,26 @@
-﻿using Huawei.E3372.Manager.Domain.Modem;
-using Huawei.E3372.Manager.Domain.Modem.Api.Device;
-using Huawei.E3372.Manager.Domain.Modem.Api.Dhcp;
-using Huawei.E3372.Manager.Domain.Modem.Api.Dialup;
-using Huawei.E3372.Manager.Domain.Modem.Api.Global;
-using Huawei.E3372.Manager.Domain.Modem.Api.Monitoring;
-using Huawei.E3372.Manager.Domain.Modem.Api.Net;
-using Huawei.E3372.Manager.Domain.Modem.Api.OnlineUpdate;
-using Huawei.E3372.Manager.Domain.Modem.Api.Pb;
-using Huawei.E3372.Manager.Domain.Modem.Api.Pin;
-using Huawei.E3372.Manager.Domain.Modem.Api.SdCard;
-using Huawei.E3372.Manager.Domain.Modem.Api.Security;
-using Huawei.E3372.Manager.Domain.Modem.Api.Sms;
-using Huawei.E3372.Manager.Domain.Modem.Api.Stk;
-using Huawei.E3372.Manager.Domain.Modem.Api.User;
-using Huawei.E3372.Manager.Domain.Modem.Api.WebServer;
-using Huawei.E3372.Manager.Domain.Modem.Config;
-using Huawei.E3372.Manager.Domain.Modem.Config.DeviceInformation;
-using Huawei.E3372.Manager.Domain.Modem.Config.Global;
-using Huawei.E3372.Manager.Domain.Modem.Config.Network;
-using Huawei.E3372.Manager.Domain.Modem.Config.PcAssistant;
-using Huawei.E3372.Manager.Domain.Modem.Config.Ussd;
-using Huawei.E3372.Manager.Logic.ModemClients;
+﻿using Huawei.E3372.Manager.Logic.Modems;
+using Huawei.E3372.Manager.Logic.Modems.Models;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.Device;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.Dhcp;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.Dialup;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.Global;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.Monitoring;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.Net;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.OnlineUpdate;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.Pb;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.Pin;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.SdCard;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.Security;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.Sms;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.Stk;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.User;
+using Huawei.E3372.Manager.Logic.Modems.Models.Api.WebServer;
+using Huawei.E3372.Manager.Logic.Modems.Models.Config;
+using Huawei.E3372.Manager.Logic.Modems.Models.Config.DeviceInformation;
+using Huawei.E3372.Manager.Logic.Modems.Models.Config.Global;
+using Huawei.E3372.Manager.Logic.Modems.Models.Config.Network;
+using Huawei.E3372.Manager.Logic.Modems.Models.Config.PcAssistant;
+using Huawei.E3372.Manager.Logic.Modems.Models.Config.Ussd;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -54,7 +54,7 @@ public sealed class E3372hClientTests
 
     [DataRow(typeof(NetFeatureSwitchReponse))]
     [DataRow(typeof(NetModeListResponse))]
-    [DataRow(typeof(Domain.Modem.Api.Net.NetModeResponse))]
+    [DataRow(typeof(Modems.Models.Api.Net.NetModeResponse))]
     [DataRow(typeof(RegisterResponse))]
     [DataRow(typeof(SignalParaResponse))]
 
@@ -97,7 +97,7 @@ public sealed class E3372hClientTests
     [DataRow(typeof(LanguageListResponse))]
     [DataRow(typeof(NetTypeResponse))]
 
-    [DataRow(typeof(Domain.Modem.Config.Network.NetModeResponse))]
+    [DataRow(typeof(Modems.Models.Config.Network.NetModeResponse))]
     [DataRow(typeof(NetworkModeResponse))]
     [DataRow(typeof(OperatorListResponse))]
 

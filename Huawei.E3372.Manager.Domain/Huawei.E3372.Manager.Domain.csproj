@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="Modem\Api\User\StateLoginResponse.cs" />
-  </ItemGroup>
-
 </Project>
