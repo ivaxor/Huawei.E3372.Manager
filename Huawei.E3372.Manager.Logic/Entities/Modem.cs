@@ -1,5 +1,7 @@
 ﻿using Huawei.E3372.Manager.Logic.Modems.Models;
 using Huawei.E3372.Manager.Logic.Modems.Models.Api.Device;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Huawei.E3372.Manager.Logic.Entities;
 
@@ -51,5 +53,15 @@ public record Modem
         if (MacAddress != modem.MacAddress) return false;
 
         return true;
+    }
+}
+
+public class ModemEntityTypeConfiguration : IEntityTypeConfiguration<Modem>
+{
+    public void Configure(EntityTypeBuilder<Modem> builder)
+    {
+        builder
+            .HasIndex(m => m.Uri)
+            .IsUnique();
     }
 }

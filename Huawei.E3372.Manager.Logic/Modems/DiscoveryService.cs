@@ -17,7 +17,7 @@ public class DiscoveryService(
     {
         var modem = await dbContext.Modems.AsNoTracking().SingleOrDefaultAsync(m => m.Uri == uri, cancellationToken);
         if (modem != null)
-            return ServiceDataResult<Modem>.Failure(ServiceResultErrorCode.Duplicate, modem);
+            return ServiceDataResult<Modem>.Failure(ServiceResultErrorCode.Duplicate, data: modem);
 
         DeviceNameResponse deviceNameResponse;
         InformationResponse informationResponse;

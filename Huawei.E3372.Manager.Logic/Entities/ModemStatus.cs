@@ -1,6 +1,8 @@
 ﻿using Huawei.E3372.Manager.Logic.Modems.Models;
 using Huawei.E3372.Manager.Logic.Modems.Models.Api.Device;
 using Huawei.E3372.Manager.Logic.Modems.Models.Api.Monitoring;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore;
 using System.Web;
 
 namespace Huawei.E3372.Manager.Logic.Entities;
@@ -8,8 +10,8 @@ namespace Huawei.E3372.Manager.Logic.Entities;
 public record ModemStatus
 {
     public Guid Id { get; init; }
-    public Guid ModemId { get; init; }
 
+    public Guid ModemId { get; init; }
     public virtual Modem? Modem { get; init; }
 
     public string? IMSI { get; init; }
@@ -76,5 +78,18 @@ public record ModemStatus
         if (SmsStorageFull == status.SmsStorageFull) return false;
 
         return true;
+    }
+}
+
+public class ModemStatusEntityTypeConfiguration : IEntityTypeConfiguration<ModemStatus>
+{
+    public void Configure(EntityTypeBuilder<ModemStatus> builder)
+    {
+        builder
+            .HasOne(s => s.Modem)
+            .WithOne(m => m.Status)
+            .HasPrincipalKey<Modem>(m => m.Id)
+            .HasForeignKey<ModemStatus>(s => s.ModemId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

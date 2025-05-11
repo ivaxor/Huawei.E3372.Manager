@@ -39,8 +39,6 @@ public record ServiceDataResult<TData>
     }
 
     public static ServiceDataResult<TData> Success(TData result) => new ServiceDataResult<TData>(result);
-    public static ServiceDataResult<TData> Failure(ServiceResultErrorCode code) => new ServiceDataResult<TData>(code);
-    public static ServiceDataResult<TData> Failure(ServiceResultErrorCode code, TData? data = null) => new ServiceDataResult<TData>(code, message: null, data);
     public static ServiceDataResult<TData> Failure(ServiceResultErrorCode code, string? message = null, TData? data = null) => new ServiceDataResult<TData>(code, message, data);    
 }
 

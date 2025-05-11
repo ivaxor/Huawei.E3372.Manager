@@ -1,4 +1,6 @@
 ﻿using Huawei.E3372.Manager.Logic.Modems.Models.Api.Sms;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore;
 using System.Web;
 
 namespace Huawei.E3372.Manager.Logic.Entities;
@@ -6,8 +8,8 @@ namespace Huawei.E3372.Manager.Logic.Entities;
 public record ModemSms
 {
     public Guid Id { get; init; }
-    public Guid ModemId { get; init; }
 
+    public Guid ModemId { get; init; }
     public virtual Modem? Modem { get; init; }
 
     public int Index { get; init; }
@@ -75,4 +77,21 @@ public enum ModemSmsType
 {
     Outgoing,
     Incoming,
+}
+
+public class ModemSmsEntityTypeConfiguration : IEntityTypeConfiguration<ModemSms>
+{
+    public void Configure(EntityTypeBuilder<ModemSms> builder)
+    {
+        builder
+            .HasOne(s => s.Modem)
+            .WithMany(m => m.Sms)
+            .HasPrincipalKey(m => m.Id)
+            .HasForeignKey(s => s.ModemId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasIndex(s => new { s.ModemId, s.Index })
+            .IsUnique();
+    }
 }
