@@ -47,6 +47,8 @@ public record ModemSms
 
     public virtual bool Equals(ModemSms sms)
     {
+        if (sms == null) return false;
+
         if (ModemId != sms.ModemId) return false;
         if (Index != sms.Index) return false;
         if (Type != sms.Type) return false;

@@ -7,6 +7,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Huawei.E3372.Manager.sqlite3" />
+	  <None Remove="Huawei.E3372.Manager.sqlite3-shm" />
+	  <None Remove="Huawei.E3372.Manager.sqlite3-wal" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.15" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">

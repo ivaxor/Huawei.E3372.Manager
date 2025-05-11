@@ -57,6 +57,8 @@ public record ModemStatus
 
     public virtual bool Equals(ModemStatus status)
     {
+        if (status == null) return false;
+
         if (ModemId == status.ModemId) return false;
 
         if (IMSI == status.IMSI) return false;

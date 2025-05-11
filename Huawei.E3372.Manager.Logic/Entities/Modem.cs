@@ -40,6 +40,8 @@ public record Modem
 
     public virtual bool Equals(Modem modem)
     {
+        if (modem == null) return false;
+
         if (Uri != modem.Uri) return false;
 
         if (DeviceName != modem.DeviceName) return false;

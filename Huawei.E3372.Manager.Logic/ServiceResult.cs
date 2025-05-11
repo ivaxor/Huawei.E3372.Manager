@@ -21,27 +21,27 @@ public record ServiceResult
     public static ServiceResult Failure(ServiceResultErrorCode code, string? message = null) => new ServiceResult(code, message);
 }
 
-public record ServiceDataResult<TResult>
+public record ServiceDataResult<TData>
     : ServiceResult
-    where TResult : class
+    where TData : class
 {
-    public TResult? Result { get; init; }
+    public TData? Data { get; init; }
 
-    public ServiceDataResult(TResult result) : base()
+    public ServiceDataResult(TData data) : base()
     {
         IsSuccess = true;
-        Result = result;
+        Data = data;
     }
 
-    public ServiceDataResult(ServiceResultErrorCode code, string? message = null, TResult? result = null) : base(code, message)
+    public ServiceDataResult(ServiceResultErrorCode code, string? message = null, TData? data = null) : base(code, message)
     {
-        Result = result;
+        Data = data;
     }
 
-    public static ServiceDataResult<TResult> Success(TResult result) => new ServiceDataResult<TResult>(result);
-    public static ServiceDataResult<TResult> Failure(ServiceResultErrorCode code) => new ServiceDataResult<TResult>(code);
-    public static ServiceDataResult<TResult> Failure(ServiceResultErrorCode code, TResult? result = null) => new ServiceDataResult<TResult>(code, result: result);
-    public static ServiceDataResult<TResult> Failure(ServiceResultErrorCode code, string? message = null, TResult? result = null) => new ServiceDataResult<TResult>(code, message, result);    
+    public static ServiceDataResult<TData> Success(TData result) => new ServiceDataResult<TData>(result);
+    public static ServiceDataResult<TData> Failure(ServiceResultErrorCode code) => new ServiceDataResult<TData>(code);
+    public static ServiceDataResult<TData> Failure(ServiceResultErrorCode code, TData? data = null) => new ServiceDataResult<TData>(code, message: null, data);
+    public static ServiceDataResult<TData> Failure(ServiceResultErrorCode code, string? message = null, TData? data = null) => new ServiceDataResult<TData>(code, message, data);    
 }
 
 public enum ServiceResultErrorCode

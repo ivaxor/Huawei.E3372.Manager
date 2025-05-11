@@ -10,10 +10,4 @@ public class ApplicationDbContext : DbContext
     public DbSet<ModemStatus> ModemStatuses { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-    {
-        var databaseFilePath = Path.Combine(Environment.ProcessPath!, "data", "HuaweiE3372Manager.sqlite3");
-        options.UseSqlite($"Data Source={databaseFilePath}");
-    }
 }
