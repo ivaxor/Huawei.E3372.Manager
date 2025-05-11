@@ -1,14 +1,13 @@
 ﻿using Huawei.E3372.Manager.Logic.Entities;
-using Huawei.E3372.Manager.Logic.Modems;
 using Huawei.E3372.Manager.Logic.Modems.Models.Api.Sms;
 using Microsoft.EntityFrameworkCore;
 
-namespace Huawei.E3372.Manager.Logic;
+namespace Huawei.E3372.Manager.Logic.Modems;
 
-public class ModemSmsService(
+public class SmsService(
     IModemClient modemClient,
     ApplicationDbContext dbContext)
-    : IModemSmsService
+    : ISmsService
 {
     public async Task<ServiceDataResult<ModemSms[]>> PollIncomingAsync(
         Modem modem,
@@ -63,7 +62,7 @@ public class ModemSmsService(
             Date = DateTime.UtcNow.ToString(),
         };
 
-        await modemClient.PostAsync<SendSmsRequest, SendSmsResponse>(modem.Host, request, cancellationToken);
+        await modemClient.PostAsync<SendSmsRequest, SendSmsResponse>(modem.Uri, request, cancellationToken);
 
         return ServiceResult.Success();
     }
@@ -75,11 +74,11 @@ public class ModemSmsService(
         bool delete = false,
         CancellationToken cancellationToken = default)
     {
-        var smsFromModem = Enumerable.Empty<SmsListMessage>();
+        IEnumerable<SmsListMessage> smsFromModem;
 
         try
         {
-            var response = await modemClient.PostAsync<SmsListRequest, SmsListResponse>(modem.Host, request, cancellationToken);
+            var response = await modemClient.PostAsync<SmsListRequest, SmsListResponse>(modem.Uri, request, cancellationToken);
             smsFromModem = response.Messages.Messages;
         }
         catch (HttpRequestException)
@@ -90,20 +89,20 @@ public class ModemSmsService(
         var smsIndexes = smsFromModem.Select(sms => sms.Index).ToHashSet();
 
         var existingSmsInDbByIndex = dbContext.ModemSms.AsNoTracking()
-            .Where(sms => sms.ModemId == modem.Id)
-            .Where(sms => smsIndexes.Contains(sms.Index))
-            .ToDictionary(sms => sms.Index, sms => sms);
+            .Where(s => s.ModemId == modem.Id)
+            .Where(s => smsIndexes.Contains(s.Index))
+            .ToDictionary(s => s.Index, s => s);
 
         var newSms = smsFromModem
-            .Where(sms => !existingSmsInDbByIndex.ContainsKey(sms.Index))
-            .Select(sms => new ModemSms(modem, sms))
+            .Where(s => !existingSmsInDbByIndex.ContainsKey(s.Index))
+            .Select(s => new ModemSms(modem, s) { Id = Guid.NewGuid() })
             .ToArray();
         await dbContext.ModemSms.AddRangeAsync(newSms, cancellationToken);
 
         var udpatedSms = smsFromModem
-            .Where(sms => existingSmsInDbByIndex.ContainsKey(sms.Index))
-            .Select(sms => new ModemSms(modem, sms) with { Id = existingSmsInDbByIndex[sms.Index].Id })
-            .Where(sms => sms != existingSmsInDbByIndex[sms.Index])
+            .Where(s => existingSmsInDbByIndex.ContainsKey(s.Index))
+            .Select(s => new ModemSms(modem, s) { Id = existingSmsInDbByIndex[s.Index].Id })
+            .Where(s => s != existingSmsInDbByIndex[s.Index])
             .ToArray();
         dbContext.ModemSms.UpdateRange(udpatedSms);
 
@@ -112,29 +111,29 @@ public class ModemSmsService(
         if (request.BoxType == 1 && setAsRead && !delete)
         {
             var setReadRequests = smsFromModem
-                .Where(sms => sms.Status == 0)
-                .Select(sms => new SetReadRequest() { Index = sms.Index })
+                .Where(s => s.Status == 0)
+                .Select(s => new SetReadRequest() { Index = s.Index })
                 .ToArray();
 
             foreach (var setReadRequest in setReadRequests)
-                await modemClient.PostAsync<SetReadRequest, SetReadResponse>(modem.Host, setReadRequest, cancellationToken);
+                await modemClient.PostAsync<SetReadRequest, SetReadResponse>(modem.Uri, setReadRequest, cancellationToken);
         }
 
         if (delete)
         {
             var smsDeleteRequests = smsFromModem
-                .Select(sms => new DeleteSmsRequest() { Index = sms.Index })
+                .Select(s => new DeleteSmsRequest() { Index = s.Index })
                 .ToArray();
 
             foreach (var smsDeleteRequest in smsDeleteRequests)
-                await modemClient.PostAsync<DeleteSmsRequest, DeleteSmsResponse>(modem.Host, smsDeleteRequest, cancellationToken);
+                await modemClient.PostAsync<DeleteSmsRequest, DeleteSmsResponse>(modem.Uri, smsDeleteRequest, cancellationToken);
         }
 
-        return ServiceDataResult<ModemSms[]>.Success(newSms.Concat(udpatedSms).ToArray());
+        return ServiceDataResult<ModemSms[]>.Success([.. newSms, .. udpatedSms]);
     }
 }
 
-public interface IModemSmsService
+public interface ISmsService
 {
     public Task<ServiceDataResult<ModemSms[]>> PollIncomingAsync(
         Modem modem,

@@ -7,13 +7,9 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<Modem> Modems { get; set; }
     public DbSet<ModemSms> ModemSms { get; set; }
+    public DbSet<ModemStatus> ModemStatuses { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        Database.EnsureCreated();
-
-        base.OnModelCreating(modelBuilder);
-    }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {

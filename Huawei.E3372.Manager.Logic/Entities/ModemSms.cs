@@ -1,4 +1,5 @@
 ﻿using Huawei.E3372.Manager.Logic.Modems.Models.Api.Sms;
+using System.Web;
 
 namespace Huawei.E3372.Manager.Logic.Entities;
 
@@ -6,6 +7,9 @@ public record ModemSms
 {
     public Guid Id { get; init; }
     public Guid ModemId { get; init; }
+
+    public virtual Modem? Modem { get; init; }
+
     public int Index { get; init; }
     public ModemSmsType Type { get; init; }
     public string PhoneNumber { get; init; }
@@ -13,12 +17,12 @@ public record ModemSms
     public int Priority { get; init; }
     public DateTime DateTime { get; init; }
     public ModemSmsStatus Status { get; init; }
+
     public DateTime LastUpdatedAt { get; init; }
 
     public ModemSms() { }
     public ModemSms(Modem modem, SmsListMessage sms)
     {
-        Id = Guid.NewGuid();
         ModemId = modem.Id;
 
         Index = sms.Index;
@@ -28,8 +32,8 @@ public record ModemSms
             2 => ModemSmsType.Incoming,
             _ => throw new NotImplementedException(),
         };
-        PhoneNumber = sms.Phone;
-        Content = sms.Content;
+        PhoneNumber = HttpUtility.HtmlDecode(sms.Phone);
+        Content = HttpUtility.HtmlDecode(sms.Content);
         Priority = sms.Priority;
         DateTime = DateTime.Parse(sms.Date);
         Status = sms.Status switch

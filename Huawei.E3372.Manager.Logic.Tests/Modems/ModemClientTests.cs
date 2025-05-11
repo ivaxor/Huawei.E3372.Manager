@@ -25,14 +25,14 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Huawei.E3372.Manager.Logic.Tests;
+namespace Huawei.E3372.Manager.Logic.Tests.Modems;
 
 [TestClass]
 public sealed class ModemClientTests
 {
-    private static readonly IMemoryCache memoryCache = new MemoryCache(new MemoryCacheOptions());
-    private static readonly ILogger<ModemClient> logger = NullLogger<ModemClient>.Instance;
-    private static readonly ModemClient client = new ModemClient(memoryCache, logger);
+
+    internal static readonly IMemoryCache MemoryCache = TestDependencyFactory.CreateMemoryCache();
+    internal static readonly ModemClient ModemClient = new ModemClient(MemoryCache, NullLogger<ModemClient>.Instance);
 
     [DataRow(typeof(BasicInformationResponse))]
     [DataRow(typeof(DeviceFeatureSwitchResponse))]
@@ -54,7 +54,7 @@ public sealed class ModemClientTests
 
     [DataRow(typeof(NetFeatureSwitchReponse))]
     [DataRow(typeof(NetModeListResponse))]
-    [DataRow(typeof(Modems.Models.Api.Net.NetModeResponse))]
+    [DataRow(typeof(Logic.Modems.Models.Api.Net.NetModeResponse))]
     [DataRow(typeof(RegisterResponse))]
     [DataRow(typeof(SignalParaResponse))]
 
@@ -97,7 +97,7 @@ public sealed class ModemClientTests
     [DataRow(typeof(LanguageListResponse))]
     [DataRow(typeof(NetTypeResponse))]
 
-    [DataRow(typeof(Modems.Models.Config.Network.NetModeResponse))]
+    [DataRow(typeof(Logic.Modems.Models.Config.Network.NetModeResponse))]
     [DataRow(typeof(NetworkModeResponse))]
     [DataRow(typeof(OperatorListResponse))]
 
@@ -114,27 +114,27 @@ public sealed class ModemClientTests
     public async Task GetAsync_All_ReturnsValidType(Type type)
     {
         var methodInfo = typeof(ModemClient).GetMethod("GetAsync")!.MakeGenericMethod(type);
-        var baseUri = new Uri("http://192.168.41.1");
 
-        var task = methodInfo.Invoke(client, [baseUri, default(CancellationToken)])!;
+        var task = methodInfo.Invoke(ModemClient, [TestConstants.ModemUri, default(CancellationToken)])!;
         var response = await GetTaskResult(task);
 
         Assert.IsTrue(response.GetType() == type);
     }
 
-    [TestMethod]
-    public async Task PostAsync_SmsList_ReturnsValidType()
+    [DataRow(1)]
+    [DataRow(2)]
+    [DataTestMethod]
+    public async Task PostAsync_SmsList_ReturnsValidType(int boxType)
     {
         var methodInfo = typeof(ModemClient).GetMethod("PostAsync")!.MakeGenericMethod(typeof(SmsListRequest), typeof(SmsListResponse));
-        var baseUri = new Uri("http://192.168.41.1");
-        var model = new SmsListRequest()
+        var request = new SmsListRequest()
         {
             PageIndex = 1,
             ReadCount = 50,
-            BoxType = 1,
+            BoxType = boxType,
         };
 
-        var task = methodInfo.Invoke(client, [baseUri, model, default(CancellationToken)])!;
+        var task = methodInfo.Invoke(ModemClient, [TestConstants.ModemUri, request, default(CancellationToken)])!;
         var response = await GetTaskResult(task);
 
         Assert.IsTrue(response is SmsListResponse);

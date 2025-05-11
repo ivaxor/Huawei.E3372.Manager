@@ -12,7 +12,7 @@ public record SignalResponse : IModemGetResponse
     public string Sc { get; init; }
 
     [XmlElement("cell_id")]
-    public long CellId { get; init; }
+    public int CellId { get; init; }
 
     [XmlElement("rsrq")]
     public string Rsrq { get; init; }
