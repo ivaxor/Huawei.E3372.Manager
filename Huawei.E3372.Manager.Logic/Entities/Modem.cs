@@ -10,7 +10,7 @@ public record Modem
     public Uri Uri { get; init; }
     public string DeviceName { get; init; }
     public string SerialNumber { get; init; }
-    public string Imei { get; init; }
+    public string IMEI { get; init; }
 
     public string MacAddress { get; init; }
 
@@ -31,7 +31,7 @@ public record Modem
         DeviceName = deviceName.Name;
 
         SerialNumber = information.SerialNumber;
-        Imei = information.Imei;
+        IMEI = information.Imei;
         MacAddress = information.MacAddress1 ?? information.MacAddress2;
 
         CreatedAt = DateTime.UtcNow;
@@ -47,7 +47,7 @@ public record Modem
         if (DeviceName != modem.DeviceName) return false;
 
         if (SerialNumber != modem.SerialNumber) return false;
-        if (Imei != modem.Imei) return false;
+        if (IMEI != modem.IMEI) return false;
         if (MacAddress != modem.MacAddress) return false;
 
         return true;

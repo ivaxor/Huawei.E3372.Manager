@@ -28,7 +28,8 @@ public partial class Modems
         ValidationMessageStore = new ValidationMessageStore(EditContext);
 
         ModemsInfo ??= await DbContext.Modems
-            .Include(m => m.Status)
+            .OrderByDescending(m => m.CreatedAt)
+            .Include(m => m.Status)            
             .ToArrayAsync();
 
         await base.OnInitializedAsync();
@@ -43,6 +44,7 @@ public partial class Modems
         if (result.IsSuccess)
         {
             ModemsInfo = await DbContext.Modems
+                .OrderByDescending(m => m.CreatedAt)
                 .Include(m => m.Status)
                 .ToArrayAsync();
 
