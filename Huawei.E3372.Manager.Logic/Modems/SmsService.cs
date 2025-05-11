@@ -81,9 +81,9 @@ public class SmsService(
             var response = await modemClient.PostAsync<SmsListRequest, SmsListResponse>(modem.Uri, request, cancellationToken);
             smsFromModem = response.Messages.Messages;
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
-            return ServiceDataResult<ModemSms[]>.Failure(ServiceResultErrorCode.RemoteNotFound);
+            return ServiceDataResult<ModemSms[]>.Failure(ServiceResultErrorCode.RemoteNotFound, ex.Message);
         }
 
         var smsIndexes = smsFromModem.Select(sms => sms.Index).ToHashSet();

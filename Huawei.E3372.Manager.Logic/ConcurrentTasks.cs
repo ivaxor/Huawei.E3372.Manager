@@ -1,6 +1,6 @@
 ﻿namespace Huawei.E3372.Manager.Logic;
 
-internal static class ConcurrentTasks
+public static class ConcurrentTasks
 {
     public static async Task<(T1, T2)> AsParallel<T1, T2>(Task<T1> t1, Task<T2> t2)
     {

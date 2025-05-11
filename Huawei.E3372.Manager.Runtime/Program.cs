@@ -1,6 +1,7 @@
 using Huawei.E3372.Manager.Logic;
 using Huawei.E3372.Manager.Logic.Modems;
 using Huawei.E3372.Manager.Runtime.Components;
+using Huawei.E3372.Manager.Worker;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,10 +26,13 @@ builder.Services
             options.UseSqlite(sqliteConnectionString);
     });
 
-builder.Services.AddScoped<IModemClient, ModemClient>();
-builder.Services.AddScoped<IDiscoveryService, DiscoveryService>();
-builder.Services.AddScoped<IStatusService, StatusService>();
-builder.Services.AddScoped<ISmsService, SmsService>();
+builder.Services.AddHostedService<SmsPollBackgroundService>();
+
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<IModemClient, ModemClient>();
+builder.Services.AddTransient<IDiscoveryService, DiscoveryService>();
+builder.Services.AddTransient<IStatusService, StatusService>();
+builder.Services.AddTransient<ISmsService, SmsService>();
 
 var app = builder.Build();
 
