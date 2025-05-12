@@ -7,20 +7,20 @@ namespace Huawei.E3372.Manager.Logic.Entities;
 
 public record Modem
 {
-    public Guid Id { get; init; }
+    public Guid Id { get; set; }
 
-    public Uri Uri { get; init; }
-    public string DeviceName { get; init; }
-    public string SerialNumber { get; init; }
-    public string IMEI { get; init; }
+    public Uri Uri { get; set; }
+    public string DeviceName { get; set; }
+    public string SerialNumber { get; set; }
+    public string IMEI { get; set; }
 
-    public string MacAddress { get; init; }
+    public string MacAddress { get; set; }
 
-    public virtual IEnumerable<ModemSms>? Sms { get; init; }
-    public virtual ModemStatus? Status { get; init; }
+    public virtual IEnumerable<ModemSms>? Sms { get; set; }
+    public virtual ModemStatus? Status { get; set; }
 
-    public DateTime CreatedAt { get; init; }
-    public DateTime LastUpdatedAt { get; init; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime LastUpdatedAt { get; set; }
 
     public Modem() { }
     public Modem(

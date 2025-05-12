@@ -6,11 +6,11 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.OnlineUpdate;
 public record OnlineUpdateConfigurationResponse : IModemGetResponse
 {
     [XmlElement("autoUpdateInterval")]
-    public int AutoUpdateInterval { get; init; }
+    public int AutoUpdateInterval { get; set; }
 
     [XmlElement("auto_update_enable")]
-    public bool AutoUpdateEnable { get; init; }
+    public bool AutoUpdateEnable { get; set; }
 
     [XmlElement("server_force_enable")]
-    public bool ServerForceEnable { get; init; }
+    public bool ServerForceEnable { get; set; }
 }

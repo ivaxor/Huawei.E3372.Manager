@@ -6,35 +6,35 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Config.DeviceInformation;
 public record AddParamResponse : IModemGetResponse
 {
     [XmlElement("lac")]
-    public string Lac { get; init; }
+    public string Lac { get; set; }
 
     [XmlElement("cell_id")]
-    public string CellId { get; init; }
+    public string CellId { get; set; }
 
     [XmlElement("band")]
-    public string Band { get; init; }
+    public string Band { get; set; }
 
     [XmlElement("earfcn1")]
-    public string Earfcn1 { get; init; }
+    public string Earfcn1 { get; set; }
 
     [XmlElement("freq1")]
-    public string Freq1 { get; init; }
+    public string Freq1 { get; set; }
 
     [XmlElement("bandwidth1")]
-    public string Bandwidth1 { get; init; }
+    public string Bandwidth1 { get; set; }
 
     [XmlElement("earfcn2")]
-    public string Earfcn2 { get; init; }
+    public string Earfcn2 { get; set; }
 
     [XmlElement("freq2")]
-    public string Freq2 { get; init; }
+    public string Freq2 { get; set; }
 
     [XmlElement("bandwidth2")]
-    public string Bandwidth2 { get; init; }
+    public string Bandwidth2 { get; set; }
 
     [XmlElement("rssi")]
-    public string Rssi { get; init; }
+    public string Rssi { get; set; }
 
     [XmlElement("cnt")]
-    public int Cnt { get; init; }
+    public int Cnt { get; set; }
 }

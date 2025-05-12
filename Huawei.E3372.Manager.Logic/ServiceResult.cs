@@ -2,9 +2,9 @@
 
 public record ServiceResult
 {
-    public bool IsSuccess { get; init; }
-    public ServiceResultErrorCode? ErrorCode { get; init; }
-    public string? ErrorMessage { get; init; }
+    public bool IsSuccess { get; set; }
+    public ServiceResultErrorCode? ErrorCode { get; set; }
+    public string? ErrorMessage { get; set; }
 
     public ServiceResult()
     {
@@ -25,7 +25,7 @@ public record ServiceDataResult<TData>
     : ServiceResult
     where TData : class
 {
-    public TData? Data { get; init; }
+    public TData? Data { get; set; }
 
     public ServiceDataResult(TData data) : base()
     {

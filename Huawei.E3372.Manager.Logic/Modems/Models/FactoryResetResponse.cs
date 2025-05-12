@@ -6,5 +6,5 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models;
 public record FactoryResetResponse : IModemGetResponse
 {
     [XmlText]
-    public string Value { get; init; }
+    public string Value { get; set; }
 }

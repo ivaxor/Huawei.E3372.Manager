@@ -6,8 +6,8 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Security;
 public record DmzResponse : IModemGetResponse
 {
     [XmlElement("DmzStatus")]
-    public bool DmzStatus { get; init; }
+    public bool DmzStatus { get; set; }
 
     [XmlElement("DmzIPAddress")]
-    public string DmzIPAddress { get; init; }
+    public string DmzIPAddress { get; set; }
 }

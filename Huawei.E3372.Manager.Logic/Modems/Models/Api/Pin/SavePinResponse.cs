@@ -6,11 +6,11 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Pin;
 public record SavePinResponse : IModemGetResponse
 {
     [XmlElement("SimSavepinStatus")]
-    public int SimSavePinStatus { get; init; }
+    public int SimSavePinStatus { get; set; }
 
     [XmlElement("SimSavepinScid")]
-    public string SimSavePinScid { get; init; }
+    public string SimSavePinScid { get; set; }
 
     [XmlElement("simsavepinenable")]
-    public bool SimSavePinEnable { get; init; }
+    public bool SimSavePinEnable { get; set; }
 }

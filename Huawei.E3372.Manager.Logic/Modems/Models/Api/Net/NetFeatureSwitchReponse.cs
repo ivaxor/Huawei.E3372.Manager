@@ -6,5 +6,5 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Net;
 public record NetFeatureSwitchReponse : IModemGetResponse
 {
     [XmlElement("net_premode_switch")]
-    public int NetPremodeSwitch { get; init; }
+    public int NetPremodeSwitch { get; set; }
 }

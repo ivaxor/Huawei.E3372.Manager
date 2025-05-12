@@ -6,5 +6,5 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models;
 public record DeviceNameResponse : IModemGetResponse
 {
     [XmlElement("DeviceName")]
-    public string Name { get; init; }
+    public string Name { get; set; }
 }

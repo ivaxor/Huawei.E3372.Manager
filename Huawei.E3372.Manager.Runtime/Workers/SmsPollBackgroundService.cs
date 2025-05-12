@@ -29,23 +29,40 @@ public sealed class SmsPollBackgroundService(
 
     internal async Task DoWorkAsync(CancellationToken cancellationToken)
     {
-        using var scope = serviceScopeFactory.CreateScope();
-        using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        var incommingSmsService = scope.ServiceProvider.GetRequiredService<ISmsService>();
-        var outgoingSmsService = scope.ServiceProvider.GetRequiredService<ISmsService>();
+        logger.LogInformation($"{nameof(SmsPollBackgroundService)} is working");
+        
+        using var dbContext = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var incommingSmsService = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ISmsService>();
+        var outgoingSmsService = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ISmsService>();
+        var draftSmsService = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ISmsService>();
 
-        var modems = await dbContext.Modems.AsNoTracking().ToArrayAsync(cancellationToken);
-        foreach (var modem in modems)
+        var modems = await dbContext.Modems
+            .Include(m => m.Status)
+            .AsNoTracking()
+            .ToArrayAsync(cancellationToken);
+
+        try
         {
-            var (incomingResult, outgoingResult) = await ConcurrentTasks.AsParallel(
-                incommingSmsService.PollIncomingAsync(modem, false, false, cancellationToken),
-                outgoingSmsService.PollOutgoingAsync(modem, false, cancellationToken));
+            foreach (var modem in modems)
+            {
+                var (incomingResult, outgoingResult, draftResult) = await ConcurrentTasks.AsParallel(
+                    incommingSmsService.PollIncomingAsync(modem, false, false, cancellationToken),
+                    outgoingSmsService.PollOutgoingAsync(modem, false, cancellationToken),
+                    draftSmsService.PollDraftAsync(modem, false, cancellationToken));
 
-            if (!incomingResult.IsSuccess)
-                logger.LogError("Failed to poll incoming SMS for {Uri}. Message: {ErrorMessage}", modem.Uri, incomingResult.ErrorMessage);
+                if (!incomingResult.IsSuccess)
+                    logger.LogError("Failed to poll incoming SMS for {ModemUri}. Message: {ErrorMessage}", modem.Uri, incomingResult.ErrorMessage);
 
-            if (!outgoingResult.IsSuccess)
-                logger.LogError("Failed to poll outgoing SMS for {Uri}. Message: {ErrorMessage}", modem.Uri, outgoingResult.ErrorMessage);
+                if (!outgoingResult.IsSuccess)
+                    logger.LogError("Failed to poll outgoing SMS for {ModemUri}. Message: {ErrorMessage}", modem.Uri, outgoingResult.ErrorMessage);
+
+                if (!draftResult.IsSuccess)
+                    logger.LogError("Failed to poll draft SMS for {ModemUri}. Message: {ErrorMessage}", modem.Uri, outgoingResult.ErrorMessage);
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, $"{nameof(SmsPollBackgroundService)} failed");
         }
     }
 }

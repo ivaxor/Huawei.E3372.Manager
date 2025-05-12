@@ -6,53 +6,53 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Device;
 public record InformationResponse : IModemGetResponse
 {
     [XmlElement("DeviceName")]
-    public string DeviceName { get; init; }
+    public string DeviceName { get; set; }
 
     [XmlElement("SerialNumber")]
-    public string SerialNumber { get; init; }
+    public string SerialNumber { get; set; }
 
     [XmlElement("Imei")]
-    public string Imei { get; init; }
+    public string Imei { get; set; }
 
     [XmlElement("Imsi")]
-    public string Imsi { get; init; }
+    public string Imsi { get; set; }
 
     [XmlElement("Iccid")]
-    public string Iccid { get; init; }
+    public string Iccid { get; set; }
 
     [XmlElement("Msisdn")]
-    public string Msisdn { get; init; }
+    public string Msisdn { get; set; }
 
     [XmlElement("HardwareVersion")]
-    public string HardwareVersion { get; init; }
+    public string HardwareVersion { get; set; }
 
     [XmlElement("SoftwareVersion")]
-    public string SoftwareVersion { get; init; }
+    public string SoftwareVersion { get; set; }
 
     [XmlElement("WebUIVersion")]
-    public string WebUIVersion { get; init; }
+    public string WebUIVersion { get; set; }
 
     [XmlElement("MacAddress1")]
-    public string MacAddress1 { get; init; }
+    public string MacAddress1 { get; set; }
 
     [XmlElement("MacAddress2")]
-    public string MacAddress2 { get; init; }
+    public string MacAddress2 { get; set; }
 
     [XmlElement("ProductFamily")]
-    public string ProductFamily { get; init; }
+    public string ProductFamily { get; set; }
 
     [XmlElement("Classify")]
-    public string Classify { get; init; }
+    public string Classify { get; set; }
 
     [XmlElement("supportmode")]
-    public string SupportMode { get; init; }
+    public string SupportMode { get; set; }
 
     [XmlElement("workmode")]
-    public string WorkMode { get; init; }
+    public string WorkMode { get; set; }
 
     [XmlElement("WanIPAddress")]
-    public string WanIPAddress { get; init; }
+    public string WanIPAddress { get; set; }
 
     [XmlElement("WanIPv6Address")]
-    public string WanIPv6Address { get; init; }
+    public string WanIPv6Address { get; set; }
 }

@@ -6,8 +6,8 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models;
 public record ErrorResponse : IModemGetResponse, IModemPostResponse
 {
     [XmlElement("code")]
-    public int Code { get; init; }
+    public int Code { get; set; }
 
     [XmlElement("message")]
-    public string Message { get; init; }
+    public string Message { get; set; }
 }

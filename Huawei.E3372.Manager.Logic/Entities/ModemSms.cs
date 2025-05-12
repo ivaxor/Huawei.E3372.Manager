@@ -7,20 +7,21 @@ namespace Huawei.E3372.Manager.Logic.Entities;
 
 public record ModemSms
 {
-    public Guid Id { get; init; }
+    public Guid Id { get; set; }
 
-    public Guid ModemId { get; init; }
-    public virtual Modem? Modem { get; init; }
+    public Guid ModemId { get; set; }
+    public virtual Modem? Modem { get; set; }
 
-    public int Index { get; init; }
-    public ModemSmsType Type { get; init; }
-    public string PhoneNumber { get; init; }
-    public string Content { get; init; }
-    public int Priority { get; init; }
-    public DateTime DateTime { get; init; }
-    public ModemSmsStatus Status { get; init; }
+    public int Index { get; set; }
 
-    public DateTime LastUpdatedAt { get; init; }
+    public ModemSmsStatus Status { get; set; }
+    public string FromPhoneNumber { get; set; }
+    public string ToPhoneNumbers { get; set; }
+    public string Content { get; set; }
+    public int Priority { get; set; }
+    public DateTime DateTime { get; set; }
+
+    public DateTime LastUpdatedAt { get; set; }
 
     public ModemSms() { }
     public ModemSms(Modem modem, SmsListMessage sms)
@@ -28,23 +29,38 @@ public record ModemSms
         ModemId = modem.Id;
 
         Index = sms.Index;
-        Type = sms.Type switch
-        {
-            1 => ModemSmsType.Outgoing,
-            2 => ModemSmsType.Incoming,
-            _ => throw new NotImplementedException(),
-        };
-        PhoneNumber = HttpUtility.HtmlDecode(sms.Phone);
-        Content = HttpUtility.HtmlDecode(sms.Content);
-        Priority = sms.Priority;
-        DateTime = DateTime.Parse(sms.Date);
+
         Status = sms.Status switch
         {
             0 => ModemSmsStatus.Unread,
             1 => ModemSmsStatus.Read,
-            3 => ModemSmsStatus.Sent,
+            2 => ModemSmsStatus.Failed,
+            3 => ModemSmsStatus.Delivered,
             _ => throw new NotImplementedException(),
         };
+
+        FromPhoneNumber = Status switch
+        {
+            ModemSmsStatus.Unread => sms.Phones,
+            ModemSmsStatus.Read => sms.Phones,
+            ModemSmsStatus.Failed => modem.Status!.PhoneNumber!,
+            ModemSmsStatus.Delivered => modem.Status!.PhoneNumber!,
+            _ => throw new NotImplementedException(),
+        };
+
+        ToPhoneNumbers = Status switch
+        {
+            ModemSmsStatus.Unread => modem.Status!.PhoneNumber!,
+            ModemSmsStatus.Read => modem.Status!.PhoneNumber!,
+            ModemSmsStatus.Failed => sms.Phones,
+            ModemSmsStatus.Delivered => sms.Phones,
+            _ => throw new NotImplementedException(),
+        };
+
+        Content = HttpUtility.HtmlDecode(sms.Content);
+        Priority = sms.Priority;
+        DateTime = DateTime.Parse(sms.Date);
+        
     }
 
     public virtual bool Equals(ModemSms sms)
@@ -52,14 +68,14 @@ public record ModemSms
         if (sms == null) return false;
 
         if (ModemId != sms.ModemId) return false;
+
         if (Index != sms.Index) return false;
-        if (Type != sms.Type) return false;
-        if (PhoneNumber != sms.PhoneNumber) return false;
+        if (Status != sms.Status) return false;
+        if (FromPhoneNumber != sms.FromPhoneNumber) return false;
+        if (ToPhoneNumbers != sms.ToPhoneNumbers) return false;
         if (Content != sms.Content) return false;
         if (Priority != sms.Priority) return false;
         if (DateTime != sms.DateTime) return false;
-        if (Status != sms.Status) return false;
-        if (Status != sms.Status) return false;
 
         return true;
     }
@@ -69,9 +85,9 @@ public enum ModemSmsStatus
 {
     Unread,
     Read,
-    Sent,
+    Failed,
+    Delivered,
 }
-
 
 public enum ModemSmsType
 {
@@ -93,5 +109,13 @@ public class ModemSmsEntityTypeConfiguration : IEntityTypeConfiguration<ModemSms
         builder
             .HasIndex(s => new { s.ModemId, s.Index })
             .IsUnique();
+
+        builder
+            .Property(s => s.FromPhoneNumber)
+            .IsRequired(false);
+
+        builder
+            .Property(s => s.ToPhoneNumbers)
+            .IsRequired(false);
     }
 }

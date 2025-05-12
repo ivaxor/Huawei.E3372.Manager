@@ -9,26 +9,27 @@ namespace Huawei.E3372.Manager.Logic.Entities;
 
 public record ModemStatus
 {
-    public Guid Id { get; init; }
+    public Guid Id { get; set; }
 
-    public Guid ModemId { get; init; }
-    public virtual Modem? Modem { get; init; }
+    public Guid ModemId { get; set; }
+    public virtual Modem? Modem { get; set; }
 
-    public string? IMSI { get; init; }
-    public string? ICCID { get; init; }
+    public string? IMSI { get; set; }
+    public string? ICCID { get; set; }
 
-    public string? OperatorName { get; init; }
-    public string? OperatorNumber { get; init; }
+    public string? OperatorName { get; set; }
+    public string? OperatorNumber { get; set; }
+    public string? PhoneNumber { get; set; }
 
-    public int? CellId { get; init; }
-    public string? RSRQ { get; init; }
-    public string? RSRP { get; init; }
-    public string? RSSI { get; init; }
-    public string? SINR { get; init; }
+    public int? CellId { get; set; }
+    public string? RSRQ { get; set; }
+    public string? RSRP { get; set; }
+    public string? RSSI { get; set; }
+    public string? SINR { get; set; }
 
-    public bool SmsStorageFull { get; init; }
+    public bool SmsStorageFull { get; set; }
 
-    public DateTime LastUpdatedAt { get; init; }
+    public DateTime LastUpdatedAt { get; set; }
 
     public ModemStatus() { }
     public ModemStatus(
@@ -91,5 +92,49 @@ public class ModemStatusEntityTypeConfiguration : IEntityTypeConfiguration<Modem
             .HasPrincipalKey<Modem>(m => m.Id)
             .HasForeignKey<ModemStatus>(s => s.ModemId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .Property(s => s.IMSI)
+            .IsRequired(false);
+
+        builder
+            .Property(s => s.ICCID)
+            .IsRequired(false);
+
+        builder
+            .Property(s => s.OperatorName)
+            .IsRequired(false);
+
+        builder
+            .Property(s => s.OperatorNumber)
+            .IsRequired(false);
+
+        builder
+            .Property(s => s.PhoneNumber)
+            .IsRequired(false);
+
+        builder
+            .Property(s => s.CellId)
+            .IsRequired(false);
+
+        builder
+            .Property(s => s.RSRQ)
+            .IsRequired(false);
+
+        builder
+            .Property(s => s.RSRP)
+            .IsRequired(false);
+
+        builder
+            .Property(s => s.RSRQ)
+            .IsRequired(false);
+
+        builder
+            .Property(s => s.RSSI)
+            .IsRequired(false);
+
+        builder
+            .Property(s => s.SINR)
+            .IsRequired(false);
     }
 }

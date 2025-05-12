@@ -6,41 +6,41 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Device;
 public record SignalResponse : IModemGetResponse
 {
     [XmlElement("pci")]
-    public int Pci { get; init; }
+    public int Pci { get; set; }
 
     [XmlElement("sc")]
-    public string Sc { get; init; }
+    public string Sc { get; set; }
 
     [XmlElement("cell_id")]
-    public int CellId { get; init; }
+    public int CellId { get; set; }
 
     [XmlElement("rsrq")]
-    public string Rsrq { get; init; }
+    public string Rsrq { get; set; }
 
     [XmlElement("rsrp")]
-    public string Rsrp { get; init; }
+    public string Rsrp { get; set; }
 
     [XmlElement("rssi")]
-    public string Rssi { get; init; }
+    public string Rssi { get; set; }
 
     [XmlElement("sinr")]
-    public string Sinr { get; init; }
+    public string Sinr { get; set; }
 
     [XmlElement("rscp")]
-    public string Rscp { get; init; }
+    public string Rscp { get; set; }
 
     [XmlElement("ecio")]
-    public string Ecio { get; init; }
+    public string Ecio { get; set; }
 
     [XmlElement("psatt")]
-    public int Psatt { get; init; }
+    public int Psatt { get; set; }
 
     [XmlElement("mode")]
-    public int Mode { get; init; }
+    public int Mode { get; set; }
 
     [XmlElement("lte_bandwidth")]
-    public string LteBandwidth { get; init; }
+    public string LteBandwidth { get; set; }
 
     [XmlElement("lte_bandinfo")]
-    public string LteBandInfo { get; init; }
+    public string LteBandInfo { get; set; }
 }

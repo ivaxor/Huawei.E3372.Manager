@@ -6,14 +6,14 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Config.Global;
 public record NetTypeResponse : IModemGetResponse
 {
     [XmlElement("networktypes")]
-    public NetTypeElement[] NetworkTypes { get; init; }
+    public NetTypeElement[] NetworkTypes { get; set; }
 }
 
 public record NetTypeElement
 {
     [XmlElement("index")]
-    public string Index { get; init; }
+    public string Index { get; set; }
 
     [XmlElement("networktype")]
-    public string NetworkType { get; init; }
+    public string NetworkType { get; set; }
 }

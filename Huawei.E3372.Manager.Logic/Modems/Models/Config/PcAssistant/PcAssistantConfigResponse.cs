@@ -6,14 +6,14 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Config.PcAssistant;
 public record PcAssistantConfigResponse : IModemGetResponse
 {
     [XmlElement("enable")]
-    public bool Enable { get; init; }
+    public bool Enable { get; set; }
 
     [XmlElement("winpath")]
-    public string WinPath { get; init; }
+    public string WinPath { get; set; }
 
     [XmlElement("macpath")]
-    public string MacPath { get; init; }
+    public string MacPath { get; set; }
 
     [XmlElement("upgradepath")]
-    public string UpgradePath { get; init; }
+    public string UpgradePath { get; set; }
 }

@@ -6,38 +6,38 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Net;
 public record NetModeListResponse : IModemGetResponse
 {
     [XmlElement("AccessList")]
-    public NetModeListAccessList AccessList { get; init; }
+    public NetModeListAccessList AccessList { get; set; }
 
     [XmlElement("BandList")]
-    public NetModeListBandList BandList { get; init; }
+    public NetModeListBandList BandList { get; set; }
 
     [XmlElement("LTEBandList")]
-    public NetModeListLTEBandList LTEBandList { get; init; }
+    public NetModeListLTEBandList LTEBandList { get; set; }
 }
 
 public record NetModeListAccessList
 {
     [XmlElement("Access")]
-    public string[] Accesses { get; init; }
+    public string[] Accesses { get; set; }
 }
 
 public record NetModeListBandList
 {
     [XmlElement("Band")]
-    public NetModeListBandInfo[] Bands { get; init; }
+    public NetModeListBandInfo[] Bands { get; set; }
 }
 
 public record NetModeListBandInfo
 {
     [XmlElement("Name")]
-    public string Name { get; init; }
+    public string Name { get; set; }
 
     [XmlElement("Value")]
-    public string Value { get; init; }
+    public string Value { get; set; }
 }
 
 public record NetModeListLTEBandList
 {
     [XmlElement("LTEBand")]
-    public NetModeListBandInfo[] LTEBands { get; init; }
+    public NetModeListBandInfo[] LTEBands { get; set; }
 }

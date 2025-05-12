@@ -46,6 +46,24 @@ public class SmsService(
         return await PollAsync(modem, request, setAsRead: false, delete, cancellationToken);
     }
 
+    public async Task<ServiceDataResult<ModemSms[]>> PollDraftAsync(
+        Modem modem,
+        bool delete = false,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new SmsListRequest()
+        {
+            PageIndex = 1,
+            ReadCount = 50,
+            BoxType = 3,
+            SortType = 0,
+            Ascending = false,
+            UnreadPreferred = false,
+        };
+
+        return await PollAsync(modem, request, setAsRead: false, delete, cancellationToken);
+    }
+
     public async Task<ServiceResult> SendAsync(
         Modem modem,
         IEnumerable<string> phones,
@@ -142,6 +160,11 @@ public interface ISmsService
         CancellationToken cancellationToken = default);
 
     public Task<ServiceDataResult<ModemSms[]>> PollOutgoingAsync(
+        Modem modem,
+        bool delete = false,
+        CancellationToken cancellationToken = default);
+
+    public Task<ServiceDataResult<ModemSms[]>> PollDraftAsync(
         Modem modem,
         bool delete = false,
         CancellationToken cancellationToken = default);

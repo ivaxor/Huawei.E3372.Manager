@@ -13,6 +13,7 @@ public class DiscoveryService(
 {
     public async Task<ServiceDataResult<Modem>> DiscoverAsync(
         Uri uri,
+        string phoneNumber,
         CancellationToken cancellationToken = default)
     {
         var modem = await dbContext.Modems.AsNoTracking().SingleOrDefaultAsync(m => m.Uri == uri, cancellationToken);
@@ -40,6 +41,7 @@ public class DiscoveryService(
         await dbContext.SaveChangesAsync(cancellationToken);
 
         await statusService.PollAsync(modem, cancellationToken);
+        await statusService.SetPhoneNumberAsync(modem, phoneNumber, cancellationToken);
 
         return ServiceDataResult<Modem>.Success(modem);
     }
@@ -48,6 +50,7 @@ public class DiscoveryService(
 public interface IDiscoveryService
 {
     public Task<ServiceDataResult<Modem>> DiscoverAsync(
-        Uri host,
+        Uri uri,
+        string phoneNumber,
         CancellationToken cancellationToken = default);
 }

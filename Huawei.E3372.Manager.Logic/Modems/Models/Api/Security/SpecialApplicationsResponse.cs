@@ -6,7 +6,7 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Security;
 public record SpecialApplicationsResponse : IModemGetResponse
 {
     [XmlElement("LanPorts")]
-    public SpecialApplicationsLanPorts LanPorts { get; init; }
+    public SpecialApplicationsLanPorts LanPorts { get; set; }
 }
 
 public record SpecialApplicationsLanPorts

@@ -6,5 +6,5 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Security;
 public record NatResponse : IModemGetResponse
 {
     [XmlElement("NATType")]
-    public int NATType { get; init; }
+    public int NATType { get; set; }
 }

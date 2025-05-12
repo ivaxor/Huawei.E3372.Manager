@@ -6,17 +6,17 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Config.Network;
 public record OperatorListResponse : IModemGetResponse
 {
     [XmlElement("Item")]
-    public OperatorListItem[] Items { get; init; }
+    public OperatorListItem[] Items { get; set; }
 }
 
 public record OperatorListItem
 {
     [XmlAttribute("plmn")]
-    public string Plmn { get; init; }
+    public string Plmn { get; set; }
 
     [XmlAttribute("shortdescr")]
-    public string ShortDescription { get; init; }
+    public string ShortDescription { get; set; }
 
     [XmlAttribute("picture")]
-    public string Picture { get; init; }
+    public string Picture { get; set; }
 }

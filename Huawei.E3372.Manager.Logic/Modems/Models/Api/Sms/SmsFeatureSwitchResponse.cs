@@ -6,5 +6,5 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Sms;
 public record SmsFeatureSwitchResponse : IModemGetResponse
 {
     [XmlElement("getcontactenable")]
-    public bool GetContactEnable { get; init; }
+    public bool GetContactEnable { get; set; }
 }

@@ -54,11 +54,31 @@ public class StatusService(
 
         return ServiceDataResult<ModemStatus>.Success(modemStatus);
     }
+
+    public async Task<ServiceDataResult<ModemStatus>> SetPhoneNumberAsync(
+        Modem modem,
+        string phoneNumber,
+        CancellationToken cancellationToken = default)
+    {
+        var modemStatus = await dbContext.ModemStatuses.SingleOrDefaultAsync(s => s.ModemId == modem.Id, cancellationToken);
+        if (modemStatus == null)
+            return ServiceDataResult<ModemStatus>.Failure(ServiceResultErrorCode.LocalNotFound);
+
+        modemStatus.PhoneNumber = phoneNumber;
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return ServiceDataResult<ModemStatus>.Success(modemStatus);
+    }
 }
 
 public interface IStatusService
 {
     public Task<ServiceDataResult<ModemStatus>> PollAsync(
         Modem modem,
+        CancellationToken cancellationToken = default);
+
+    public Task<ServiceDataResult<ModemStatus>> SetPhoneNumberAsync(
+        Modem modem,
+        string phoneNumber,
         CancellationToken cancellationToken = default);
 }

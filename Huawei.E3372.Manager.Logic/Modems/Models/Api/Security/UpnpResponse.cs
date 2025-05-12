@@ -6,5 +6,5 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Security;
 public record UpnpResponse : IModemGetResponse
 {
     [XmlElement("UpnpStatus")]
-    public bool UpnpStatus { get; init; }
+    public bool UpnpStatus { get; set; }
 }

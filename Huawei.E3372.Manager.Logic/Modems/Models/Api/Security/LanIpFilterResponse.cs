@@ -6,7 +6,7 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Security;
 public record LanIpFilterResponse : IModemGetResponse
 {
     [XmlElement("IPFilters")]
-    public LanIpFilter Filter { get; init; }
+    public LanIpFilter Filter { get; set; }
 }
 
 public record LanIpFilter

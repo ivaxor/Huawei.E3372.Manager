@@ -6,5 +6,5 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Config;
 public record VersionResponse : IModemGetResponse
 {
     [XmlElement("webui")]
-    public string WebUi { get; init; }
+    public string WebUi { get; set; }
 }

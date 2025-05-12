@@ -6,7 +6,7 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Security;
 public record VirtualServersResponse : IModemGetResponse
 {
     [XmlElement("Servers")]
-    public VirtualServers Servers { get; init; }
+    public VirtualServers Servers { get; set; }
 }
 
 public record VirtualServers

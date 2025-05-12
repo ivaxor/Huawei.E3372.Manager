@@ -6,11 +6,11 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Net;
 public record NetModeResponse : IModemGetResponse
 {
     [XmlElement("NetworkMode")]
-    public string NetworkMode { get; init; }
+    public string NetworkMode { get; set; }
 
     [XmlElement("NetworkBand")]
-    public string NetworkBand { get; init; }
+    public string NetworkBand { get; set; }
 
     [XmlElement("LTEBand")]
-    public string LTEBand { get; init; }
+    public string LTEBand { get; set; }
 }

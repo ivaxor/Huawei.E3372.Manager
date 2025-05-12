@@ -6,11 +6,11 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.Security;
 public record FirewallSwitchResponse : IModemGetResponse
 {
     [XmlElement("FirewallMainSwitch")]
-    public bool FirewallMainSwitch { get; init; }
+    public bool FirewallMainSwitch { get; set; }
 
     [XmlElement("FirewallIPFilterSwitch")]
-    public bool FirewallIPFilterSwitch { get; init; }
+    public bool FirewallIPFilterSwitch { get; set; }
 
     [XmlElement("FirewallWanPortPingSwitch")]
-    public bool FirewallWanPortPingSwitch { get; init; }
+    public bool FirewallWanPortPingSwitch { get; set; }
 }

@@ -6,20 +6,20 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models;
 public record OperatorResponse : IModemGetResponse
 {
     [XmlElement("State")]
-    public int State { get; init; }
+    public int State { get; set; }
 
     [XmlElement("FullName")]
-    public string FullName { get; init; }
+    public string FullName { get; set; }
 
     [XmlElement("ShortName")]
-    public string ShortName { get; init; }
+    public string ShortName { get; set; }
 
     [XmlElement("SIMName")]
-    public string SIMName { get; init; }
+    public string SIMName { get; set; }
 
     [XmlElement("Numeric")]
-    public string Numeric { get; init; }
+    public string Numeric { get; set; }
 
     [XmlElement("Rat")]
-    public int Rat { get; init; }
+    public int Rat { get; set; }
 }

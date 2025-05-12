@@ -6,26 +6,26 @@ namespace Huawei.E3372.Manager.Logic.Modems.Models.Api.SdCard;
 public record SdCardResponse : IModemGetResponse
 {
     [XmlElement("sdcard")]
-    public SDCardInfo Info { get; init; }
+    public SDCardInfo Info { get; set; }
 }
 
 public record SDCardInfo
 {
     [XmlElement("SDShareMode")]
-    public bool ShareMode { get; init; }
+    public bool ShareMode { get; set; }
 
     [XmlElement("SDCardShareStatus")]
-    public bool ShareStatus { get; init; }
+    public bool ShareStatus { get; set; }
 
     [XmlElement("SDShareFileMode")]
-    public bool ShareFileMode { get; init; }
+    public bool ShareFileMode { get; set; }
 
     [XmlElement("SDAccessType")]
-    public bool AccessType { get; init; }
+    public bool AccessType { get; set; }
 
     [XmlElement("SDSharePath")]
-    public string SharePath { get; init; }
+    public string SharePath { get; set; }
 
     [XmlElement("SDCardStatus")]
-    public bool Status { get; init; }
+    public bool Status { get; set; }
 }
