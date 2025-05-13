@@ -76,7 +76,7 @@ app
     .UseSwagger()
     .UseSwaggerUI();
 
-app.MapHealthChecks("/healtz");
+app.MapHealthChecks("/healthz");
 
 using var dbContext = app.Services.GetService<IServiceScopeFactory>()!.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
 await dbContext.Database.EnsureCreatedAsync();
