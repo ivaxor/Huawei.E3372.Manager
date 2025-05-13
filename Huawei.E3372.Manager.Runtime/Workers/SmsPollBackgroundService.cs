@@ -1,6 +1,7 @@
 using Huawei.E3372.Manager.Logic;
 using Huawei.E3372.Manager.Logic.Entities;
 using Huawei.E3372.Manager.Logic.Modems;
+using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -12,9 +13,11 @@ public sealed class SmsPollBackgroundService(
     ILogger<SmsPollBackgroundService> logger)
     : BackgroundService
 {
+    public static readonly EventCallback OnChanged;
+
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        logger.LogInformation($"{nameof(SmsPollBackgroundService)} running");
+        logger.LogInformation($"{nameof(SmsPollBackgroundService)} running.");
 
         using var timer = new PeriodicTimer(applicationSettings.Value.SmsPollBackgroundServiceInterval);
         try
@@ -26,13 +29,13 @@ public sealed class SmsPollBackgroundService(
         }
         catch (OperationCanceledException)
         {
-            logger.LogInformation($"{nameof(SmsPollBackgroundService)} is stopping");
+            logger.LogInformation($"{nameof(SmsPollBackgroundService)} is stopping.");
         }
     }
 
     internal async Task DoWorkAsync(CancellationToken cancellationToken)
     {
-        logger.LogInformation($"{nameof(SmsPollBackgroundService)} is working");
+        logger.LogInformation($"{nameof(SmsPollBackgroundService)} is working.");
 
         using var dbContext = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var incommingSmsService = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ISmsService>();
@@ -44,9 +47,9 @@ public sealed class SmsPollBackgroundService(
             .AsNoTracking()
             .ToArrayAsync(cancellationToken);
 
-        try
+        foreach (var modem in modems)
         {
-            foreach (var modem in modems)
+            try
             {
                 var (incomingResult, outgoingResult, draftResult) = await ConcurrentTasks.AsParallel(
                     incommingSmsService.PollIncomingAsync(modem, applicationSettings.Value.SmsPollBackgroundServiceSetAsRead, applicationSettings.Value.SmsPollBackgroundServiceDelete, cancellationToken),
@@ -54,18 +57,20 @@ public sealed class SmsPollBackgroundService(
                     draftSmsService.PollDraftAsync(modem, applicationSettings.Value.SmsPollBackgroundServiceDelete, cancellationToken));
 
                 if (!incomingResult.IsSuccess)
-                    logger.LogError("Failed to poll incoming SMS for {ModemUri}. Message: {ErrorMessage}", modem.Uri, incomingResult.ErrorMessage);
+                    logger.LogError("Failed to poll incoming SMS for {ModemUri}. Message: {ErrorMessage}.", modem.Uri, incomingResult.ErrorMessage);
 
                 if (!outgoingResult.IsSuccess)
-                    logger.LogError("Failed to poll outgoing SMS for {ModemUri}. Message: {ErrorMessage}", modem.Uri, outgoingResult.ErrorMessage);
+                    logger.LogError("Failed to poll outgoing SMS for {ModemUri}. Message: {ErrorMessage}.", modem.Uri, outgoingResult.ErrorMessage);
 
                 if (!draftResult.IsSuccess)
-                    logger.LogError("Failed to poll draft SMS for {ModemUri}. Message: {ErrorMessage}", modem.Uri, outgoingResult.ErrorMessage);
+                    logger.LogError("Failed to poll draft SMS for {ModemUri}. Message: {ErrorMessage}.", modem.Uri, outgoingResult.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, $"{nameof(SmsPollBackgroundService)} failed.");
             }
         }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, $"{nameof(SmsPollBackgroundService)} failed");
-        }
+
+        await OnChanged.InvokeAsync();
     }
 }

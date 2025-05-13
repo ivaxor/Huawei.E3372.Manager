@@ -11,6 +11,7 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["Huawei.E3372.Manager.Logic/Huawei.E3372.Manager.Logic.csproj", "Huawei.E3372.Manager.Logic/"]
 COPY ["Huawei.E3372.Manager.Runtime/Huawei.E3372.Manager.Runtime.csproj", "Huawei.E3372.Manager.Runtime/"]
 RUN dotnet restore "./Huawei.E3372.Manager.Runtime/Huawei.E3372.Manager.Runtime.csproj"
 COPY . .
@@ -24,6 +25,10 @@ RUN dotnet publish "./Huawei.E3372.Manager.Runtime.csproj" -c $BUILD_CONFIGURATI
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
+USER root
+RUN mkdir -p /app/Data
+RUN chown -R app:app /app/Data
 WORKDIR /app
 COPY --from=publish /app/publish .
+USER $APP_UID
 ENTRYPOINT ["dotnet", "Huawei.E3372.Manager.Runtime.dll"]

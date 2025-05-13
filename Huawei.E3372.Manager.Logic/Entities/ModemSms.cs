@@ -15,8 +15,8 @@ public record ModemSms
     public int Index { get; set; }
 
     public ModemSmsStatus Status { get; set; }
-    public string FromPhoneNumber { get; set; }
-    public string ToPhoneNumbers { get; set; }
+    public string? FromPhoneNumber { get; set; }
+    public string? ToPhoneNumbers { get; set; }
     public string Content { get; set; }
     public int Priority { get; set; }
     public DateTime DateTime { get; set; }
@@ -43,15 +43,15 @@ public record ModemSms
         {
             ModemSmsStatus.Unread => sms.Phones,
             ModemSmsStatus.Read => sms.Phones,
-            ModemSmsStatus.Failed => modem.Status!.PhoneNumber!,
-            ModemSmsStatus.Delivered => modem.Status!.PhoneNumber!,
+            ModemSmsStatus.Failed => modem.Status?.PhoneNumber,
+            ModemSmsStatus.Delivered => modem.Status?.PhoneNumber,
             _ => throw new NotImplementedException(),
         };
 
         ToPhoneNumbers = Status switch
         {
-            ModemSmsStatus.Unread => modem.Status!.PhoneNumber!,
-            ModemSmsStatus.Read => modem.Status!.PhoneNumber!,
+            ModemSmsStatus.Unread => modem.Status?.PhoneNumber,
+            ModemSmsStatus.Read => modem.Status?.PhoneNumber,
             ModemSmsStatus.Failed => sms.Phones,
             ModemSmsStatus.Delivered => sms.Phones,
             _ => throw new NotImplementedException(),

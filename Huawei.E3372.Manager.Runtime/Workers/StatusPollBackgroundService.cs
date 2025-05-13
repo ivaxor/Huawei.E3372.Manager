@@ -1,6 +1,7 @@
 using Huawei.E3372.Manager.Logic;
 using Huawei.E3372.Manager.Logic.Entities;
 using Huawei.E3372.Manager.Logic.Modems;
+using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -12,9 +13,11 @@ public sealed class StatusPollBackgroundService(
     ILogger<StatusPollBackgroundService> logger)
     : BackgroundService
 {
+    public static readonly EventCallback OnChanged;
+
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        logger.LogInformation($"{nameof(StatusPollBackgroundService)} running");
+        logger.LogInformation($"{nameof(StatusPollBackgroundService)} running.");
 
         using var timer = new PeriodicTimer(applicationSettings.Value.StatusPollBackgroundServiceInterval);
         try
@@ -26,13 +29,13 @@ public sealed class StatusPollBackgroundService(
         }
         catch (OperationCanceledException)
         {
-            logger.LogInformation($"{nameof(StatusPollBackgroundService)} is stopping");
+            logger.LogInformation($"{nameof(StatusPollBackgroundService)} is stopping.");
         }
     }
 
     internal async Task DoWorkAsync(CancellationToken cancellationToken)
     {
-        logger.LogInformation($"{nameof(StatusPollBackgroundService)} is working");
+        logger.LogInformation($"{nameof(StatusPollBackgroundService)} is working.");
 
         using var dbContext = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var statusService = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<IStatusService>();
@@ -41,19 +44,22 @@ public sealed class StatusPollBackgroundService(
             .AsNoTracking()
             .ToArrayAsync(cancellationToken);
 
-        try
+
+        foreach (var modem in modems)
         {
-            foreach (var modem in modems)
+            try
             {
-                var statusResult = await statusService.PollAsync(modem);
+                var statusResult = await statusService.PollAsync(modem, cancellationToken);
 
                 if (!statusResult.IsSuccess)
-                    logger.LogError("Failed to poll status for {ModemUri}. Message: {ErrorMessage}", modem.Uri, statusResult.ErrorMessage);
+                    logger.LogError("Failed to poll status for {ModemUri}. Message: {ErrorMessage}.", modem.Uri, statusResult.ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, $"{nameof(StatusPollBackgroundService)} failed.");
             }
         }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, $"{nameof(StatusPollBackgroundService)} failed");
-        }
+
+        await OnChanged.InvokeAsync();
     }
 }

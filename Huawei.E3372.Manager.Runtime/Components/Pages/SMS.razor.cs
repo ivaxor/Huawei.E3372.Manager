@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
 namespace Huawei.E3372.Manager.Runtime.Components.Pages;
+
 public partial class SMS
 {
     [Inject] protected ApplicationDbContext DbContext { get; set; }
@@ -43,11 +44,21 @@ public partial class SMS
         foreach (var phoneNumber in phoneNumbers)
         {
             if (!SendSmsModel.ToPhoneNumberRegex.IsMatch(phoneNumber))
-                ValidationMessageStore.Add(() => Model.ToPhoneNumbers, $"Invalid phone number: {phoneNumber}");
+                ValidationMessageStore.Add(() => Model.ToPhoneNumbers, $"Invalid phone number: {phoneNumber}.");
         }
     }
 
-    protected async Task OnSubmit(EditContext context)
+    protected void OnClose()
+    {
+        EditContext.OnValidationRequested -= OnValidationRequested;
+
+        Model = new SendSmsModel();
+        EditContext = new EditContext(Model);
+        EditContext.OnValidationRequested += OnValidationRequested!;
+        ValidationMessageStore = new ValidationMessageStore(EditContext);
+    }
+
+    protected async Task OnValidSubmit(EditContext context)
     {
         IsSubmitted = true;
 
@@ -58,16 +69,9 @@ public partial class SMS
 
         var result = await SmsService.SendAsync(modem, phoneNumbers, Model.Content);
         if (result.IsSuccess)
-        {
-            Modal!.Close();
-            Model.FromModemId = string.Empty;
-            Model.ToPhoneNumbers = string.Empty;
-            Model.Content = string.Empty;
-        }
+            Modal.Close();
         else
-        {
-            ValidationMessageStore.Add(() => Model.FromModemId, result.ErrorMessage ?? "Failed to send SMS");
-        }
+            ValidationMessageStore.Add(() => Model.FromModemId, result.ErrorMessage ?? "Failed to send SMS.");
 
         IsSubmitted = false;
     }
@@ -90,13 +94,13 @@ public partial class SMS
     {
         public static readonly Regex ToPhoneNumberRegex = new Regex("\\+\\d{8,15}");
 
-        [Required]
+        [Required(ErrorMessage = "From field is required.")]
         public string FromModemId { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "To field is required.")]
         public string ToPhoneNumbers { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Content field is required.")]
         public string Content { get; set; } = string.Empty;
     }
 }

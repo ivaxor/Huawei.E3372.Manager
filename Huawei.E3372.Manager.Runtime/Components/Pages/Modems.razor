@@ -14,7 +14,7 @@
     </div>
 
     <div class="col text-end">
-        <button @onclick="() => Modal?.Open()" class="btn btn-primary">
+        <button @onclick="() => Modal.Open()" class="btn btn-primary">
             <i class="bi bi-plugin"></i>
             Discover new modem
         </button>
@@ -24,7 +24,6 @@
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th scope="col">#</th>
             <th scope="col">URI</th>
             <th scope="col">Name</th>
             <th scope="col">Serial Number</th>
@@ -35,12 +34,22 @@
         </tr>
     </thead>
     <tbody>
-        @for (var i = 0; i < ModemsInfo.Length; i++)
+        @if (ModemsInfo == null)
         {
-            var modem = ModemsInfo[i];
+            <tr class="placeholder-glow">
+                <td><span class="placeholder col-12"></span></td>
+                <td><span class="placeholder col-12"></span></td>
+                <td><span class="placeholder col-12"></span></td>
+                <td><span class="placeholder col-12"></span></td>
+                <td><span class="placeholder col-12"></span></td>
+                <td><span class="placeholder col-12"></span></td>
+                <td><span class="placeholder col-12"></span></td>
+            </tr>
+        }
 
+        @foreach (var modem in ModemsInfo ?? Enumerable.Empty<Modem>())
+        {
             <tr>
-                <th scope="row">@(i + 1)</th>
                 <td>
                     <a href="@modem.Uri" target="_blank">
                         @modem.Uri.Host
@@ -57,10 +66,11 @@
     </tbody>
 </table>
 
-<ModalComponent @ref="Modal" Title="Discover new modem">
-    <EditForm EditContext="EditContext" OnValidSubmit="OnSubmit">
+<ModalComponent @ref="Modal" Title="Discover new modem" OnClose="OnClose">
+    <EditForm EditContext="EditContext" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
+        <AntiforgeryToken />
 
         <div class="mb-3 row">
             <label for="uri" class="col-sm-4 col-form-label">Uri</label>

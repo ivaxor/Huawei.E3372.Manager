@@ -41,13 +41,23 @@ public partial class Modems
         ValidationMessageStore.Clear();
 
         if (!Uri.TryCreate(Model.RawUri, UriKind.Absolute, out var uri))
-            ValidationMessageStore.Add(() => Model.RawUri, "Invalid URI. Only absolute URI is accepted");
+            ValidationMessageStore.Add(() => Model.RawUri, "Invalid URI. Only absolute URI is accepted.");
 
-        if (string.IsNullOrEmpty(Model.PhoneNumber) && !DiscoveryModel.PhoneNumberRegex.IsMatch(Model.PhoneNumber))
-            ValidationMessageStore.Add(() => Model.PhoneNumber, "Invalid phone number");
+        if (!string.IsNullOrEmpty(Model.PhoneNumber) && !DiscoveryModel.PhoneNumberRegex.IsMatch(Model.PhoneNumber))
+            ValidationMessageStore.Add(() => Model.PhoneNumber, "Invalid phone number.");
     }
 
-    protected async Task OnSubmit(EditContext context)
+    protected void OnClose()
+    {
+        EditContext.OnValidationRequested -= OnValidationRequested;
+
+        Model = new DiscoveryModel();
+        EditContext = new EditContext(Model);
+        EditContext.OnValidationRequested += OnValidationRequested!;
+        ValidationMessageStore = new ValidationMessageStore(EditContext);
+    }
+
+    protected async Task OnValidSubmit(EditContext context)
     {
         IsSubmitted = true;
 
@@ -60,19 +70,17 @@ public partial class Modems
                 .Include(m => m.Status)
                 .ToArrayAsync();
 
-            Modal!.Close();
-            Model.RawUri = string.Empty;
-            Model.PhoneNumber = string.Empty;
+            Modal.Close();
         }
         else
         {
             switch (result.ErrorCode)
             {
                 case ServiceResultErrorCode.Duplicate:
-                    ValidationMessageStore.Add(() => Model.RawUri, "Duplicate URI. Modem with this URI already exists");
+                    ValidationMessageStore.Add(() => Model.RawUri, "Duplicate URI. Modem with this URI already exists.");
                     break;
                 default:
-                    ValidationMessageStore.Add(() => Model.RawUri, result.ErrorMessage ?? "Failed to discover modem");
+                    ValidationMessageStore.Add(() => Model.RawUri, result.ErrorMessage ?? "Failed to discover modem.");
                     break;
             }
         }
@@ -84,7 +92,7 @@ public partial class Modems
     {
         public static readonly Regex PhoneNumberRegex = new Regex("\\+\\d{8,15}");
 
-        [Required]
+        [Required(ErrorMessage = "URI field is required.")]
         public string RawUri { get; set; } = string.Empty;
 
         public string PhoneNumber { get; set; } = string.Empty;

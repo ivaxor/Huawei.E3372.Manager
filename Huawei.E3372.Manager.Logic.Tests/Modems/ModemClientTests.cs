@@ -22,7 +22,6 @@ using Huawei.E3372.Manager.Logic.Modems.Models.Config.Network;
 using Huawei.E3372.Manager.Logic.Modems.Models.Config.PcAssistant;
 using Huawei.E3372.Manager.Logic.Modems.Models.Config.Ussd;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Huawei.E3372.Manager.Logic.Tests.Modems;

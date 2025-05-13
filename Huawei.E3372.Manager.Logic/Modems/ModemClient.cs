@@ -1,7 +1,9 @@
-﻿using Huawei.E3372.Manager.Logic.Modems.Models;
+﻿using Huawei.E3372.Manager.Logic.Entities;
+using Huawei.E3372.Manager.Logic.Modems.Models;
 using Huawei.E3372.Manager.Logic.Modems.Models.Api.WebServer;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Collections.Frozen;
 using System.Net;
 using System.Net.Mime;
@@ -13,6 +15,7 @@ namespace Huawei.E3372.Manager.Logic.Modems;
 
 public class ModemClient(
     IMemoryCache memoryCache,
+    IOptions<ApplicationSettings> applicationSettings,
     ILogger<ModemClient> logger)
     : IModemClient
 {
@@ -45,12 +48,12 @@ public class ModemClient(
         if (ErrorXmlSerializer.CanDeserialize(xmlReader))
         {
             var error = (ErrorResponse)ErrorXmlSerializer.Deserialize(xmlReader)!;
-            logger.LogError("Error response returned by modem. Code: {Code}. Message: {Message}", error.Code, error.Message);
-            throw new HttpRequestException("Error response returned by modem", null, response.StatusCode);
+            logger.LogError("Error response returned by modem. Code: {Code}. Message: {Message}.", error.Code, error.Message);
+            throw new HttpRequestException("Error response returned by modem.", null, response.StatusCode);
         }
 
-        logger.LogError("Failed to deserialize data from modem. Response: {Response}", responseText);
-        throw new HttpRequestException("Failed to deserialize data from modem", null, response.StatusCode);
+        logger.LogError("Failed to deserialize data from modem. Response: {Response}.", responseText);
+        throw new HttpRequestException("Failed to deserialize data from modem.", null, response.StatusCode);
     }
 
     public async Task<TModelPostResponse> PostAsync<TModelPostRequest, TModelPostResponse>(
@@ -84,12 +87,12 @@ public class ModemClient(
         if (ErrorXmlSerializer.CanDeserialize(xmlReader))
         {
             var error = (ErrorResponse)ErrorXmlSerializer.Deserialize(xmlReader)!;
-            logger.LogError("Error response returned by modem. Code: {Code}. Message: {Message}", error.Code, error.Message);
-            throw new HttpRequestException("Error response returned by modem", null, response.StatusCode);
+            logger.LogError("Error response returned by modem. Code: {Code}. Message: {Message}.", error.Code, error.Message);
+            throw new HttpRequestException("Error response returned by modem.", null, response.StatusCode);
         }
 
-        logger.LogError("Failed to deserialize data from modem. Response: {Response}", responseText);
-        throw new HttpRequestException("Failed to deserialize data from modem", null, response.StatusCode);
+        logger.LogError("Failed to deserialize data from modem. Response: {Response}.", responseText);
+        throw new HttpRequestException("Failed to deserialize data from modem.", null, response.StatusCode);
     }
 
     internal async Task<HttpClient> CreateHttpClientForGetAsync(
@@ -129,7 +132,7 @@ public class ModemClient(
         return memoryCache.GetOrCreateAsync(
             $"{nameof(SessionTokenInfoResponse)}_{baseUri.Host}",
             c => GetSessionTokenInfoAsync(httpClient, cancellationToken),
-            new MemoryCacheEntryOptions() { SlidingExpiration = TimeSpan.FromMinutes(5) })!;
+            new MemoryCacheEntryOptions() { SlidingExpiration = applicationSettings.Value.ModemTokenLifetime })!;
     }
 
     internal static async Task<SessionTokenInfoResponse> GetSessionTokenInfoAsync(

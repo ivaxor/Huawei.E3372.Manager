@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Huawei.E3372.Manager.Domain", "Huawei.E3372.Manager.Domain\Huawei.E3372.Manager.Domain.csproj", "{AB6AD494-1CD4-4576-9AAE-BFF308B34C2D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Huawei.E3372.Manager.Logic", "Huawei.E3372.Manager.Logic\Huawei.E3372.Manager.Logic.csproj", "{9F4A9C2A-375F-4E33-AA83-71552F5CBA80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Huawei.E3372.Manager.Logic.Tests", "Huawei.E3372.Manager.Logic.Tests\Huawei.E3372.Manager.Logic.Tests.csproj", "{1173A76B-DD2C-4FB5-90A5-64A35DB5182B}"
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AB6AD494-1CD4-4576-9AAE-BFF308B34C2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB6AD494-1CD4-4576-9AAE-BFF308B34C2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB6AD494-1CD4-4576-9AAE-BFF308B34C2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB6AD494-1CD4-4576-9AAE-BFF308B34C2D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9F4A9C2A-375F-4E33-AA83-71552F5CBA80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F4A9C2A-375F-4E33-AA83-71552F5CBA80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F4A9C2A-375F-4E33-AA83-71552F5CBA80}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -3,6 +3,7 @@ using Huawei.E3372.Manager.Logic.Entities;
 using Huawei.E3372.Manager.Logic.Modems;
 using Huawei.E3372.Manager.Runtime.Components;
 using Huawei.E3372.Manager.Runtime.Workers;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,8 +20,6 @@ builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
 
-builder.Services.AddMemoryCache();
-
 builder.Services
     .AddDbContext<ApplicationDbContext>(options =>
     {
@@ -29,14 +28,24 @@ builder.Services
             options.UseSqlite(sqliteConnectionString);
     });
 
+builder.Services
+    .AddDataProtection()
+    .PersistKeysToDbContext<ApplicationDbContext>();
+
+builder.Services
+    .AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>();
+
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient();
+
 builder.Services.AddHostedService<SmsPollBackgroundService>();
 builder.Services.AddHostedService<StatusPollBackgroundService>();
 
-builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IModemClient, ModemClient>();
-builder.Services.AddTransient<IDiscoveryService, DiscoveryService>();
-builder.Services.AddTransient<IStatusService, StatusService>();
-builder.Services.AddTransient<ISmsService, SmsService>();
+builder.Services.AddScoped<IDiscoveryService, DiscoveryService>();
+builder.Services.AddScoped<IStatusService, StatusService>();
+builder.Services.AddScoped<ISmsService, SmsService>();
 
 var app = builder.Build();
 
@@ -66,6 +75,8 @@ app.MapControllers();
 app
     .UseSwagger()
     .UseSwaggerUI();
+
+app.MapHealthChecks("/healtz");
 
 using var dbContext = app.Services.GetService<IServiceScopeFactory>()!.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
 await dbContext.Database.EnsureCreatedAsync();

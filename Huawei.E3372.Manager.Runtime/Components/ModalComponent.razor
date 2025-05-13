@@ -4,8 +4,8 @@
             <div class="modal-header">
                 <h5 class="modal-title">
                     @Title
-                    </h5>
-                <button type="button" class="btn-close" @onclick="Close" aria-label="Close"></button>
+                </h5>
+                <button type="button" class="btn-close" @onclick="() => Close()" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
@@ -23,6 +23,7 @@
 @code {
     [Parameter] public required string Title { get; set; }
     [Parameter] public required RenderFragment ChildContent { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
 
     protected bool IsOpen { get; set; } = false;
 
@@ -32,8 +33,11 @@
         StateHasChanged();
     }
 
-    public void Close()
+    public async Task Close(bool sielenceOnCloseEvent = false)
     {
+        if (!sielenceOnCloseEvent)
+            await OnClose.InvokeAsync();
+
         IsOpen = false;
         StateHasChanged();
     }

@@ -14,7 +14,7 @@
     </div>
 
     <div class="col text-end">
-        <button @onclick="() => Modal?.Open()" class="btn btn-primary">
+        <button @onclick="() => Modal.Open()" class="btn btn-primary">
             <i class="bi bi-send"></i>
             Send SMS
         </button>
@@ -24,7 +24,6 @@
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th scope="col">#</th>
             <th scope="col">DateTime</th>
             <th scope="col">Status</th>
             <th scope="col">Sender</th>
@@ -34,20 +33,68 @@
         </tr>
     </thead>
     <tbody>
-        @for (var i = 0; i < ModemSms.Length; i++)
+        @if (ModemSms == null || ModemById == null)
         {
-            var sms = ModemSms[i];
+            <tr class="placeholder-glow">
+                <td><span class="placeholder col-12"></span></td>
+                <td><span class="placeholder col-12"></span></td>
+                <td><span class="placeholder col-12"></span></td>
+                <td><span class="placeholder col-12"></span></td>
+                <td><span class="placeholder col-12"></span></td>
+                <td><span class="placeholder col-12"></span></td>
+            </tr>
+        }
+
+        @foreach (var sms in ModemSms ?? Enumerable.Empty<ModemSms>())
+        {
             var trClass = sms.Status switch
             {
                 ModemSmsStatus.Unread => "table-primary",
                 ModemSmsStatus.Read => "table-secondary",
                 ModemSmsStatus.Failed => "table-warning",
                 ModemSmsStatus.Delivered => "table-info",
-                _ => string.Empty,
+                _ => throw new NotImplementedException(),
+            };
+
+            var secondaryActionDisabled = sms.Status == ModemSmsStatus.Read;
+            var secondaryActionIconClassName = sms.Status switch
+            {
+                ModemSmsStatus.Unread => "bi bi-check",
+                ModemSmsStatus.Read => "bi bi-check-all",
+                ModemSmsStatus.Failed => "bi bi-arrow-repeat",
+                ModemSmsStatus.Delivered => "bi bi-arrow-repeat",
+                _ => throw new NotImplementedException(),
+            };
+            var secondaryActionTitle = sms.Status switch
+            {
+                ModemSmsStatus.Unread => "Mark as read",
+                ModemSmsStatus.Read => string.Empty,
+                ModemSmsStatus.Failed => "Retry",
+                ModemSmsStatus.Delivered => "Repeat",
+                _ => throw new NotImplementedException(),
+            };
+            Action secondaryActionFunction = sms.Status switch
+            {
+                ModemSmsStatus.Unread => (() => MarkAsRead(sms)),
+                ModemSmsStatus.Read => (() => { }),
+                ModemSmsStatus.Failed => (() =>
+                {
+                    Model.FromModemId = ModemById[sms.ModemId].Id.ToString();
+                    Model.ToPhoneNumbers = sms.ToPhoneNumbers;
+                    Model.Content = sms.Content;
+                    Modal.Open();
+                }),
+                ModemSmsStatus.Delivered => (() =>
+                {
+                    Model.FromModemId = ModemById[sms.ModemId].Id.ToString();
+                    Model.ToPhoneNumbers = sms.ToPhoneNumbers;
+                    Model.Content = sms.Content;
+                    Modal.Open();
+                }),
+                _ => throw new NotImplementedException(),
             };
 
             <tr class="@trClass">
-                <th scope="row">@(i + 1)</th>
                 <td>@sms.DateTime</td>
                 <td>
                     @switch (sms.Status)
@@ -73,16 +120,16 @@
                 </td>
                 <td>@sms.FromPhoneNumber</td>
                 <td>
-                    @foreach (var toPhoneNumber in sms.ToPhoneNumbers.Split(","))
+                    @foreach (var toPhoneNumber in sms.ToPhoneNumbers?.Split(",") ?? Enumerable.Empty<string>())
                     {
                         <p>@toPhoneNumber</p>
                     }
                 </td>
                 <td>@sms.Content</td>
-                <td class="align-middle">
+                <td class="align-middle text-end">
                     <div class="btn-group" role="group" aria-label="Actions">
-                        <button type="button" @onclick="() => MarkAsRead(sms)" class="btn btn-info" disabled="@(sms.Status != ModemSmsStatus.Unread)" title="Mark as read">
-                            <i class="bi bi-eye"></i>
+                        <button type="button" @onclick="() => secondaryActionFunction()" class="btn btn-secondary" title="@secondaryActionTitle">
+                            <i class="@secondaryActionIconClassName"></i>
                         </button>
                         <button type="button" @onclick="() => Delete(sms)" class="btn btn-danger" title="Delete">
                             <i class="bi bi-trash"></i>
@@ -94,18 +141,19 @@
     </tbody>
 </table>
 
-<ModalComponent @ref="Modal" Title="Send SMS">
-    <EditForm EditContext="EditContext" OnValidSubmit="OnSubmit">
+<ModalComponent @ref="Modal" Title="Send SMS" OnClose="OnClose">
+    <EditForm EditContext="EditContext" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
+        <AntiforgeryToken />
 
         <div class="mb-3 row">
             <label for="from" class="col-sm-2 col-form-label">From</label>
             <div class="col-sm-10">
                 <InputSelect @bind-Value="Model.FromModemId" id="from" class="form-select">
-                    @foreach (var kvp in ModemById)
+                    @foreach (var kvp in ModemById ?? Enumerable.Empty<KeyValuePair<Guid, Modem>>())
                     {
-                        <option value="@kvp.Key.ToString()" disabled="@(string.IsNullOrEmpty(kvp.Value.Status?.IMSI))">
+                        <option value="@kvp.Key.ToString()" disabled="@(string.IsNullOrEmpty(kvp.Value.Status!.IMSI))">
                             @(kvp.Value.Status!.PhoneNumber ?? kvp.Value.Status!.IMSI)
                         </option>
                     }
