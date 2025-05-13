@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Huawei.E3372.Manager.Domain\Huawei.E3372.Manager.Domain.csproj" />
     <ProjectReference Include="..\Huawei.E3372.Manager.Logic\Huawei.E3372.Manager.Logic.csproj" />
   </ItemGroup>
 
