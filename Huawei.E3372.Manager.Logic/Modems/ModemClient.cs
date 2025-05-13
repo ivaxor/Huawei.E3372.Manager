@@ -46,12 +46,10 @@ public class ModemClient(
         {
             var error = (ErrorResponse)ErrorXmlSerializer.Deserialize(xmlReader)!;
             logger.LogError("Error response returned by modem. Code: {Code}. Message: {Message}", error.Code, error.Message);
-        }
-        else
-        {
-            logger.LogError("Failed to deserialize data from modem. Response: {Response}", responseText);
+            throw new HttpRequestException("Error response returned by modem", null, response.StatusCode);
         }
 
+        logger.LogError("Failed to deserialize data from modem. Response: {Response}", responseText);
         throw new HttpRequestException("Failed to deserialize data from modem", null, response.StatusCode);
     }
 
@@ -87,12 +85,10 @@ public class ModemClient(
         {
             var error = (ErrorResponse)ErrorXmlSerializer.Deserialize(xmlReader)!;
             logger.LogError("Error response returned by modem. Code: {Code}. Message: {Message}", error.Code, error.Message);
-        }
-        else
-        {
-            logger.LogError("Failed to deserialize data from modem. Response: {Response}", responseText);
+            throw new HttpRequestException("Error response returned by modem", null, response.StatusCode);
         }
 
+        logger.LogError("Failed to deserialize data from modem. Response: {Response}", responseText);
         throw new HttpRequestException("Failed to deserialize data from modem", null, response.StatusCode);
     }
 
@@ -132,10 +128,11 @@ public class ModemClient(
     {
         return memoryCache.GetOrCreateAsync(
             $"{nameof(SessionTokenInfoResponse)}_{baseUri.Host}",
-            c => GetSessionTokenInfoAsync(httpClient, cancellationToken))!;
+            c => GetSessionTokenInfoAsync(httpClient, cancellationToken),
+            new MemoryCacheEntryOptions() { SlidingExpiration = TimeSpan.FromMinutes(5) })!;
     }
 
-    internal async Task<SessionTokenInfoResponse> GetSessionTokenInfoAsync(
+    internal static async Task<SessionTokenInfoResponse> GetSessionTokenInfoAsync(
         HttpClient httpClient,
         CancellationToken cancellationToken = default)
     {

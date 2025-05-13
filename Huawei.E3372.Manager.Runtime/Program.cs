@@ -1,11 +1,14 @@
 using Huawei.E3372.Manager.Logic;
+using Huawei.E3372.Manager.Logic.Entities;
 using Huawei.E3372.Manager.Logic.Modems;
 using Huawei.E3372.Manager.Runtime.Components;
-using Huawei.E3372.Manager.Worker;
+using Huawei.E3372.Manager.Runtime.Workers;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection(nameof(ApplicationSettings)));
 
 builder.Services
     .AddRazorComponents()
@@ -27,6 +30,7 @@ builder.Services
     });
 
 builder.Services.AddHostedService<SmsPollBackgroundService>();
+builder.Services.AddHostedService<StatusPollBackgroundService>();
 
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IModemClient, ModemClient>();
@@ -63,8 +67,7 @@ app
     .UseSwagger()
     .UseSwaggerUI();
 
-using var serviceScope = app.Services.GetService<IServiceScopeFactory>()!.CreateScope();
-using var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+using var dbContext = app.Services.GetService<IServiceScopeFactory>()!.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
 await dbContext.Database.EnsureCreatedAsync();
 
 app.Run();

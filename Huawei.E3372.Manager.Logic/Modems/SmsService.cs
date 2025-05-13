@@ -80,9 +80,57 @@ public class SmsService(
             Date = DateTime.UtcNow.ToString(),
         };
 
-        await modemClient.PostAsync<SendSmsRequest, SendSmsResponse>(modem.Uri, request, cancellationToken);
+        try
+        {
+            await modemClient.PostAsync<SendSmsRequest, SendSmsResponse>(modem.Uri, request, cancellationToken);
+            return ServiceResult.Success();
+        }
+        catch (HttpRequestException ex)
+        {
+            return ServiceResult.Failure(ServiceResultErrorCode.RemoteNotFound, ex.Message);
+        }
+    }
 
-        return ServiceResult.Success();
+    public async Task<ServiceResult> MarkAsReadAsync(
+        Modem modem,
+        ModemSms sms,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new SetReadRequest()
+        {
+            Index = sms.Index,
+        };
+
+        try
+        {
+            await modemClient.PostAsync<SetReadRequest, SetReadResponse>(modem.Uri, request, cancellationToken);
+            return ServiceResult.Success();
+        }
+        catch (HttpRequestException ex)
+        {
+            return ServiceResult.Failure(ServiceResultErrorCode.RemoteNotFound, ex.Message);
+        }
+    }
+
+    public async Task<ServiceResult> DeleteAsync(
+        Modem modem,
+        ModemSms sms,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new DeleteSmsRequest()
+        {
+            Index = sms.Index,
+        };
+
+        try
+        {
+            await modemClient.PostAsync<DeleteSmsRequest, DeleteSmsResponse>(modem.Uri, request, cancellationToken);
+            return ServiceResult.Success();
+        }
+        catch (HttpRequestException ex)
+        {
+            return ServiceResult.Failure(ServiceResultErrorCode.RemoteNotFound, ex.Message);
+        }
     }
 
     internal async Task<ServiceDataResult<ModemSms[]>> PollAsync(
@@ -173,5 +221,15 @@ public interface ISmsService
         Modem modem,
         IEnumerable<string> phones,
         string content,
+        CancellationToken cancellationToken = default);
+
+    public Task<ServiceResult> MarkAsReadAsync(
+        Modem modem,
+        ModemSms sms,
+        CancellationToken cancellationToken = default);
+
+    public Task<ServiceResult> DeleteAsync(
+        Modem modem,
+        ModemSms sms,
         CancellationToken cancellationToken = default);
 }

@@ -46,6 +46,7 @@ public class StatusService(
             modemStatus = new ModemStatus(modem, informationResponse, operatorResponse, signalResponse, checkNotificationResponse)
             {
                 Id = modemStatus.Id,
+                PhoneNumber = modemStatus.PhoneNumber,
             };
             dbContext.Update(modemStatus);
         }

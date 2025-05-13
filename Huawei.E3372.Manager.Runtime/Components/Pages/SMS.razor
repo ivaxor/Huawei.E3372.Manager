@@ -14,8 +14,8 @@
     </div>
 
     <div class="col text-end">
-        <button @onclick="() => Modal?.Open()" class="btn btn-sm btn-primary">
-            <i class="bi bi-envelope-plus"></i>
+        <button @onclick="() => Modal?.Open()" class="btn btn-primary">
+            <i class="bi bi-send"></i>
             Send SMS
         </button>
     </div>
@@ -30,6 +30,7 @@
             <th scope="col">Sender</th>
             <th scope="col">Receiver</th>
             <th scope="col">Content</th>
+            <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -78,6 +79,16 @@
                     }
                 </td>
                 <td>@sms.Content</td>
+                <td class="align-middle">
+                    <div class="btn-group" role="group" aria-label="Actions">
+                        <button type="button" @onclick="() => MarkAsRead(sms)" class="btn btn-info" disabled="@(sms.Status != ModemSmsStatus.Unread)" title="Mark as read">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button type="button" @onclick="() => Delete(sms)" class="btn btn-danger" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
             </tr>
         }
     </tbody>
@@ -94,7 +105,9 @@
                 <InputSelect @bind-Value="Model.FromModemId" id="from" class="form-select">
                     @foreach (var kvp in ModemById)
                     {
-                        <option value="@kvp.Key.ToString()">@kvp.Value.Status!.PhoneNumber</option>
+                        <option value="@kvp.Key.ToString()" disabled="@(string.IsNullOrEmpty(kvp.Value.Status?.IMSI))">
+                            @(kvp.Value.Status!.PhoneNumber ?? kvp.Value.Status!.IMSI)
+                        </option>
                     }
                 </InputSelect>
             </div>

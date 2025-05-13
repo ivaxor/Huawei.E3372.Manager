@@ -72,6 +72,20 @@ public partial class SMS
         IsSubmitted = false;
     }
 
+    protected async Task MarkAsRead(ModemSms sms)
+    {
+        var modem = ModemById[sms.ModemId];
+        var result = await SmsService.MarkAsReadAsync(modem, sms);
+        // if(result.IsSuccess)
+            // TODO: Add alert
+    }
+
+    protected async Task Delete(ModemSms sms)
+    {
+        var modem = ModemById[sms.ModemId];
+        var result = await SmsService.DeleteAsync(modem, sms);
+    }
+
     public record SendSmsModel
     {
         public static readonly Regex ToPhoneNumberRegex = new Regex("\\+\\d{8,15}");

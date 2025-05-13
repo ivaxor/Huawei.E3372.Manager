@@ -1,8 +1,8 @@
-﻿<div class="modal fade @(IsOpen ? "show d-block" : "")" id="@ModalId" tabindex="-1" role="dialog" aria-labelledby="@ModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+﻿<div class="modal fade @(IsOpen ? "show d-block" : "")" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="@ModalLabel">
+                <h5 class="modal-title">
                     @Title
                     </h5>
                 <button type="button" class="btn-close" @onclick="Close" aria-label="Close"></button>
@@ -21,10 +21,8 @@
 }
 
 @code {
-    [Parameter] public string ModalId { get; set; } = Guid.NewGuid().ToString();
-    [Parameter] public string ModalLabel { get; set; } = "Modal";
-    [Parameter] public string Title { get; set; } = "Modal Title";
-    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public required string Title { get; set; }
+    [Parameter] public required RenderFragment ChildContent { get; set; }
 
     protected bool IsOpen { get; set; } = false;
 
