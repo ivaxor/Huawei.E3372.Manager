@@ -145,7 +145,7 @@ public class SmsService(
         try
         {
             var response = await modemClient.PostAsync<SmsListRequest, SmsListResponse>(modem.Uri, request, cancellationToken);
-            smsFromModem = response.Messages.Messages;
+            smsFromModem = response.Messages.Messages ?? Enumerable.Empty<SmsListMessage>();
         }
         catch (HttpRequestException ex)
         {
