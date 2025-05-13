@@ -21,125 +21,127 @@
     </div>
 </div>
 
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th scope="col">DateTime</th>
-            <th scope="col">Status</th>
-            <th scope="col">Sender</th>
-            <th scope="col">Receiver</th>
-            <th scope="col">Content</th>
-            <th scope="col">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (ModemSms == null || ModemById == null)
-        {
-            <tr class="placeholder-glow">
-                <td><span class="placeholder col-12"></span></td>
-                <td><span class="placeholder col-12"></span></td>
-                <td><span class="placeholder col-12"></span></td>
-                <td><span class="placeholder col-12"></span></td>
-                <td><span class="placeholder col-12"></span></td>
-                <td><span class="placeholder col-12"></span></td>
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">DateTime</th>
+                <th scope="col">Status</th>
+                <th scope="col">Sender</th>
+                <th scope="col">Receiver</th>
+                <th scope="col">Content</th>
+                <th scope="col">Actions</th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @if (ModemSms == null || ModemById == null)
+            {
+                <tr class="placeholder-glow">
+                    <td><span class="placeholder col-12"></span></td>
+                    <td><span class="placeholder col-12"></span></td>
+                    <td><span class="placeholder col-12"></span></td>
+                    <td><span class="placeholder col-12"></span></td>
+                    <td><span class="placeholder col-12"></span></td>
+                    <td><span class="placeholder col-12"></span></td>
+                </tr>
+            }
 
-        @foreach (var sms in ModemSms ?? Enumerable.Empty<ModemSms>())
-        {
-            var trClass = sms.Status switch
+            @foreach (var sms in ModemSms ?? Enumerable.Empty<ModemSms>())
             {
-                ModemSmsStatus.Unread => "table-primary",
-                ModemSmsStatus.Read => "table-secondary",
-                ModemSmsStatus.Failed => "table-warning",
-                ModemSmsStatus.Delivered => "table-info",
-                _ => throw new NotImplementedException(),
-            };
-
-            var secondaryActionDisabled = sms.Status == ModemSmsStatus.Read;
-            var secondaryActionIconClassName = sms.Status switch
-            {
-                ModemSmsStatus.Unread => "bi bi-check",
-                ModemSmsStatus.Read => "bi bi-check-all",
-                ModemSmsStatus.Failed => "bi bi-arrow-repeat",
-                ModemSmsStatus.Delivered => "bi bi-arrow-repeat",
-                _ => throw new NotImplementedException(),
-            };
-            var secondaryActionTitle = sms.Status switch
-            {
-                ModemSmsStatus.Unread => "Mark as read",
-                ModemSmsStatus.Read => string.Empty,
-                ModemSmsStatus.Failed => "Retry",
-                ModemSmsStatus.Delivered => "Repeat",
-                _ => throw new NotImplementedException(),
-            };
-            Action secondaryActionFunction = sms.Status switch
-            {
-                ModemSmsStatus.Unread => (() => MarkAsRead(sms)),
-                ModemSmsStatus.Read => (() => { }),
-                ModemSmsStatus.Failed => (() =>
+                var trClass = sms.Status switch
                 {
-                    Model.FromModemId = ModemById[sms.ModemId].Id.ToString();
-                    Model.ToPhoneNumbers = sms.ToPhoneNumbers;
-                    Model.Content = sms.Content;
-                    Modal.Open();
-                }),
-                ModemSmsStatus.Delivered => (() =>
-                {
-                    Model.FromModemId = ModemById[sms.ModemId].Id.ToString();
-                    Model.ToPhoneNumbers = sms.ToPhoneNumbers;
-                    Model.Content = sms.Content;
-                    Modal.Open();
-                }),
-                _ => throw new NotImplementedException(),
-            };
+                    ModemSmsStatus.Unread => "table-primary",
+                    ModemSmsStatus.Read => "table-secondary",
+                    ModemSmsStatus.Failed => "table-warning",
+                    ModemSmsStatus.Delivered => "table-info",
+                    _ => throw new NotImplementedException(),
+                };
 
-            <tr class="@trClass">
-                <td>@sms.DateTime</td>
-                <td>
-                    @switch (sms.Status)
+                var secondaryActionDisabled = sms.Status == ModemSmsStatus.Read;
+                var secondaryActionIconClassName = sms.Status switch
+                {
+                    ModemSmsStatus.Unread => "bi bi-check",
+                    ModemSmsStatus.Read => "bi bi-check-all",
+                    ModemSmsStatus.Failed => "bi bi-arrow-repeat",
+                    ModemSmsStatus.Delivered => "bi bi-arrow-repeat",
+                    _ => throw new NotImplementedException(),
+                };
+                var secondaryActionTitle = sms.Status switch
+                {
+                    ModemSmsStatus.Unread => "Mark as read",
+                    ModemSmsStatus.Read => string.Empty,
+                    ModemSmsStatus.Failed => "Retry",
+                    ModemSmsStatus.Delivered => "Repeat",
+                    _ => throw new NotImplementedException(),
+                };
+                Action secondaryActionFunction = sms.Status switch
+                {
+                    ModemSmsStatus.Unread => (() => MarkAsRead(sms)),
+                    ModemSmsStatus.Read => (() => { }),
+                    ModemSmsStatus.Failed => (() =>
                     {
-                        case ModemSmsStatus.Unread:
-                            <i class="bi bi-envelope"></i>
-                            <i class="bi bi-arrow-down"></i>
-                            break;
-                        case ModemSmsStatus.Read:
-                            <i class="bi bi-envelope-open"></i>
-                            <i class="bi bi-arrow-down"></i>
-                            break;
-                        case ModemSmsStatus.Failed:
-                            <i class="bi bi-envelope-x"></i>
-                            <i class="bi bi-arrow-up"></i>
-                            break;
-                        case ModemSmsStatus.Delivered:
-                            <i class="bi bi-envelope-check"></i>
-                            <i class="bi bi-arrow-up"></i>
-                            break;
-                    }
-                    <p>@sms.Status</p>
-                </td>
-                <td>@sms.FromPhoneNumber</td>
-                <td>
-                    @foreach (var toPhoneNumber in sms.ToPhoneNumbers?.Split(",") ?? Enumerable.Empty<string>())
+                        Model.FromModemId = ModemById[sms.ModemId].Id.ToString();
+                        Model.ToPhoneNumbers = sms.ToPhoneNumbers;
+                        Model.Content = sms.Content;
+                        Modal.Open();
+                    }),
+                    ModemSmsStatus.Delivered => (() =>
                     {
-                        <p>@toPhoneNumber</p>
-                    }
-                </td>
-                <td>@sms.Content</td>
-                <td class="align-middle text-end">
-                    <div class="btn-group" role="group" aria-label="Actions">
-                        <button type="button" @onclick="() => secondaryActionFunction()" class="btn btn-secondary" title="@secondaryActionTitle">
-                            <i class="@secondaryActionIconClassName"></i>
-                        </button>
-                        <button type="button" @onclick="() => Delete(sms)" class="btn btn-danger" title="Delete">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                        Model.FromModemId = ModemById[sms.ModemId].Id.ToString();
+                        Model.ToPhoneNumbers = sms.ToPhoneNumbers;
+                        Model.Content = sms.Content;
+                        Modal.Open();
+                    }),
+                    _ => throw new NotImplementedException(),
+                };
+
+                <tr class="@trClass">
+                    <td>@sms.DateTime</td>
+                    <td>
+                        @switch (sms.Status)
+                        {
+                            case ModemSmsStatus.Unread:
+                                <i class="bi bi-envelope"></i>
+                                <i class="bi bi-arrow-down"></i>
+                                break;
+                            case ModemSmsStatus.Read:
+                                <i class="bi bi-envelope-open"></i>
+                                <i class="bi bi-arrow-down"></i>
+                                break;
+                            case ModemSmsStatus.Failed:
+                                <i class="bi bi-envelope-x"></i>
+                                <i class="bi bi-arrow-up"></i>
+                                break;
+                            case ModemSmsStatus.Delivered:
+                                <i class="bi bi-envelope-check"></i>
+                                <i class="bi bi-arrow-up"></i>
+                                break;
+                        }
+                        <p>@sms.Status</p>
+                    </td>
+                    <td>@sms.FromPhoneNumber</td>
+                    <td>
+                        @foreach (var toPhoneNumber in sms.ToPhoneNumbers?.Split(",") ?? Enumerable.Empty<string>())
+                        {
+                            <p>@toPhoneNumber</p>
+                        }
+                    </td>
+                    <td>@sms.Content</td>
+                    <td class="align-middle text-end">
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <button type="button" @onclick="() => secondaryActionFunction()" class="btn btn-secondary" title="@secondaryActionTitle">
+                                <i class="@secondaryActionIconClassName"></i>
+                            </button>
+                            <button type="button" @onclick="() => Delete(sms)" class="btn btn-danger" title="Delete">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <ModalComponent @ref="Modal" Title="Send SMS" OnClose="OnClose">
     <EditForm EditContext="EditContext" OnValidSubmit="OnValidSubmit">

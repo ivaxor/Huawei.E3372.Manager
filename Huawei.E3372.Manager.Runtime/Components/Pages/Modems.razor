@@ -21,50 +21,52 @@
     </div>
 </div>
 
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th scope="col">URI</th>
-            <th scope="col">Name</th>
-            <th scope="col">Serial Number</th>
-            <th scope="col">IMEI</th>
-            <th scope="col">Operator Name</th>
-            <th scope="col">IMSI</th>
-            <th scope="col">Phone Number</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (ModemsInfo == null)
-        {
-            <tr class="placeholder-glow">
-                <td><span class="placeholder col-12"></span></td>
-                <td><span class="placeholder col-12"></span></td>
-                <td><span class="placeholder col-12"></span></td>
-                <td><span class="placeholder col-12"></span></td>
-                <td><span class="placeholder col-12"></span></td>
-                <td><span class="placeholder col-12"></span></td>
-                <td><span class="placeholder col-12"></span></td>
-            </tr>
-        }
-
-        @foreach (var modem in ModemsInfo ?? Enumerable.Empty<Modem>())
-        {
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
             <tr>
-                <td>
-                    <a href="@modem.Uri" target="_blank">
-                        @modem.Uri.Host
-                    </a>
-                </td>
-                <td>@modem.DeviceName</td>
-                <td>@modem.SerialNumber</td>
-                <td>@modem.IMEI</td>
-                <td>@modem.Status?.OperatorName</td>
-                <td>@modem.Status?.IMSI</td>
-                <td>@modem.Status?.PhoneNumber</td>
+                <th scope="col">URI</th>
+                <th scope="col">Name</th>
+                <th scope="col">Serial Number</th>
+                <th scope="col">IMEI</th>
+                <th scope="col">Operator Name</th>
+                <th scope="col">IMSI</th>
+                <th scope="col">Phone Number</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @if (ModemsInfo == null)
+            {
+                <tr class="placeholder-glow">
+                    <td><span class="placeholder col-12"></span></td>
+                    <td><span class="placeholder col-12"></span></td>
+                    <td><span class="placeholder col-12"></span></td>
+                    <td><span class="placeholder col-12"></span></td>
+                    <td><span class="placeholder col-12"></span></td>
+                    <td><span class="placeholder col-12"></span></td>
+                    <td><span class="placeholder col-12"></span></td>
+                </tr>
+            }
+
+            @foreach (var modem in ModemsInfo ?? Enumerable.Empty<Modem>())
+            {
+                <tr>
+                    <td>
+                        <a href="@modem.Uri" target="_blank">
+                            @modem.Uri.Host
+                        </a>
+                    </td>
+                    <td>@modem.DeviceName</td>
+                    <td>@modem.SerialNumber</td>
+                    <td>@modem.IMEI</td>
+                    <td>@modem.Status?.OperatorName</td>
+                    <td>@modem.Status?.IMSI</td>
+                    <td>@modem.Status?.PhoneNumber</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <ModalComponent @ref="Modal" Title="Discover new modem" OnClose="OnClose">
     <EditForm EditContext="EditContext" OnValidSubmit="OnValidSubmit">
