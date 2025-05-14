@@ -29,9 +29,8 @@ public partial class SMS
         EditContext.OnValidationRequested += OnValidationRequested!;
         ValidationMessageStore = new ValidationMessageStore(EditContext);
 
-        (ModemSms, ModemById) = await ConcurrentTasks.AsParallel(
-             DbContext.ModemSms.OrderByDescending(m => m.DateTime).ToArrayAsync(),
-             DbContext.Modems.Include(m => m.Status).ToDictionaryAsync(m => m.Id, m => m));
+        ModemSms = await DbContext.ModemSms.OrderByDescending(m => m.CreatedAt).ToArrayAsync();
+        ModemById = await DbContext.Modems.Include(m => m.Status).ToDictionaryAsync(m => m.Id, m => m);
 
         await base.OnInitializedAsync();
     }
@@ -92,7 +91,7 @@ public partial class SMS
 
     public record SendSmsModel
     {
-        public static readonly Regex ToPhoneNumberRegex = new Regex("\\+\\d{8,15}");
+        internal static readonly Regex ToPhoneNumberRegex = new Regex("\\+\\d{8,15}");
 
         [Required(ErrorMessage = "From field is required.")]
         public string FromModemId { get; set; } = string.Empty;

@@ -90,7 +90,7 @@ public partial class Modems
 
     public record DiscoveryModel
     {
-        public static readonly Regex PhoneNumberRegex = new Regex("\\+\\d{8,15}");
+        internal static readonly Regex PhoneNumberRegex = new Regex("\\+\\d{8,15}");
 
         [Required(ErrorMessage = "URI field is required.")]
         public string RawUri { get; set; } = string.Empty;

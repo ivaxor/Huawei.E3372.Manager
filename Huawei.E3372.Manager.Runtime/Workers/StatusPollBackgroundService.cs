@@ -37,13 +37,13 @@ public sealed class StatusPollBackgroundService(
     {
         logger.LogInformation($"{nameof(StatusPollBackgroundService)} is working.");
 
-        using var dbContext = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        var statusService = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<IStatusService>();
+        using var scope = serviceScopeFactory.CreateScope();
+        using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var statusService = scope.ServiceProvider.GetRequiredService<IStatusService>();
 
         var modems = await dbContext.Modems
             .AsNoTracking()
             .ToArrayAsync(cancellationToken);
-
 
         foreach (var modem in modems)
         {

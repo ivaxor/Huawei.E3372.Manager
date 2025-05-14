@@ -19,7 +19,7 @@ public record ModemSms
     public string? ToPhoneNumbers { get; set; }
     public string Content { get; set; }
     public int Priority { get; set; }
-    public DateTime DateTime { get; set; }
+    public DateTime CreatedAt { get; set; }
 
     public DateTime LastUpdatedAt { get; set; }
 
@@ -59,8 +59,7 @@ public record ModemSms
 
         Content = HttpUtility.HtmlDecode(sms.Content);
         Priority = sms.Priority;
-        DateTime = DateTime.Parse(sms.Date);
-        
+        CreatedAt = DateTime.Parse(sms.Date);
     }
 
     public virtual bool Equals(ModemSms sms)
@@ -75,7 +74,7 @@ public record ModemSms
         if (ToPhoneNumbers != sms.ToPhoneNumbers) return false;
         if (Content != sms.Content) return false;
         if (Priority != sms.Priority) return false;
-        if (DateTime != sms.DateTime) return false;
+        if (CreatedAt != sms.CreatedAt) return false;
 
         return true;
     }

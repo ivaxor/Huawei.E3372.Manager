@@ -17,7 +17,7 @@ public record Modem
     public string MacAddress { get; set; }
 
     public virtual ModemStatus? Status { get; set; }
-    public virtual IEnumerable<ModemSms>? Sms { get; set; }    
+    public virtual IEnumerable<ModemSms>? Sms { get; set; }
 
     public DateTime CreatedAt { get; set; }
     public DateTime LastUpdatedAt { get; set; }

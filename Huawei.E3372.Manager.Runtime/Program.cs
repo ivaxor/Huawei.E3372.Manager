@@ -6,6 +6,8 @@ using Huawei.E3372.Manager.Runtime.Workers;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,13 +22,20 @@ builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen();
 
-builder.Services
-    .AddDbContext<ApplicationDbContext>(options =>
-    {
-        var sqliteConnectionString = builder.Configuration.GetConnectionString(nameof(SqliteConnection));
-        if (!string.IsNullOrEmpty(sqliteConnectionString))
-            options.UseSqlite(sqliteConnectionString);
-    });
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    var sqliteConnectionString = builder.Configuration.GetConnectionString(nameof(SqliteConnection));
+    if (!string.IsNullOrEmpty(sqliteConnectionString))
+        options.UseSqlite(sqliteConnectionString);
+
+    var sqlServerConnectionString = builder.Configuration.GetConnectionString(nameof(SqlServerConnection));
+    if (!string.IsNullOrEmpty(sqlServerConnectionString))
+        options.UseSqlServer(sqlServerConnectionString);
+
+    var npgsqlConnectionString = builder.Configuration.GetConnectionString(nameof(NpgsqlConnection));
+    if (!string.IsNullOrEmpty(npgsqlConnectionString))
+        options.UseNpgsql(npgsqlConnectionString);
+});
 
 builder.Services
     .AddDataProtection()
