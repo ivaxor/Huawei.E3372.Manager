@@ -66,7 +66,7 @@ public sealed class SmsPollBackgroundService(
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"{nameof(SmsPollBackgroundService)} failed.");
+                logger.LogError(ex, $"{nameof(SmsPollBackgroundService)} failed for {{ModemUri}}.", modem.Uri);
             }
         }
 
