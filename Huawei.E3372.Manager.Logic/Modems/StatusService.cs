@@ -36,11 +36,7 @@ public class StatusService(
         var modemStatus = await dbContext.ModemStatuses.SingleOrDefaultAsync(s => s.ModemId == modem.Id, cancellationToken);
         if (modemStatus == null)
         {
-            modemStatus = new ModemStatus()
-            {
-                Id = Guid.NewGuid(),
-                LastUpdatedAt = DateTime.UtcNow,
-            };
+            modemStatus = new ModemStatus() { Id = Guid.NewGuid(), ModemId = modem.Id };
             await dbContext.AddAsync(modemStatus, cancellationToken);
         }
 
@@ -57,8 +53,8 @@ public class StatusService(
         modemStatus.SINR = HttpUtility.HtmlDecode(signalResponse.Sinr);
 
         modemStatus.SmsStorageFull = checkNotificationResponse.SmsStorageFull;
-        99999
-        modemStatus.LastUpdatedAt = DateTime.UtcNow;
+
+        modemStatus.LastUpdatedAt = DateTimeOffset.UtcNow;
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

@@ -18,8 +18,8 @@ public record Modem
     public virtual ModemStatus? Status { get; set; }
     public virtual IEnumerable<ModemSms>? Sms { get; set; }
 
-    public DateTime CreatedAt { get; set; }
-    public DateTime LastUpdatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset LastUpdatedAt { get; set; }
 
     public virtual bool Equals(Modem modem)
     {

@@ -1,7 +1,5 @@
-﻿using Huawei.E3372.Manager.Logic.Modems.Models.Api.Sms;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using System.Web;
 
 namespace Huawei.E3372.Manager.Logic.Entities;
 
@@ -19,48 +17,9 @@ public record ModemSms
     public string? ToPhoneNumbers { get; set; }
     public string Content { get; set; }
     public int Priority { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 
-    public DateTime LastUpdatedAt { get; set; }
-
-    public ModemSms() { }
-    public ModemSms(Modem modem, SmsListMessage sms)
-    {
-        ModemId = modem.Id;
-
-        Index = sms.Index;
-
-        Status = sms.Status switch
-        {
-            0 => ModemSmsStatus.Unread,
-            1 => ModemSmsStatus.Read,
-            2 => ModemSmsStatus.Failed,
-            3 => ModemSmsStatus.Delivered,
-            _ => throw new NotImplementedException(),
-        };
-
-        FromPhoneNumber = Status switch
-        {
-            ModemSmsStatus.Unread => sms.Phones,
-            ModemSmsStatus.Read => sms.Phones,
-            ModemSmsStatus.Failed => modem.Status?.PhoneNumber,
-            ModemSmsStatus.Delivered => modem.Status?.PhoneNumber,
-            _ => throw new NotImplementedException(),
-        };
-
-        ToPhoneNumbers = Status switch
-        {
-            ModemSmsStatus.Unread => modem.Status?.PhoneNumber,
-            ModemSmsStatus.Read => modem.Status?.PhoneNumber,
-            ModemSmsStatus.Failed => sms.Phones,
-            ModemSmsStatus.Delivered => sms.Phones,
-            _ => throw new NotImplementedException(),
-        };
-
-        Content = HttpUtility.HtmlDecode(sms.Content);
-        Priority = sms.Priority;
-        CreatedAt = DateTime.Parse(sms.Date);
-    }
+    public DateTimeOffset LastUpdatedAt { get; set; }
 
     public virtual bool Equals(ModemSms sms)
     {

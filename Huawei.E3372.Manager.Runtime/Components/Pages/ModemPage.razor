@@ -22,9 +22,15 @@
     </div>
 </div>
 
-<ModemStatusComponent Modem="Modem" OnChanged="OnChanged" />
+<div class="row">
+    <div class="col-md-12 col-lg-6">
+        <ModemStatusComponent Modem="Modem" OnChanged="OnChanged" />
+    </div>
 
-<ModemSettingsComponent Modem="Modem" OnChanged="OnChanged" />
+    <div class="col-md-12 col-lg-6">
+        <ModemSettingsComponent Modem="Modem" OnChanged="OnChanged" />
+        </div>
+</div>
 
 <ModalComponent @ref="Modal" Title="Delete modem" OnClose="OnClose">
     <EditForm EditContext="EditContext" OnValidSubmit="OnValidSubmit">

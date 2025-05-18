@@ -11,14 +11,14 @@ public partial class ModemStatusComponent
 
     [Parameter] public EventCallback<ModemStatus> OnChanged { get; set; }
 
-    protected ModemStatusThic Model { get; set; }
+    protected ModemStatus Model { get; set; }
     protected EditContext EditContext { get; set; }
     protected ValidationMessageStore ValidationMessageStore { get; set; }
 
 
     protected override void OnInitialized()
     {
-        Model = new ModemStatusThic(Modem.Status!);
+        Model = Modem.Status!;
 
         EditContext = new EditContext(Model);
         EditContext.OnFieldChanged += OnFieldChangedAsync;

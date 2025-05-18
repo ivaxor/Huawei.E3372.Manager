@@ -23,8 +23,8 @@ public class DiscoveryService(
         {
             Id = Guid.NewGuid(),
             Uri = uri,
-            CreatedAt = DateTime.UtcNow,
-            LastUpdatedAt = DateTime.UtcNow,
+            CreatedAt = DateTimeOffset.UtcNow,
+            LastUpdatedAt = DateTimeOffset.UtcNow,
         };
 
         DeviceNameResponse deviceNameResponse;

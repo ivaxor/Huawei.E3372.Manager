@@ -1,8 +1,8 @@
 ﻿@rendermode InteractiveServer
 
 @{
-    var labelClass = "col-sm-12 col-md-3 col-lg-2";
-    var inputClass = "col-sm-12 col-md-9 col-lg-10";
+    var labelClass = "col-md-12 col-lg-4";
+    var inputClass = "col-md-12 col-lg-8";
 }
 
 <div class="card w-100 mb-3">
@@ -38,11 +38,11 @@
                     <label for="@nameof(ModemSettings.PollIncomingSms)" class="form-check-label">Poll incoming SMS</label>
                 </div>
                 <div class="form-check form-switch">
-                    <InputCheckbox id="@nameof(ModemSettings.PollIncomingSmsThenSetAsRead)" @bind-Value="Model.PollIncomingSmsThenSetAsRead" disabled="@(!Model.PollSms)" class="form-check-input" />
+                    <InputCheckbox id="@nameof(ModemSettings.PollIncomingSmsThenSetAsRead)" @bind-Value="Model.PollIncomingSmsThenSetAsRead" disabled="@(!Model.PollSms || Model.PollIncomingSmsThenDelete)" class="form-check-input" />
                     <label for="@nameof(ModemSettings.PollIncomingSmsThenSetAsRead)" class="form-check-label">Set as read polled incoming SMS</label>
                 </div>
                 <div class="form-check form-switch">
-                    <InputCheckbox id="@nameof(ModemSettings.PollIncomingSmsThenDelete)" @bind-Value="Model.PollIncomingSmsThenDelete" disabled="@(!Model.PollSms)" class="form-check-input" />
+                    <InputCheckbox id="@nameof(ModemSettings.PollIncomingSmsThenDelete)" @bind-Value="Model.PollIncomingSmsThenDelete" disabled="@(!Model.PollSms || Model.PollIncomingSmsThenSetAsRead)" class="form-check-input" />
                     <label for="@nameof(ModemSettings.PollIncomingSmsThenDelete)" class="form-check-label">Delete polled incoming SMS</label>
                 </div>
                 <hr />

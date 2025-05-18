@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Huawei.E3372.Manager.Logic.Constants;
 
 namespace Huawei.E3372.Manager.Logic.Entities;
 
@@ -10,8 +11,10 @@ public record ModemStatus
     public Guid ModemId { get; set; }
     public virtual Modem? Modem { get; set; }
 
-    public string? IMSI { get; set; }
     public string? ICCID { get; set; }
+    public string? IMSI { get; set; }
+    public string? MCC => IMSI?.Substring(0, 3);
+    public TimeZoneInfo? TimeZoneInfo => MCC == null ? null : MobileCountyCodeConstants.MobileCountyCodeToTimeZone[MCC];
 
     public string? OperatorName { get; set; }
     public string? OperatorNumber { get; set; }
@@ -25,7 +28,7 @@ public record ModemStatus
 
     public bool SmsStorageFull { get; set; }
 
-    public DateTime LastUpdatedAt { get; set; }
+    public DateTimeOffset LastUpdatedAt { get; set; }
 
     public virtual bool Equals(ModemStatus status)
     {
@@ -63,12 +66,15 @@ public class ModemStatusEntityTypeConfiguration : IEntityTypeConfiguration<Modem
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .Property(s => s.IMSI)
+            .Property(s => s.ICCID)
             .IsRequired(false);
 
         builder
-            .Property(s => s.ICCID)
+            .Property(s => s.IMSI)
             .IsRequired(false);
+
+        builder.Ignore(c => c.MCC);
+        builder.Ignore(c => c.TimeZoneInfo);
 
         builder
             .Property(s => s.OperatorName)
