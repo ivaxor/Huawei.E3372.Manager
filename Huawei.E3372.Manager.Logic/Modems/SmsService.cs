@@ -11,8 +11,6 @@ public class SmsService(
 {
     public async Task<ServiceDataResult<ModemSms[]>> PollIncomingAsync(
         Modem modem,
-        bool setAsRead = true,
-        bool delete = false,
         CancellationToken cancellationToken = default)
     {
         var request = new SmsListRequest()
@@ -25,12 +23,16 @@ public class SmsService(
             UnreadPreferred = false,
         };
 
-        return await PollAsync(modem, request, setAsRead, delete, cancellationToken);
+        return await PollAsync(
+            modem,
+            request,
+            modem.Settings?.PollIncomingSmsThenSetAsRead ?? false,
+            modem.Settings?.PollIncomingSmsThenDelete ?? false,
+            cancellationToken);
     }
 
     public async Task<ServiceDataResult<ModemSms[]>> PollOutgoingAsync(
         Modem modem,
-        bool delete = false,
         CancellationToken cancellationToken = default)
     {
         var request = new SmsListRequest()
@@ -43,12 +45,16 @@ public class SmsService(
             UnreadPreferred = false,
         };
 
-        return await PollAsync(modem, request, setAsRead: false, delete, cancellationToken);
+        return await PollAsync(
+            modem,
+            request,
+            setAsRead: false,
+            modem.Settings?.PollOutgoingSmsThenDelete ?? false,
+            cancellationToken);
     }
 
     public async Task<ServiceDataResult<ModemSms[]>> PollDraftAsync(
         Modem modem,
-        bool delete = false,
         CancellationToken cancellationToken = default)
     {
         var request = new SmsListRequest()
@@ -61,7 +67,12 @@ public class SmsService(
             UnreadPreferred = false,
         };
 
-        return await PollAsync(modem, request, setAsRead: false, delete, cancellationToken);
+        return await PollAsync(
+            modem,
+            request,
+            setAsRead: false,
+            modem.Settings?.PollDraftSmsThenDelete ?? false,
+            cancellationToken);
     }
 
     public async Task<ServiceResult> SendAsync(
@@ -82,7 +93,7 @@ public class SmsService(
 
         try
         {
-            await modemClient.PostAsync<SendSmsRequest, SendSmsResponse>(modem.Uri, request, cancellationToken);
+            await modemClient.PostAsync<SendSmsRequest, SendSmsResponse>(modem, request, cancellationToken);
             return ServiceResult.Success();
         }
         catch (HttpRequestException ex)
@@ -103,7 +114,7 @@ public class SmsService(
 
         try
         {
-            await modemClient.PostAsync<SetReadRequest, SetReadResponse>(modem.Uri, request, cancellationToken);
+            await modemClient.PostAsync<SetReadRequest, SetReadResponse>(modem, request, cancellationToken);
             return ServiceResult.Success();
         }
         catch (HttpRequestException ex)
@@ -124,7 +135,7 @@ public class SmsService(
 
         try
         {
-            await modemClient.PostAsync<DeleteSmsRequest, DeleteSmsResponse>(modem.Uri, request, cancellationToken);
+            await modemClient.PostAsync<DeleteSmsRequest, DeleteSmsResponse>(modem, request, cancellationToken);
             return ServiceResult.Success();
         }
         catch (HttpRequestException ex)
@@ -144,7 +155,7 @@ public class SmsService(
 
         try
         {
-            var response = await modemClient.PostAsync<SmsListRequest, SmsListResponse>(modem.Uri, request, cancellationToken);
+            var response = await modemClient.PostAsync<SmsListRequest, SmsListResponse>(modem, request, cancellationToken);
             smsFromModem = response.Messages.Messages ?? Enumerable.Empty<SmsListMessage>();
         }
         catch (HttpRequestException ex)
@@ -182,7 +193,7 @@ public class SmsService(
                 .ToArray();
 
             foreach (var setReadRequest in setReadRequests)
-                await modemClient.PostAsync<SetReadRequest, SetReadResponse>(modem.Uri, setReadRequest, cancellationToken);
+                await modemClient.PostAsync<SetReadRequest, SetReadResponse>(modem, setReadRequest, cancellationToken);
         }
 
         if (delete)
@@ -192,7 +203,7 @@ public class SmsService(
                 .ToArray();
 
             foreach (var smsDeleteRequest in smsDeleteRequests)
-                await modemClient.PostAsync<DeleteSmsRequest, DeleteSmsResponse>(modem.Uri, smsDeleteRequest, cancellationToken);
+                await modemClient.PostAsync<DeleteSmsRequest, DeleteSmsResponse>(modem, smsDeleteRequest, cancellationToken);
         }
 
         return ServiceDataResult<ModemSms[]>.Success([.. newSms, .. udpatedSms]);
@@ -203,18 +214,14 @@ public interface ISmsService
 {
     public Task<ServiceDataResult<ModemSms[]>> PollIncomingAsync(
         Modem modem,
-        bool setAsRead = true,
-        bool delete = false,
         CancellationToken cancellationToken = default);
 
     public Task<ServiceDataResult<ModemSms[]>> PollOutgoingAsync(
         Modem modem,
-        bool delete = false,
         CancellationToken cancellationToken = default);
 
     public Task<ServiceDataResult<ModemSms[]>> PollDraftAsync(
         Modem modem,
-        bool delete = false,
         CancellationToken cancellationToken = default);
 
     public Task<ServiceResult> SendAsync(

@@ -14,9 +14,9 @@
             <ValidationSummary />
 
             <div class="mb-3 row">
-                <label for="@nameof(ModemSettings.ModemTokenLifeTime)" class="@labelClass col-form-label">Token lifetime</label>
+                <label for="@nameof(ModemSettings.TokenLifeTime)" class="@labelClass col-form-label">Token lifetime</label>
                 <div class="@inputClass">
-                    <InputDate id="@nameof(ModemSettings.ModemTokenLifeTime)" Type="InputDateType.Time" @bind-Value="Model.ModemTokenLifeTime" class="form-control" />
+                    <InputDate id="@nameof(ModemSettings.TokenLifeTime)" Type="InputDateType.Time" @bind-Value="Model.TokenLifeTime" class="form-control" />
                 </div>
             </div>
             <hr />
@@ -25,25 +25,11 @@
                 <InputCheckbox id="@nameof(ModemSettings.PollStatus)" @bind-Value="Model.PollStatus" class="form-check-input" />
                 <label for="@nameof(ModemSettings.PollStatus)" class="form-check-label">Poll Status</label>
             </div>
-
-            <div class="mb-3 row">
-                <label for="@nameof(ModemSettings.PollStatusInterval)" class="@labelClass col-form-label">Poll Status interval</label>
-                <div class="@inputClass">
-                    <InputDate id="@nameof(ModemSettings.PollStatusInterval)" Type="InputDateType.Time" @bind-Value="Model.PollStatusInterval" disabled="@(!Model.PollStatus)" class="form-control" />
-                </div>
-            </div>
             <hr />
 
             <div class="form-check form-switch">
                 <InputCheckbox id="@nameof(ModemSettings.PollSms)" @bind-Value="Model.PollSms" class="form-check-input" />
                 <label for="@nameof(ModemSettings.PollSms)" class="form-check-label">Poll SMS</label>
-            </div>
-
-            <div class="mb-3 row">
-                <label for="@nameof(ModemSettings.PollSmsInterval)" class="@labelClass col-form-label">Poll SMS interval</label>
-                <div class="@inputClass">
-                    <InputDate id="@nameof(ModemSettings.PollSmsInterval)" Type="InputDateType.Time" @bind-Value="Model.PollSmsInterval" disabled="@(!Model.PollSms)" class="form-control" />
-                </div>
             </div>
 
             <div class="ms-3 row">

@@ -43,6 +43,7 @@ public sealed class StatusPollBackgroundService(
 
         var modems = await dbContext.Modems
             .AsNoTracking()
+            .Where(m => m.Settings.PollStatus)
             .ToArrayAsync(cancellationToken);
 
         foreach (var modem in modems)

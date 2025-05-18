@@ -122,10 +122,17 @@
                 </div>
             </div>
 
-            <div class="row">
-                <label for="@nameof(ModemStatusThic.LastUpdatedAt)" class="@labelClass col-form-label">Last updated at (UTC)</label>
+            <div class="mb-3 row">
+                <label for="@nameof(ModemStatusThic.SmsStorageFull)" class="@labelClass col-form-label">SMS storage full?</label>
                 <div class="@inputClass">
-                    <input id="@nameof(ModemStatusThic.LastUpdatedAt)" type="text" class="form-control-plaintext" value="@Model.LastUpdatedAt"/>
+                    <input id="@nameof(ModemStatusThic.SmsStorageFull)" type="text" class="form-control-plaintext" value="@(Model.SmsStorageFull ? "Yes" : "No")" />
+                </div>
+            </div>
+
+            <div class="row">
+                <label for="@nameof(ModemStatusThic.LastUpdatedAt)" class="@labelClass col-form-label">Last updated</label>
+                <div class="@inputClass">
+                    <input id="@nameof(ModemStatusThic.LastUpdatedAt)" type="text" class="form-control-plaintext" value="@((DateTime.UtcNow - Model.LastUpdatedAt).ToString("hh\\:mm\\:ss"))" />
                 </div>
             </div>
         </EditForm>

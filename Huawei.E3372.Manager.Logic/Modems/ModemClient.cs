@@ -3,7 +3,6 @@ using Huawei.E3372.Manager.Logic.Modems.Models;
 using Huawei.E3372.Manager.Logic.Modems.Models.Api.WebServer;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Collections.Frozen;
 using System.Net;
 using System.Net.Mime;
@@ -15,7 +14,6 @@ namespace Huawei.E3372.Manager.Logic.Modems;
 
 public class ModemClient(
     IMemoryCache memoryCache,
-    IOptions<ApplicationSettings> applicationSettings,
     ILogger<ModemClient> logger)
     : IModemClient
 {
@@ -25,11 +23,11 @@ public class ModemClient(
     internal static readonly XmlSerializer ErrorXmlSerializer = new XmlSerializer(typeof(ErrorResponse));
 
     public async Task<TModemGetResponse> GetAsync<TModemGetResponse>(
-        Uri baseUri,
+        Modem modem,
         CancellationToken cancellationToken = default)
         where TModemGetResponse : IModemGetResponse
     {
-        using var httpClient = await CreateHttpClientForGetAsync(baseUri, cancellationToken);
+        using var httpClient = await CreateHttpClientForGetAsync(modem, cancellationToken);
 
         var relativeUri = ModemUriConstants.TypeToRelativeUri[typeof(TModemGetResponse)];
         var request = new HttpRequestMessage(HttpMethod.Get, relativeUri);
@@ -57,13 +55,13 @@ public class ModemClient(
     }
 
     public async Task<TModelPostResponse> PostAsync<TModelPostRequest, TModelPostResponse>(
-        Uri baseUri,
+        Modem modem,
         TModelPostRequest model,
         CancellationToken cancellationToken = default)
         where TModelPostRequest : IModemPostRequest
         where TModelPostResponse : IModemPostResponse
     {
-        using var httpClient = await CreateHttpClientForPostAsync(baseUri, cancellationToken);
+        using var httpClient = await CreateHttpClientForPostAsync(modem, cancellationToken);
 
         var relativeUri = ModemUriConstants.TypeToRelativeUri[typeof(TModelPostResponse)];
         var request = new HttpRequestMessage(HttpMethod.Post, relativeUri);
@@ -96,43 +94,43 @@ public class ModemClient(
     }
 
     internal async Task<HttpClient> CreateHttpClientForGetAsync(
-        Uri baseUri,
+        Modem modem,
         CancellationToken cancellationToken = default)
     {
         var httpClientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer() };
-        var httpClient = new HttpClient(httpClientHandler) { BaseAddress = baseUri };
+        var httpClient = new HttpClient(httpClientHandler) { BaseAddress = modem.Uri };
 
-        var sessionTokenInfo = await GetCachedSessionTokenInfoAsync(baseUri, httpClient, cancellationToken);
+        var sessionTokenInfo = await GetCachedSessionTokenInfoAsync(modem, httpClient, cancellationToken);
         var sessionInfoSplits = sessionTokenInfo.SessionInfo.Split("=");
-        httpClientHandler.CookieContainer.Add(baseUri, new Cookie(sessionInfoSplits[0], sessionInfoSplits[1]));
+        httpClientHandler.CookieContainer.Add(modem.Uri, new Cookie(sessionInfoSplits[0], sessionInfoSplits[1]));
 
         return httpClient;
     }
 
     internal async Task<HttpClient> CreateHttpClientForPostAsync(
-        Uri baseUri,
+        Modem modem,
         CancellationToken cancellationToken = default)
     {
         var httpClientHandler = new HttpClientHandler() { CookieContainer = new CookieContainer() };
-        var httpClient = new HttpClient(httpClientHandler) { BaseAddress = baseUri };
+        var httpClient = new HttpClient(httpClientHandler) { BaseAddress = modem.Uri };
 
         var sessionTokenInfo = await GetSessionTokenInfoAsync(httpClient, cancellationToken);
         var sessionInfoSplits = sessionTokenInfo.SessionInfo.Split("=");
-        httpClientHandler.CookieContainer.Add(baseUri, new Cookie(sessionInfoSplits[0], sessionInfoSplits[1]));
+        httpClientHandler.CookieContainer.Add(modem.Uri, new Cookie(sessionInfoSplits[0], sessionInfoSplits[1]));
         httpClient.DefaultRequestHeaders.Add("__requestverificationtoken", sessionTokenInfo.TokenInfo);
 
         return httpClient;
     }
 
     internal Task<SessionTokenInfoResponse> GetCachedSessionTokenInfoAsync(
-        Uri baseUri,
+        Modem modem,
         HttpClient httpClient,
         CancellationToken cancellationToken = default)
     {
         return memoryCache.GetOrCreateAsync(
-            $"{nameof(SessionTokenInfoResponse)}_{baseUri.Host}",
+            $"{nameof(SessionTokenInfoResponse)}_{modem.Id}",
             c => GetSessionTokenInfoAsync(httpClient, cancellationToken),
-            new MemoryCacheEntryOptions() { SlidingExpiration = applicationSettings.Value.ModemTokenLifetime })!;
+            new MemoryCacheEntryOptions() { SlidingExpiration = modem.Settings?.TokenLifeTime.ToTimeSpan() ?? TimeSpan.FromMinutes(3) })!;
     }
 
     internal static async Task<SessionTokenInfoResponse> GetSessionTokenInfoAsync(
@@ -157,12 +155,12 @@ public class ModemClient(
 public interface IModemClient
 {
     public Task<TModemGetResponse> GetAsync<TModemGetResponse>(
-        Uri baseUri,
+        Modem modem,
         CancellationToken cancellationToken = default)
         where TModemGetResponse : IModemGetResponse;
 
     public Task<TModelPostResponse> PostAsync<TModelPostRequest, TModelPostResponse>(
-        Uri baseUri,
+        Modem modem,
         TModelPostRequest model,
         CancellationToken cancellationToken = default)
         where TModelPostRequest : IModemPostRequest

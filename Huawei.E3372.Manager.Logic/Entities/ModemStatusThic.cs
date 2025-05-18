@@ -4,25 +4,11 @@ namespace Huawei.E3372.Manager.Logic.Entities;
 
 public record ModemStatusThic : ModemStatus
 {
-    public string? MCC { get; set; }
-    public TimeZoneInfo? TimeZoneInfo { get; set; }
-
-    public DateTimeOffset LastUpdatedAtLocal { get; set; }
+    public string? MCC => IMSI?.Substring(0, 3);
+    public TimeZoneInfo? TimeZoneInfo => MCC == null ? null : MobileCountyCodeConstants.MobileCountyCodeToTimeZone[MCC];
 
     public ModemStatusThic() : base() { }
-    public ModemStatusThic(ModemStatus modemStatus) : base(modemStatus)
-    {
-        if (!string.IsNullOrEmpty(IMSI))
-        {
-            MCC = IMSI.Substring(0, 3);
-            TimeZoneInfo = MobileCountyCodeConstants.MobileCountyCodeToTimeZone[MCC];
-            LastUpdatedAtLocal = TimeZoneInfo.ConvertTimeFromUtc(LastUpdatedAt, TimeZoneInfo);
-        }
-        else
-        {
-            LastUpdatedAtLocal = new DateTimeOffset(LastUpdatedAt, TimeSpan.Zero);
-        }
-    }
+    public ModemStatusThic(ModemStatus status) : base(status) { }
 
     public virtual bool Equals(ModemStatusThic status)
     {

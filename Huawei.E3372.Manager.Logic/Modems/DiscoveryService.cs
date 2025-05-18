@@ -19,33 +19,44 @@ public class DiscoveryService(
         if (modem != null)
             return ServiceDataResult<Modem>.Failure(ServiceResultErrorCode.Duplicate, data: modem);
 
+        modem = new Modem()
+        {
+            Id = Guid.NewGuid(),
+            Uri = uri,
+            CreatedAt = DateTime.UtcNow,
+            LastUpdatedAt = DateTime.UtcNow,
+        };
+
         DeviceNameResponse deviceNameResponse;
         InformationResponse informationResponse;
         try
         {
             (deviceNameResponse, informationResponse) = await ConcurrentTasks.AsParallel(
-                modemClient.GetAsync<DeviceNameResponse>(uri, cancellationToken),
-                modemClient.GetAsync<InformationResponse>(uri, cancellationToken));
+                modemClient.GetAsync<DeviceNameResponse>(modem, cancellationToken),
+                modemClient.GetAsync<InformationResponse>(modem, cancellationToken));
         }
         catch (HttpRequestException ex)
         {
             return ServiceDataResult<Modem>.Failure(ServiceResultErrorCode.RemoteNotFound, ex.Message);
         }
 
-        modem = new Modem(uri, deviceNameResponse, informationResponse)
+        modem = modem with
         {
-            Id = Guid.NewGuid(),
+            DeviceName = deviceNameResponse.Name,
+
+            SerialNumber = informationResponse.SerialNumber,
+            IMEI = informationResponse.Imei,
+            MacAddress = informationResponse.MacAddress1 ?? informationResponse.MacAddress2,
         };
+
         var modemSettings = new ModemSettings()
         {
             ModemId = modem.Id,
-            ModemTokenLifeTime = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(3)),
+            TokenLifeTime = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(3)),
 
             PollStatus = true,
-            PollStatusInterval = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(5)),
 
             PollSms = true,
-            PollSmsInterval = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(1)),
             PollIncomingSms = true,
             PollOutgoingSms = true,
             PollDraftSms = true,

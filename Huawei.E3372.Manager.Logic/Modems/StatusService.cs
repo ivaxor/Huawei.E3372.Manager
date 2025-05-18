@@ -3,6 +3,7 @@ using Huawei.E3372.Manager.Logic.Modems.Models;
 using Huawei.E3372.Manager.Logic.Modems.Models.Api.Device;
 using Huawei.E3372.Manager.Logic.Modems.Models.Api.Monitoring;
 using Microsoft.EntityFrameworkCore;
+using System.Web;
 
 namespace Huawei.E3372.Manager.Logic.Modems;
 
@@ -22,34 +23,42 @@ public class StatusService(
         try
         {
             (informationResponse, operatorResponse, signalResponse, checkNotificationResponse) = await ConcurrentTasks.AsParallel(
-                modemClient.GetAsync<InformationResponse>(modem.Uri, cancellationToken),
-                modemClient.GetAsync<OperatorResponse>(modem.Uri, cancellationToken),
-                modemClient.GetAsync<SignalResponse>(modem.Uri, cancellationToken),
-                modemClient.GetAsync<CheckNotificationResponse>(modem.Uri, cancellationToken));
+                modemClient.GetAsync<InformationResponse>(modem, cancellationToken),
+                modemClient.GetAsync<OperatorResponse>(modem, cancellationToken),
+                modemClient.GetAsync<SignalResponse>(modem, cancellationToken),
+                modemClient.GetAsync<CheckNotificationResponse>(modem, cancellationToken));
         }
         catch (HttpRequestException ex)
         {
             return ServiceDataResult<ModemStatus>.Failure(ServiceResultErrorCode.RemoteNotFound, ex.Message);
         }
 
-        var modemStatus = await dbContext.ModemStatuses.AsNoTracking().SingleOrDefaultAsync(s => s.ModemId == modem.Id, cancellationToken);
+        var modemStatus = await dbContext.ModemStatuses.SingleOrDefaultAsync(s => s.ModemId == modem.Id, cancellationToken);
         if (modemStatus == null)
         {
-            modemStatus = new ModemStatus(modem, informationResponse, operatorResponse, signalResponse, checkNotificationResponse)
+            modemStatus = new ModemStatus()
             {
                 Id = Guid.NewGuid(),
+                LastUpdatedAt = DateTime.UtcNow,
             };
             await dbContext.AddAsync(modemStatus, cancellationToken);
         }
-        else
-        {
-            modemStatus = new ModemStatus(modem, informationResponse, operatorResponse, signalResponse, checkNotificationResponse)
-            {
-                Id = modemStatus.Id,
-                PhoneNumber = modemStatus.PhoneNumber,
-            };
-            dbContext.Update(modemStatus);
-        }
+
+        modemStatus.IMSI = informationResponse.Imsi;
+        modemStatus.ICCID = informationResponse.Iccid;
+
+        modemStatus.OperatorName = HttpUtility.HtmlDecode(operatorResponse.FullName);
+        modemStatus.OperatorNumber = operatorResponse.Numeric;
+
+        modemStatus.CID = signalResponse.CellId;
+        modemStatus.RSRQ = HttpUtility.HtmlDecode(signalResponse.Rsrq);
+        modemStatus.RSRP = HttpUtility.HtmlDecode(signalResponse.Rsrp);
+        modemStatus.RSSI = HttpUtility.HtmlDecode(signalResponse.Rssi);
+        modemStatus.SINR = HttpUtility.HtmlDecode(signalResponse.Sinr);
+
+        modemStatus.SmsStorageFull = checkNotificationResponse.SmsStorageFull;
+        99999
+        modemStatus.LastUpdatedAt = DateTime.UtcNow;
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

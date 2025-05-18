@@ -8,10 +8,7 @@ public static class TestConstants
 
     public static readonly ApplicationSettings ApplicationSettings = new ApplicationSettings()
     {
-        ModemTokenLifetime = TimeSpan.MaxValue,
-        SmsPollBackgroundServiceInterval = TimeSpan.FromMinutes(1),
-        SmsPollBackgroundServiceSetAsRead = false,
-        SmsPollBackgroundServiceDelete = false,
-        StatusPollBackgroundServiceInterval = TimeSpan.FromMinutes(1),
+        StatusPollBackgroundServiceInterval = TimeSpan.FromMinutes(5),
+        SmsPollBackgroundServiceInterval = TimeSpan.FromMinutes(1),        
     };
 }

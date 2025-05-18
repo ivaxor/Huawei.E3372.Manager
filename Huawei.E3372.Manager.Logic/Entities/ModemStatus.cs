@@ -1,9 +1,5 @@
-﻿using Huawei.E3372.Manager.Logic.Modems.Models;
-using Huawei.E3372.Manager.Logic.Modems.Models.Api.Device;
-using Huawei.E3372.Manager.Logic.Modems.Models.Api.Monitoring;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using System.Web;
 
 namespace Huawei.E3372.Manager.Logic.Entities;
 
@@ -30,33 +26,6 @@ public record ModemStatus
     public bool SmsStorageFull { get; set; }
 
     public DateTime LastUpdatedAt { get; set; }
-
-    public ModemStatus() { }
-    public ModemStatus(
-        Modem modem,
-        InformationResponse information,
-        OperatorResponse operatorInfo,
-        SignalResponse signal,
-        CheckNotificationResponse checkNotification)
-    {
-        ModemId = modem.Id;
-
-        IMSI = information.Imsi;
-        ICCID = information.Iccid;
-
-        OperatorName = HttpUtility.HtmlDecode(operatorInfo.FullName);
-        OperatorNumber = operatorInfo.Numeric;
-
-        CID = signal.CellId;
-        RSRQ = HttpUtility.HtmlDecode(signal.Rsrq);
-        RSRP = HttpUtility.HtmlDecode(signal.Rsrp);
-        RSSI = HttpUtility.HtmlDecode(signal.Rssi);
-        SINR = HttpUtility.HtmlDecode(signal.Sinr);
-
-        SmsStorageFull = checkNotification.SmsStorageFull;
-
-        LastUpdatedAt = DateTime.UtcNow;
-    }
 
     public virtual bool Equals(ModemStatus status)
     {

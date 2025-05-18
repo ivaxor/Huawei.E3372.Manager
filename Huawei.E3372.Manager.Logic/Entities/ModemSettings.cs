@@ -7,20 +7,13 @@ public record ModemSettings
 {
     public Guid Id { get; set; }
 
-    #region Modem
     public Guid ModemId { get; set; }
     public virtual Modem? Modem { get; set; }
-    public TimeOnly ModemTokenLifeTime { get; set; }
-    #endregion
+    public TimeOnly TokenLifeTime { get; set; }
 
-    #region Status
     public bool PollStatus { get; set; }
-    public TimeOnly PollStatusInterval { get; set; }
-    #endregion
 
-    #region SMS
     public bool PollSms { get; set; }
-    public TimeOnly PollSmsInterval { get; set; }
 
     public bool PollIncomingSms { get; set; }
     public bool PollIncomingSmsThenSetAsRead { get; set; }
@@ -31,7 +24,6 @@ public record ModemSettings
 
     public bool PollDraftSms { get; set; }
     public bool PollDraftSmsThenDelete { get; set; }
-    #endregion
 }
 
 public class ModemSettingsEntityTypeConfiguration : IEntityTypeConfiguration<ModemSettings>
@@ -46,25 +38,16 @@ public class ModemSettingsEntityTypeConfiguration : IEntityTypeConfiguration<Mod
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .Property(s => s.ModemTokenLifeTime)
+            .Property(s => s.TokenLifeTime)
             .HasDefaultValue(TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(3)));
-
 
         builder
             .Property(s => s.PollStatus)
             .HasDefaultValue(true);
 
         builder
-            .Property(s => s.PollStatusInterval)
-            .HasDefaultValue(TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(5)));
-
-        builder
             .Property(s => s.PollSms)
             .HasDefaultValue(true);
-
-        builder
-            .Property(s => s.PollSmsInterval)
-            .HasDefaultValue(TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(1)));
 
         builder
             .Property(s => s.PollIncomingSms)

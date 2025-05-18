@@ -23,7 +23,6 @@ using Huawei.E3372.Manager.Logic.Modems.Models.Config.PcAssistant;
 using Huawei.E3372.Manager.Logic.Modems.Models.Config.Ussd;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 
 namespace Huawei.E3372.Manager.Logic.Tests.Modems;
 
@@ -32,7 +31,7 @@ public sealed class ModemClientTests
 {
 
     internal static readonly IMemoryCache MemoryCache = TestDependencyFactory.CreateMemoryCache();
-    internal static readonly ModemClient ModemClient = new ModemClient(MemoryCache, Options.Create(TestConstants.ApplicationSettings), NullLogger<ModemClient>.Instance);
+    internal static readonly ModemClient ModemClient = new ModemClient(MemoryCache, NullLogger<ModemClient>.Instance);
 
     [DataRow(typeof(BasicInformationResponse))]
     [DataRow(typeof(DeviceFeatureSwitchResponse))]
