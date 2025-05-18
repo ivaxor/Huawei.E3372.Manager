@@ -78,12 +78,12 @@
 <ModalComponent @ref="Modal" Title="Discover new modem" OnClose="OnClose">
     <EditForm EditContext="EditContext" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator />
-        <ValidationSummary />
 
         <div class="mb-3 row">
-            <label for="uri" class="col-sm-4 col-form-label">Uri</label>
+            <label for="@nameof(Model.RawUri)" class="col-sm-4 col-form-label">Uri</label>
             <div class="col-sm-8">
-                <InputText @bind-Value="Model.RawUri" placeholder="http://192.168.1.1" id="uri" class="form-control" />
+                <InputText id="@nameof(Model.RawUri)" @bind-Value="Model.RawUri" placeholder="http://192.168.1.1" class="form-control" />
+                <ValidationMessage For="() => Model.RawUri" />
             </div>
         </div>
 

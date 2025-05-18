@@ -1,0 +1,133 @@
+﻿@rendermode InteractiveServer
+
+@{
+    var labelClass = "col-sm-12 col-md-3 col-lg-2";
+    var labelIconStyle = "font-size: 0.75rem;";
+    var inputClass = "col-sm-12 col-md-9 col-lg-10";
+}
+
+<div class="card w-100 mb-3">
+    <div class="card-body">
+        <h5 class="card-title">Status</h5>
+
+        <EditForm EditContext="EditContext">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3 row">
+                <label for="@nameof(ModemStatusThic.OperatorName)" class="@labelClass col-form-label">Operator Name</label>
+                <div class="@inputClass">
+                    <input id="@nameof(ModemStatusThic.OperatorName)" type="text" readonly class="form-control-plaintext" value="@Model.OperatorName"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="@nameof(ModemStatusThic.OperatorNumber)" class="@labelClass col-form-label">Operator Number</label>
+                <div class="@inputClass">
+                    <input id="@nameof(ModemStatusThic.OperatorNumber)" type="text" readonly class="form-control-plaintext" value="@Model.OperatorNumber"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="@nameof(ModemStatusThic.ICCID)" class="@labelClass col-form-label">
+                    ICCID
+                    <i class="bi bi-info-circle" title="Integrated Circuit Card Identifier" style="@labelIconStyle"></i>
+                </label>
+                <div class="@inputClass">
+                    <input id="@nameof(ModemStatusThic.ICCID)" type="text" readonly class="form-control-plaintext" value="@Model.ICCID" />
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="@nameof(ModemStatusThic.IMSI)" class="@labelClass col-form-label">
+                    IMSI
+                    <i class="bi bi-info-circle" title="International Mobile Subscriber Identity" style="@labelIconStyle"></i>
+                </label>
+                <div class="@inputClass">
+                    <input id="@nameof(ModemStatusThic.IMSI)" type="text" readonly class="form-control-plaintext" value="@Model.IMSI" />
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="@nameof(ModemStatusThic.MCC)" class="@labelClass col-form-label">
+                    MCC
+                    <i class="bi bi-info-circle" title="Mobile Country Code" style="@labelIconStyle"></i>
+                </label>
+                <div class="@inputClass">
+                    <input id="@nameof(ModemStatusThic.MCC)" type="text" readonly class="form-control-plaintext" value="@Model.MCC" />
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="@nameof(TimeZoneInfo.DaylightName)" class="@labelClass col-form-label">Time Zone</label>
+                <div class="@inputClass">
+                    <input id="@nameof(TimeZoneInfo.DaylightName)" type="text" readonly class="form-control-plaintext" value="@Model.TimeZoneInfo?.Id" />
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="@nameof(ModemStatusThic.PhoneNumber)" class="@labelClass col-form-label">Phone Number</label>
+                <div class="@inputClass">
+                    <InputText id="@nameof(ModemStatusThic.PhoneNumber)" class="form-control" @bind-Value="Model.PhoneNumber" placeholder="+1234567890" />
+                    <ValidationMessage For="() => Model.PhoneNumber" />
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="@nameof(ModemStatusThic.CID)" class="@labelClass col-form-label">
+                    CID
+                    <i class="bi bi-info-circle" title="Cell Identifier" style="@labelIconStyle"></i>
+                </label>
+                <div class="@inputClass">
+                    <input id="@nameof(ModemStatusThic.CID)" type="text" readonly class="form-control-plaintext" value="@Model.CID"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="@nameof(ModemStatusThic.RSRP)" class="@labelClass col-form-label">
+                    RSRP
+                    <i class="bi bi-info-circle" title="Reference Signal Received Power" style="@labelIconStyle"></i>
+                </label>
+                <div class="@inputClass">
+                    <input id="@nameof(ModemStatusThic.RSRP)" type="text" class="form-control-plaintext" value="@Model.RSRP"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="@nameof(ModemStatusThic.RSRQ)" class="@labelClass col-form-label">
+                    RSRQ
+                    <i class="bi bi-info-circle" title="Reference Signal Received Quality" style="@labelIconStyle"></i>
+                </label>
+                <div class="@inputClass">
+                    <input id="@nameof(ModemStatusThic.RSRQ)" type="text" class="form-control-plaintext" value="@Model.RSRQ"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="@nameof(ModemStatusThic.RSSI)" class="@labelClass col-form-label">
+                    RSSI
+                    <i class="bi bi-info-circle" title="Received Signal Strength Indicator" style="@labelIconStyle"></i>
+                </label>
+                <div class="@inputClass">
+                    <input id="@nameof(ModemStatusThic.RSSI)" type="text" class="form-control-plaintext" value="@Model.RSSI"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="@nameof(ModemStatusThic.SINR)" class="@labelClass col-form-label">
+                    SINR
+                    <i class="bi bi-info-circle" title="Signal-to-Interference-plus-Noise Ratio" style="@labelIconStyle"></i>
+                </label>
+                <div class="@inputClass">
+                    <input id="@nameof(ModemStatusThic.SINR)" type="text" class="form-control-plaintext" value="@Model.SINR"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <label for="@nameof(ModemStatusThic.LastUpdatedAt)" class="@labelClass col-form-label">Last updated at (UTC)</label>
+                <div class="@inputClass">
+                    <input id="@nameof(ModemStatusThic.LastUpdatedAt)" type="text" class="form-control-plaintext" value="@Model.LastUpdatedAt"/>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>

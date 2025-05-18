@@ -146,35 +146,37 @@
 <ModalComponent @ref="Modal" Title="Send SMS" OnClose="OnClose">
     <EditForm EditContext="EditContext" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator />
-        <ValidationSummary />
 
         <div class="mb-3 row">
-            <label for="from" class="col-sm-2 col-form-label">From</label>
+            <label for="@nameof(SendSmsModel.FromModemId)" class="col-sm-2 col-form-label">From</label>
             <div class="col-sm-10">
-                <InputSelect @bind-Value="Model.FromModemId" id="from" class="form-select">
+                <InputSelect id="@nameof(SendSmsModel.FromModemId)" @bind-Value="Model.FromModemId" class="form-select">
                     @foreach (var kvp in ModemById ?? Enumerable.Empty<KeyValuePair<Guid, Modem>>())
                     {
                         var isDisabled = string.IsNullOrEmpty(kvp.Value.Status!.IMSI);
                         var text = string.IsNullOrEmpty(kvp.Value.Status!.PhoneNumber) ? kvp.Value.Status!.IMSI : kvp.Value.Status!.PhoneNumber;
                         var value = kvp.Key.ToString();
 
-                        <option value="@value" disabled="@isDisabled">@text</option>
+                        <option disabled="@isDisabled" value="@value">@text</option>
                     }
                 </InputSelect>
+                <ValidationMessage For="() => Model.FromModemId" />
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label for="to" class="col-sm-2 col-form-label">To</label>
+            <label for="@nameof(SendSmsModel.ToPhoneNumbers)" class="col-sm-2 col-form-label">To</label>
             <div class="col-sm-10">
-                <InputText @bind-Value="Model.ToPhoneNumbers" placeholder="+1234567890,+9876543210" id="to" class="form-control" />
+                <InputText id="@nameof(SendSmsModel.ToPhoneNumbers)" @bind-Value="Model.ToPhoneNumbers" placeholder="+1234567890,+9876543210" class="form-control" />
+                <ValidationMessage For="() => Model.ToPhoneNumbers" />
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label for="content" class="col-sm-2 col-form-label">Content</label>
+            <label for="@nameof(SendSmsModel.Content)" class="col-sm-2 col-form-label">Content</label>
             <div class="col-sm-10">
-                <InputTextArea @bind-Value="Model.Content" placeholder="Lorem ipsum dolor sit amet." id="content" class="form-control"></InputTextArea>
+                <InputTextArea id="@nameof(SendSmsModel.Content)" @bind-Value="Model.Content" placeholder="Lorem ipsum dolor sit amet." class="form-control" />
+                <ValidationMessage For="() => Model.Content" />
             </div>
         </div>
 

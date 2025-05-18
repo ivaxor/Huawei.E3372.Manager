@@ -21,7 +21,7 @@ public record ModemStatus
     public string? OperatorNumber { get; set; }
     public string? PhoneNumber { get; set; }
 
-    public int? CellId { get; set; }
+    public int? CID { get; set; }
     public string? RSRQ { get; set; }
     public string? RSRP { get; set; }
     public string? RSSI { get; set; }
@@ -47,7 +47,7 @@ public record ModemStatus
         OperatorName = HttpUtility.HtmlDecode(operatorInfo.FullName);
         OperatorNumber = operatorInfo.Numeric;
 
-        CellId = signal.CellId;
+        CID = signal.CellId;
         RSRQ = HttpUtility.HtmlDecode(signal.Rsrq);
         RSRP = HttpUtility.HtmlDecode(signal.Rsrp);
         RSSI = HttpUtility.HtmlDecode(signal.Rssi);
@@ -70,7 +70,7 @@ public record ModemStatus
         if (OperatorName == status.OperatorName) return false;
         if (OperatorNumber == status.OperatorNumber) return false;
 
-        if (CellId == status.CellId) return false;
+        if (CID == status.CID) return false;
         if (RSRQ == status.RSRQ) return false;
         if (RSRP == status.RSRP) return false;
         if (RSSI == status.RSSI) return false;
@@ -114,7 +114,7 @@ public class ModemStatusEntityTypeConfiguration : IEntityTypeConfiguration<Modem
             .IsRequired(false);
 
         builder
-            .Property(s => s.CellId)
+            .Property(s => s.CID)
             .IsRequired(false);
 
         builder

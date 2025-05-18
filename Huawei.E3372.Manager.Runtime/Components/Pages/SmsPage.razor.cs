@@ -1,11 +1,11 @@
 using Huawei.E3372.Manager.Logic;
+using Huawei.E3372.Manager.Logic.Constants;
 using Huawei.E3372.Manager.Logic.Entities;
 using Huawei.E3372.Manager.Logic.Modems;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 
 namespace Huawei.E3372.Manager.Runtime.Components.Pages;
 
@@ -42,7 +42,7 @@ public partial class SmsPage
         var phoneNumbers = Model.ToPhoneNumbers.Split(",");
         foreach (var phoneNumber in phoneNumbers)
         {
-            if (!SendSmsModel.ToPhoneNumberRegex.IsMatch(phoneNumber))
+            if (!RegexConstants.PhoneNumberRegex.IsMatch(phoneNumber))
                 ValidationMessageStore.Add(() => Model.ToPhoneNumbers, $"Invalid phone number: {phoneNumber}.");
         }
     }
@@ -91,8 +91,6 @@ public partial class SmsPage
 
     public record SendSmsModel
     {
-        internal static readonly Regex ToPhoneNumberRegex = new Regex("\\+\\d{8,15}");
-
         [Required(ErrorMessage = "From field is required.")]
         public string FromModemId { get; set; } = string.Empty;
 
