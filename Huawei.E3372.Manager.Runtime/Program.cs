@@ -53,6 +53,7 @@ builder.Services.AddHostedService<StatusPollBackgroundService>();
 
 builder.Services.AddSingleton<IModemClient, ModemClient>();
 builder.Services.AddScoped<IDiscoveryService, DiscoveryService>();
+builder.Services.AddScoped<IModemService, ModemService>();
 builder.Services.AddScoped<IStatusService, StatusService>();
 builder.Services.AddScoped<ISmsService, SmsService>();
 

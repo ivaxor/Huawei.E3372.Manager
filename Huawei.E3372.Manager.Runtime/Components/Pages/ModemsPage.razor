@@ -14,7 +14,7 @@
     </div>
 
     <div class="col text-end">
-        <button @onclick="() => Modal.Open()" class="btn btn-primary">
+        <button @onclick="() => Modal.Open()" class="btn btn-sm btn-primary">
             <i class="bi bi-plugin"></i>
             Discover new modem
         </button>
@@ -32,12 +32,14 @@
                 <th scope="col">Operator Name</th>
                 <th scope="col">IMSI</th>
                 <th scope="col">Phone Number</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
-            @if (ModemsInfo == null)
+            @if (Modems == null)
             {
                 <tr class="placeholder-glow">
+                    <td><span class="placeholder col-12"></span></td>
                     <td><span class="placeholder col-12"></span></td>
                     <td><span class="placeholder col-12"></span></td>
                     <td><span class="placeholder col-12"></span></td>
@@ -48,7 +50,7 @@
                 </tr>
             }
 
-            @foreach (var modem in ModemsInfo ?? Enumerable.Empty<Modem>())
+            @foreach (var modem in Modems ?? Enumerable.Empty<Modem>())
             {
                 <tr>
                     <td>
@@ -62,6 +64,11 @@
                     <td>@modem.Status?.OperatorName</td>
                     <td>@modem.Status?.IMSI</td>
                     <td>@modem.Status?.PhoneNumber</td>
+                    <td>
+                        <NavLink href="@($"/modems/{modem.Id.ToString()}")" class="btn-info">
+                            <i class="bi bi-gear"></i>
+                        </NavLink>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -77,13 +84,6 @@
             <label for="uri" class="col-sm-4 col-form-label">Uri</label>
             <div class="col-sm-8">
                 <InputText @bind-Value="Model.RawUri" placeholder="http://192.168.1.1" id="uri" class="form-control" />
-            </div>
-        </div>
-
-        <div class="mb-3 row">
-            <label for="phonenumber" class="col-sm-4 col-form-label">Phone number</label>
-            <div class="col-sm-8">
-                <InputText @bind-Value="Model.PhoneNumber" placeholder="+1234567890" id="phonenumber" class="form-control" />
             </div>
         </div>
 

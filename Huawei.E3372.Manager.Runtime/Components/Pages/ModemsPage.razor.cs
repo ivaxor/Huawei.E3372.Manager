@@ -5,16 +5,15 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 
 namespace Huawei.E3372.Manager.Runtime.Components.Pages;
 
-public partial class Modems
+public partial class ModemsPage
 {
     [Inject] protected IDiscoveryService DiscoveryService { get; set; }
     [Inject] protected ApplicationDbContext DbContext { get; set; }
 
-    protected Modem[] ModemsInfo { get; set; }
+    protected Modem[]? Modems { get; set; }
 
     protected DiscoveryModel Model { get; set; } = new DiscoveryModel();
     protected ModalComponent Modal { get; set; }
@@ -28,7 +27,7 @@ public partial class Modems
         EditContext.OnValidationRequested += OnValidationRequested!;
         ValidationMessageStore = new ValidationMessageStore(EditContext);
 
-        ModemsInfo = await DbContext.Modems
+        Modems = await DbContext.Modems
             .OrderByDescending(m => m.CreatedAt)
             .Include(m => m.Status)
             .ToArrayAsync();
@@ -42,9 +41,6 @@ public partial class Modems
 
         if (!Uri.TryCreate(Model.RawUri, UriKind.Absolute, out var uri))
             ValidationMessageStore.Add(() => Model.RawUri, "Invalid URI. Only absolute URI is accepted.");
-
-        if (!string.IsNullOrEmpty(Model.PhoneNumber) && !DiscoveryModel.PhoneNumberRegex.IsMatch(Model.PhoneNumber))
-            ValidationMessageStore.Add(() => Model.PhoneNumber, "Invalid phone number.");
     }
 
     protected void OnClose()
@@ -62,10 +58,10 @@ public partial class Modems
         IsSubmitted = true;
 
         var uri = new Uri(Model.RawUri, UriKind.Absolute);
-        var result = await DiscoveryService.DiscoverAsync(uri, Model.PhoneNumber);
+        var result = await DiscoveryService.DiscoverAsync(uri);
         if (result.IsSuccess)
         {
-            ModemsInfo = await DbContext.Modems
+            Modems = await DbContext.Modems
                 .OrderByDescending(m => m.CreatedAt)
                 .Include(m => m.Status)
                 .ToArrayAsync();
@@ -90,11 +86,7 @@ public partial class Modems
 
     public record DiscoveryModel
     {
-        internal static readonly Regex PhoneNumberRegex = new Regex("\\+\\d{8,15}");
-
         [Required(ErrorMessage = "URI field is required.")]
         public string RawUri { get; set; } = string.Empty;
-
-        public string PhoneNumber { get; set; } = string.Empty;
     }
 }

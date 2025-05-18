@@ -9,12 +9,12 @@ using System.Text.RegularExpressions;
 
 namespace Huawei.E3372.Manager.Runtime.Components.Pages;
 
-public partial class SMS
+public partial class SmsPage
 {
     [Inject] protected ApplicationDbContext DbContext { get; set; }
     [Inject] protected ISmsService SmsService { get; set; }
 
-    protected ModemSms[] ModemSms { get; set; }
+    protected ModemSms[] Sms { get; set; }
     protected Dictionary<Guid, Modem> ModemById { get; set; }
 
     protected SendSmsModel Model { get; set; } = new SendSmsModel();
@@ -29,7 +29,7 @@ public partial class SMS
         EditContext.OnValidationRequested += OnValidationRequested!;
         ValidationMessageStore = new ValidationMessageStore(EditContext);
 
-        ModemSms = await DbContext.ModemSms.OrderByDescending(m => m.CreatedAt).ToArrayAsync();
+        Sms = await DbContext.ModemSms.OrderByDescending(m => m.CreatedAt).ToArrayAsync();
         ModemById = await DbContext.Modems.Include(m => m.Status).ToDictionaryAsync(m => m.Id, m => m);
 
         await base.OnInitializedAsync();

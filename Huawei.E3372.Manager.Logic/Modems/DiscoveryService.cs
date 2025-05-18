@@ -13,7 +13,6 @@ public class DiscoveryService(
 {
     public async Task<ServiceDataResult<Modem>> DiscoverAsync(
         Uri uri,
-        string phoneNumber,
         CancellationToken cancellationToken = default)
     {
         var modem = await dbContext.Modems.AsNoTracking().SingleOrDefaultAsync(m => m.Uri == uri, cancellationToken);
@@ -37,11 +36,26 @@ public class DiscoveryService(
         {
             Id = Guid.NewGuid(),
         };
+        var modemSettings = new ModemSettings()
+        {
+            ModemId = modem.Id,
+            ModemTokenLifeTime = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(3)),
+
+            PollStatus = true,
+            PollStatusInterval = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(5)),
+
+            PollSms = true,
+            PollSmsInterval = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(1)),
+            PollIncomingSms = true,
+            PollOutgoingSms = true,
+            PollDraftSms = true,
+        };
+
         await dbContext.AddAsync(modem, cancellationToken);
+        await dbContext.AddAsync(modemSettings, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         await statusService.PollAsync(modem, cancellationToken);
-        await statusService.SetPhoneNumberAsync(modem, phoneNumber, cancellationToken);
 
         return ServiceDataResult<Modem>.Success(modem);
     }
@@ -51,6 +65,5 @@ public interface IDiscoveryService
 {
     public Task<ServiceDataResult<Modem>> DiscoverAsync(
         Uri uri,
-        string phoneNumber,
         CancellationToken cancellationToken = default);
 }

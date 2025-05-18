@@ -1,0 +1,49 @@
+﻿@page "/modems/{id:guid}"
+@rendermode InteractiveServer
+
+<PageTitle>Modem Details</PageTitle>
+
+<div class="row mb-3">
+    <div class="col">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><NavLink href="/">Home</NavLink></li>
+                <li class="breadcrumb-item"><NavLink href="/modems">Modems</NavLink></li>
+                <li class="breadcrumb-item active" aria-current="page">Modem details</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="col text-end">
+        <button @onclick="() => Modal.Open()" class="btn btn-sm btn-danger">
+            <i class="bi bi-trash"></i>
+            Delete
+        </button>
+    </div>
+</div>
+
+<ModemSettingsComponent Modem="Modem" OnChanged="OnSettingsFieldChanged" />
+
+<ModalComponent @ref="Modal" Title="Delete modem" OnClose="OnClose">
+    <EditForm EditContext="EditContext" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="d-grid gap-2">
+            <button type="submit" disabled="@IsSubmitted" class="btn btn-primary">
+                @if (IsSubmitted)
+                {
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <span>Deleting</span>
+                }
+                else
+                {
+                    <i class="bi bi-search"></i>
+                    <span>Delete</span>
+                }
+            </button>
+        </div>
+    </EditForm>
+</ModalComponent>

@@ -14,7 +14,7 @@
     </div>
 
     <div class="col text-end">
-        <button @onclick="() => Modal.Open()" class="btn btn-primary">
+        <button @onclick="() => Modal.Open()" class="btn btn-sm btn-primary">
             <i class="bi bi-send"></i>
             Send SMS
         </button>
@@ -34,7 +34,7 @@
             </tr>
         </thead>
         <tbody>
-            @if (ModemSms == null || ModemById == null)
+            @if (Sms == null || ModemById == null)
             {
                 <tr class="placeholder-glow">
                     <td><span class="placeholder col-12"></span></td>
@@ -46,7 +46,7 @@
                 </tr>
             }
 
-            @foreach (var sms in ModemSms ?? Enumerable.Empty<ModemSms>())
+            @foreach (var sms in Sms ?? Enumerable.Empty<ModemSms>())
             {
                 var trClass = sms.Status switch
                 {

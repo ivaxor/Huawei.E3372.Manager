@@ -1,0 +1,85 @@
+﻿@rendermode InteractiveServer
+
+<div class="card w-100">
+    <div class="card-body">
+        <h5 class="card-title">Settings</h5>
+
+        <EditForm EditContext="EditContext">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            @{
+                var labelClass = "col-sm-12 col-md-3 col-lg-2";
+                var inputClass = "col-sm-12 col-md-9 col-lg-10";
+            }
+
+            <div class="mb-3 row">
+                <label for="@nameof(Model.ModemTokenLifeTime)" class="@labelClass col-form-label">Token lifetime</label>
+                <div class="@inputClass">
+                    <input id="@nameof(Model.ModemTokenLifeTime)" type="time" @bind="Model.ModemTokenLifeTime" class="form-control" />
+                </div>
+            </div>
+            <hr />
+
+            <div class="form-check form-switch">
+                <InputCheckbox id="@nameof(Model.PollStatus)" @bind-Value="Model.PollStatus" class="form-check-input" />
+                <label for="@nameof(Model.PollStatus)" class="form-check-label">Poll Status</label>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="@nameof(Model.PollStatusInterval)" class="@labelClass col-form-label">Poll Status interval</label>
+                <div class="@inputClass">
+                    <input id="@nameof(Model.PollStatusInterval)" type="time" @bind="Model.PollStatusInterval" class="form-control" />
+                </div>
+            </div>
+            <hr />
+
+            <div class="form-check form-switch">
+                <InputCheckbox id="@nameof(Model.PollSms)" @bind-Value="Model.PollSms" class="form-check-input" />
+                <label for="@nameof(Model.PollSms)" class="form-check-label">Poll SMS</label>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="@nameof(Model.PollSmsInterval)" class="@labelClass col-form-label">Poll SMS interval</label>
+                <div class="@inputClass">
+                    <input id="@nameof(Model.PollSmsInterval)" type="time" @bind="Model.PollSmsInterval" class="form-control" />
+                </div>
+            </div>
+
+            <div class="ms-3">
+                <div class="form-check form-switch">
+                    <InputCheckbox id="@nameof(Model.PollIncomingSms)" @bind-Value="Model.PollIncomingSms" class="form-check-input" />
+                    <label for="@nameof(Model.PollIncomingSms)" class="form-check-label">Poll incoming SMS</label>
+                </div>
+                <div class="form-check form-switch">
+                    <InputCheckbox id="@nameof(Model.PollIncomingSmsThenSetAsRead)" @bind-Value="Model.PollIncomingSmsThenSetAsRead" class="form-check-input" />
+                    <label for="@nameof(Model.PollIncomingSmsThenSetAsRead)" class="form-check-label">Set as read polled incoming SMS</label>
+                </div>
+                <div class="form-check form-switch">
+                    <InputCheckbox id="@nameof(Model.PollIncomingSmsThenDelete)" @bind-Value="Model.PollIncomingSmsThenDelete" class="form-check-input" />
+                    <label for="@nameof(Model.PollIncomingSmsThenDelete)" class="form-check-label">Delete polled incoming SMS</label>
+                </div>
+                <hr />
+
+                <div class="form-check form-switch">
+                    <InputCheckbox id="@nameof(Model.PollOutgoingSms)" @bind-Value="Model.PollOutgoingSms" class="form-check-input" />
+                    <label for="@nameof(Model.PollOutgoingSms)" class="form-check-label">Poll outgoing SMS</label>
+                </div>
+                <div class="form-check form-switch">
+                    <InputCheckbox id="@nameof(Model.PollOutgoingSmsThenDelete)" @bind-Value="Model.PollOutgoingSmsThenDelete" class="form-check-input" />
+                    <label for="@nameof(Model.PollOutgoingSmsThenDelete)" class="form-check-label">Delete polled outgoing SMS</label>
+                </div>
+                <hr />
+
+                <div class="form-check form-switch">
+                    <InputCheckbox id="@nameof(Model.PollDraftSms)" @bind-Value="Model.PollDraftSms" class="form-check-input" />
+                    <label for="@nameof(Model.PollDraftSms)" class="form-check-label">Poll draft/failed SMS</label>
+                </div>
+                <div class="form-check form-switch">
+                    <InputCheckbox id="@nameof(Model.PollDraftSmsThenDelete)" @bind-Value="Model.PollDraftSmsThenDelete" class="form-check-input" />
+                    <label for="@nameof(Model.PollDraftSmsThenDelete)" class="form-check-label">Delete polled draft/failed SMS</label>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
