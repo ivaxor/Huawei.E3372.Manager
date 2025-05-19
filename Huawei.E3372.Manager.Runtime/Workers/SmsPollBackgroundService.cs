@@ -75,9 +75,16 @@ public sealed class SmsPollBackgroundService(
             if (!incomingResult.IsSuccess)
                 logger.LogError("Failed to poll incoming SMS for {ModemUri}. Message: {ErrorMessage}.", modem.Uri, incomingResult.ErrorMessage);
         }
+        catch (TaskCanceledException ex)
+        {
+            if (ex.Message.Contains("The request was canceled due to the configured HttpClient.Timeout"))
+                logger.LogWarning($"{nameof(SmsPollBackgroundService)} failed to poll incoming SMS for {{ModemUri}} because of HTTP timeout.", modem.Uri);
+
+            throw;
+        }
         catch (Exception ex)
         {
-            logger.LogError(ex, $"{nameof(SmsPollBackgroundService)} failed for {{ModemUri}}.", modem.Uri);
+            logger.LogError(ex, $"{nameof(SmsPollBackgroundService)} failed to poll incoming SMS for {{ModemUri}}.", modem.Uri);
         }
     }
 
@@ -92,9 +99,16 @@ public sealed class SmsPollBackgroundService(
             if (!outgoingResult.IsSuccess)
                 logger.LogError("Failed to poll outgoing SMS for {ModemUri}. Message: {ErrorMessage}.", modem.Uri, outgoingResult.ErrorMessage);
         }
+        catch (TaskCanceledException ex)
+        {
+            if (ex.Message.Contains("The request was canceled due to the configured HttpClient.Timeout"))
+                logger.LogWarning($"{nameof(SmsPollBackgroundService)} failed to poll outgoing SMS for {{ModemUri}} because of HTTP timeout.", modem.Uri);
+
+            throw;
+        }
         catch (Exception ex)
         {
-            logger.LogError(ex, $"{nameof(SmsPollBackgroundService)} failed for {{ModemUri}}.", modem.Uri);
+            logger.LogError(ex, $"{nameof(SmsPollBackgroundService)} failed to poll outgoing SMS for {{ModemUri}}.", modem.Uri);
         }
     }
 
@@ -109,9 +123,16 @@ public sealed class SmsPollBackgroundService(
             if (!draftResult.IsSuccess)
                 logger.LogError("Failed to poll draft SMS for {ModemUri}. Message: {ErrorMessage}.", modem.Uri, draftResult.ErrorMessage);
         }
+        catch (TaskCanceledException ex)
+        {
+            if (ex.Message.Contains("The request was canceled due to the configured HttpClient.Timeout"))
+                logger.LogWarning($"{nameof(SmsPollBackgroundService)} failed to poll draft SMS for {{ModemUri}} because of HTTP timeout.", modem.Uri);
+
+            throw;
+        }
         catch (Exception ex)
         {
-            logger.LogError(ex, $"{nameof(SmsPollBackgroundService)} failed for {{ModemUri}}.", modem.Uri);
+            logger.LogError(ex, $"{nameof(SmsPollBackgroundService)} failed to poll draft SMS for {{ModemUri}}.", modem.Uri);
         }
     }
 }
