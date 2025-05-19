@@ -56,7 +56,7 @@ public class DiscoveryService(
 
             PollStatus = true,
 
-            PollSms = true,
+            PollSms = false,
             PollIncomingSms = true,
             PollOutgoingSms = true,
             PollDraftSms = true,
