@@ -42,7 +42,7 @@ public partial class ModemPage
         switch (obj)
         {
             case ModemStatus modemStatus:
-                await StatusService.SetPhoneNumberAsync(Modem!, modemStatus.PhoneNumber!);
+                await StatusService.SetPhoneNumberAsync(Modem!, modemStatus.PhoneNumber);
                 return;
 
             case ModemSettings modemSettings:

@@ -67,7 +67,7 @@ public class ModemClient(
         var request = new HttpRequestMessage(HttpMethod.Post, relativeUri);
 
         var xmlRequestSerializer = new XmlSerializer(model.GetType());
-        using var writer = new StringWriter();
+        await using var writer = new StringWriter();
         xmlRequestSerializer.Serialize(writer, model);
         request.Content = new StringContent(writer.ToString(), Encoding.UTF8, MediaTypeNames.Application.Xml);
 

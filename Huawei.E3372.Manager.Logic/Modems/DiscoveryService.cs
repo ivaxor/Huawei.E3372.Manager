@@ -19,6 +19,8 @@ public class DiscoveryService(
         if (modem != null)
             return ServiceDataResult<Modem>.Failure(ServiceResultErrorCode.Duplicate, data: modem);
 
+        await using var transaction = await dbContext.Database.BeginTransactionAsync();
+
         modem = new Modem()
         {
             Id = Guid.NewGuid(),
@@ -67,6 +69,8 @@ public class DiscoveryService(
         await dbContext.SaveChangesAsync(cancellationToken);
 
         await statusService.PollAsync(modem, cancellationToken);
+
+        await transaction.CommitAsync(cancellationToken);
 
         return ServiceDataResult<Modem>.Success(modem);
     }

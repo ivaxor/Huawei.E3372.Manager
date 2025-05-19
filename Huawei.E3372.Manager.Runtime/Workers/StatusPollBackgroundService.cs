@@ -38,7 +38,7 @@ public sealed class StatusPollBackgroundService(
         logger.LogInformation($"{nameof(StatusPollBackgroundService)} is working.");
 
         using var scope = serviceScopeFactory.CreateScope();
-        using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var statusService = scope.ServiceProvider.GetRequiredService<IStatusService>();
 
         var modems = await dbContext.Modems

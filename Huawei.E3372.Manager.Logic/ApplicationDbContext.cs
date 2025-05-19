@@ -8,7 +8,7 @@ public class ApplicationDbContext(
     DbContextOptions<ApplicationDbContext> options)
     : DbContext(options), IDataProtectionKeyContext
 {
-    public DbSet<Modem> Modems { get; set; }
+    public DbSet<Modem> Modems { get; set; } 
     public DbSet<ModemSms> ModemSms { get; set; }
     public DbSet<ModemStatus> ModemStatuses { get; set; }
 

@@ -210,7 +210,7 @@ public class SmsService(
         return ServiceDataResult<ModemSms[]>.Success([.. newSms, .. udpatedSms]);
     }
 
-    internal ModemSms MapToSms(Guid id, Modem modem, SmsListMessage smsMesssage)
+    internal static ModemSms MapToSms(Guid id, Modem modem, SmsListMessage smsMesssage)
     {
         var sms = new ModemSms()
         {

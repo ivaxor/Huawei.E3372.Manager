@@ -63,7 +63,7 @@ public class StatusService(
 
     public async Task<ServiceDataResult<ModemStatus>> SetPhoneNumberAsync(
         Modem modem,
-        string phoneNumber,
+        string? phoneNumber,
         CancellationToken cancellationToken = default)
     {
         var modemStatus = await dbContext.ModemStatuses.SingleOrDefaultAsync(s => s.ModemId == modem.Id, cancellationToken);
@@ -85,6 +85,6 @@ public interface IStatusService
 
     public Task<ServiceDataResult<ModemStatus>> SetPhoneNumberAsync(
         Modem modem,
-        string phoneNumber,
+        string? phoneNumber,
         CancellationToken cancellationToken = default);
 }

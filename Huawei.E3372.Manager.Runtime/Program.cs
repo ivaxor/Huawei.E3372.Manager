@@ -88,7 +88,7 @@ app
 
 app.MapHealthChecks("/healthz");
 
-using var dbContext = app.Services.GetService<IServiceScopeFactory>()!.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
+await using var dbContext = app.Services.GetService<IServiceScopeFactory>()!.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
 await dbContext.Database.EnsureCreatedAsync();
 
 app.Run();

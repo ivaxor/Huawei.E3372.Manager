@@ -38,7 +38,7 @@ public sealed class SmsPollBackgroundService(
         logger.LogInformation($"{nameof(SmsPollBackgroundService)} is working.");
 
         using var scope = serviceScopeFactory.CreateScope();
-        using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var smsService = scope.ServiceProvider.GetRequiredService<ISmsService>();
 
         var modems = await dbContext.Modems
