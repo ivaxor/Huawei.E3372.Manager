@@ -1,1 +1,1 @@
-# Huawei.E3372.Manager
+# Huawei E3372 Manager
