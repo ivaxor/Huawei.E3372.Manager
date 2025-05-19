@@ -12,7 +12,6 @@ public partial class ModemPage
     [Parameter] public Guid Id { get; set; }
 
     [Inject] protected IModemService ModemService { get; set; }
-    [Inject] protected IStatusService StatusService { get; set; }
     [Inject] protected ApplicationDbContext DbContext { get; set; }
 
     protected Modem? Modem { get; set; }
@@ -25,11 +24,10 @@ public partial class ModemPage
 
     protected override async Task OnInitializedAsync()
     {
-        EditContext = new EditContext(new { });
+        EditContext = new EditContext(Model);
         ValidationMessageStore = new ValidationMessageStore(EditContext);
 
         Modem = await DbContext.Modems
-            .AsNoTracking()
             .Include(m => m.Status)
             .Include(m => m.Settings)
             .SingleOrDefaultAsync(m => m.Id == Id);
@@ -42,17 +40,18 @@ public partial class ModemPage
         switch (obj)
         {
             case ModemStatus modemStatus:
-                await StatusService.SetPhoneNumberAsync(Modem!, modemStatus.PhoneNumber);
-                return;
+                Modem.Status = modemStatus;
+                break;
 
             case ModemSettings modemSettings:
-                DbContext.Update(modemSettings);
-                await DbContext.SaveChangesAsync();
-                return;
+                Modem.Settings = modemSettings;
+                break;
 
             default:
                 throw new NotImplementedException();
         }
+
+        await DbContext.SaveChangesAsync();
     }
 
     protected void OnClose()
