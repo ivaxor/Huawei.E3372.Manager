@@ -45,7 +45,7 @@ public sealed class SmsPollBackgroundService(
             .AsNoTracking()
             .Include(m => m.Status)
             .Include(m => m.Settings)
-            .Where(m => m.Settings.PollIncomingSms || m.Settings.PollOutgoingSms || m.Settings.PollDraftSms)
+            .Where(m => m.Settings.PollSms && (m.Settings.PollIncomingSms || m.Settings.PollOutgoingSms || m.Settings.PollDraftSms))
             .ToArrayAsync(cancellationToken);
 
         foreach (var modem in modems)
