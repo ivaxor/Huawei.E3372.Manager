@@ -2,7 +2,6 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
@@ -25,10 +24,7 @@ RUN dotnet publish "./Huawei.E3372.Manager.Runtime.csproj" -c $BUILD_CONFIGURATI
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
-USER root
 RUN mkdir -p /app/data
-RUN chown -R app:app /app/data
 WORKDIR /app
 COPY --from=publish /app/publish .
-USER $APP_UID
 ENTRYPOINT ["dotnet", "Huawei.E3372.Manager.Runtime.dll"]
