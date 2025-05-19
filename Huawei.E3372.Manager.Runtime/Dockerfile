@@ -26,8 +26,8 @@ RUN dotnet publish "./Huawei.E3372.Manager.Runtime.csproj" -c $BUILD_CONFIGURATI
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 USER root
-RUN mkdir -p /app/Data
-RUN chown -R app:app /app/Data
+RUN mkdir -p /app/data
+RUN chown -R app:app /app/data
 WORKDIR /app
 COPY --from=publish /app/publish .
 USER $APP_UID
