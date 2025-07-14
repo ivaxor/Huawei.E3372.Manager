@@ -16,8 +16,6 @@ public class SmsService(
     {
         var request = new SmsListRequest()
         {
-            PageIndex = 1,
-            ReadCount = 50,
             BoxType = 1,
             SortType = 0,
             Ascending = false,
@@ -38,8 +36,6 @@ public class SmsService(
     {
         var request = new SmsListRequest()
         {
-            PageIndex = 1,
-            ReadCount = 50,
             BoxType = 2,
             SortType = 0,
             Ascending = false,
@@ -60,8 +56,6 @@ public class SmsService(
     {
         var request = new SmsListRequest()
         {
-            PageIndex = 1,
-            ReadCount = 50,
             BoxType = 3,
             SortType = 0,
             Ascending = false,
@@ -152,17 +146,30 @@ public class SmsService(
         bool delete = false,
         CancellationToken cancellationToken = default)
     {
-        IEnumerable<SmsListMessage> smsFromModem;
+        var smsFromModem = new List<SmsListMessage>();
+        var smsBatch = Enumerable.Empty<SmsListMessage>();
+
+        request.PageIndex = 0;
+        request.ReadCount = 50;
 
         try
         {
-            var response = await modemClient.PostAsync<SmsListRequest, SmsListResponse>(modem, request, cancellationToken);
-            smsFromModem = response.Messages.Messages ?? Enumerable.Empty<SmsListMessage>();
+            do
+            {
+                request.PageIndex++;
+
+                var response = await modemClient.PostAsync<SmsListRequest, SmsListResponse>(modem, request, cancellationToken);
+                smsBatch = response.Messages.Messages ?? Enumerable.Empty<SmsListMessage>();
+                smsFromModem.AddRange(smsBatch);
+            } while (smsBatch.Count() == request.ReadCount);
         }
         catch (HttpRequestException ex)
         {
             return ServiceDataResult<ModemSms[]>.Failure(ServiceResultErrorCode.RemoteNotFound, ex.Message);
         }
+
+        if (smsFromModem.Count == 0)
+            return new ServiceDataResult<ModemSms[]>([]);
 
         var smsIndexes = smsFromModem.Select(sms => sms.Index).ToHashSet();
 
