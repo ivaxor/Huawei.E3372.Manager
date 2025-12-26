@@ -2,13 +2,25 @@
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Text.RegularExpressions;
+
 namespace Huawei.E3372.Manager.Logic;
 
-public class ApplicationDbContext(
-    DbContextOptions<ApplicationDbContext> options)
-    : DbContext(options), IDataProtectionKeyContext
+public partial class ApplicationDbContext : DbContext, IDataProtectionKeyContext
 {
-    public DbSet<Modem> Modems { get; set; } 
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
+        switch (Database.ProviderName)
+        {
+            case "Microsoft.EntityFrameworkCore.Sqlite":
+                var filePath = SqliteFilePathRegex().Match(Database.GetDbConnection().ConnectionString).Groups.Values.Last().Value;
+                var directoryPath = Path.GetDirectoryName(filePath);
+                Directory.CreateDirectory(directoryPath);
+                break;
+        }
+    }
+
+    public DbSet<Modem> Modems { get; set; }
     public DbSet<ModemSms> ModemSms { get; set; }
     public DbSet<ModemStatus> ModemStatuses { get; set; }
 
@@ -30,16 +42,15 @@ public class ApplicationDbContext(
             // This only supports millisecond precision, but should be sufficient for most use cases.
             case "Microsoft.EntityFrameworkCore.Sqlite":
                 foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-                {
                     foreach (var property in entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(DateTimeOffset) || p.PropertyType == typeof(DateTimeOffset?)))
-                    {
                         modelBuilder
                             .Entity(entityType.Name)
                             .Property(property.Name)
                             .HasConversion(new DateTimeOffsetToBinaryConverter());
-                    }
-                }
                 break;
         }
     }
+
+    [GeneratedRegex("(?:Data Source|DataSource|Filename)=(.*?)(?:;|$)")]
+    private static partial Regex SqliteFilePathRegex();
 }
