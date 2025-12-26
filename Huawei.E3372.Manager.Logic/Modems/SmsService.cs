@@ -146,8 +146,8 @@ public class SmsService(
         bool delete = false,
         CancellationToken cancellationToken = default)
     {
-        var smsFromModem = new List<SmsListMessage>();
-        var smsBatch = Enumerable.Empty<SmsListMessage>();
+        var rawSmsFromModem = new List<SmsListMessage>();
+        var rawSmsBatch = Enumerable.Empty<SmsListMessage>();
 
         request.PageIndex = 0;
         request.ReadCount = 50;
@@ -159,65 +159,67 @@ public class SmsService(
                 request.PageIndex++;
 
                 var response = await modemClient.PostAsync<SmsListRequest, SmsListResponse>(modem, request, cancellationToken);
-                smsBatch = response.Messages.Messages ?? Enumerable.Empty<SmsListMessage>();
-                smsFromModem.AddRange(smsBatch);
-            } while (smsBatch.Count() == request.ReadCount);
+                rawSmsBatch = response.Messages.Messages ?? Enumerable.Empty<SmsListMessage>();
+                rawSmsFromModem.AddRange(rawSmsBatch);
+            } while (rawSmsBatch.Count() == request.ReadCount);
         }
         catch (HttpRequestException ex)
         {
             return ServiceDataResult<ModemSms[]>.Failure(ServiceResultErrorCode.RemoteNotFound, ex.Message);
         }
 
-        if (smsFromModem.Count == 0)
+        if (rawSmsFromModem.Count == 0)
             return new ServiceDataResult<ModemSms[]>([]);
 
-        var smsIndexes = smsFromModem.Select(sms => sms.Index).ToHashSet();
+        var smsFromModem = rawSmsFromModem
+            .Select(sms => MapToSms(modem, sms))
+            .ToDictionary(sms => new Tuple<int, DateTimeOffset>(sms.Index, sms.CreatedAt));
 
-        var existingSmsInDbByIndex = dbContext.ModemSms.AsNoTracking()
-            .Where(s => s.ModemId == modem.Id)
-            .Where(s => smsIndexes.Contains(s.Index))
-            .ToDictionary(s => s.Index, s => s);
+        var existingSmsInDb = await dbContext.ModemSms.AsNoTracking()
+            .Where(sms => sms.ModemId == modem.Id)
+            //.Where(sms => smsFromModem.ContainsKey(new Tuple<int, DateTimeOffset>(sms.Index, sms.CreatedAt)))
+            .ToDictionaryAsync(sms => new Tuple<int, DateTimeOffset>(sms.Index, sms.CreatedAt), cancellationToken);
 
         var newSms = smsFromModem
-            .Where(s => !existingSmsInDbByIndex.ContainsKey(s.Index))
-            .Select(s => MapToSms(Guid.NewGuid(), modem, s))
+            .Where(kvp => !existingSmsInDb.ContainsKey(kvp.Key))
+            .Select(kvp => kvp.Value)
             .ToArray();
         await dbContext.ModemSms.AddRangeAsync(newSms, cancellationToken);
 
         var udpatedSms = smsFromModem
-            .Where(s => existingSmsInDbByIndex.ContainsKey(s.Index))
-            .Select(s => MapToSms(existingSmsInDbByIndex[s.Index].Id, modem, s))
-            .Where(s => s != existingSmsInDbByIndex[s.Index])
+            .Where(kvp => existingSmsInDb.ContainsKey(kvp.Key) && existingSmsInDb[kvp.Key] != kvp.Value)
+            .Select(kvp => kvp.Value)
             .ToArray();
         dbContext.ModemSms.UpdateRange(udpatedSms);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        if (request.BoxType == 1 && setAsRead && !delete)
-        {
-            var setReadRequests = smsFromModem
-                .Where(s => s.Status == 0)
-                .Select(s => new SetReadRequest() { Index = s.Index })
-                .ToArray();
-
-            foreach (var setReadRequest in setReadRequests)
-                await modemClient.PostAsync<SetReadRequest, SetReadResponse>(modem, setReadRequest, cancellationToken);
-        }
-
         if (delete)
         {
             var smsDeleteRequests = smsFromModem
-                .Select(s => new DeleteSmsRequest() { Index = s.Index })
+                .Select(kvp => new DeleteSmsRequest() { Index = kvp.Value.Index })
                 .ToArray();
 
+            // TODO: Add error handling & logging to mute exceptions
             foreach (var smsDeleteRequest in smsDeleteRequests)
                 await modemClient.PostAsync<DeleteSmsRequest, DeleteSmsResponse>(modem, smsDeleteRequest, cancellationToken);
+        }
+        else if (request.BoxType == 1 && setAsRead)
+        {
+            var setReadRequests = smsFromModem
+                .Where(kvp => kvp.Value.Status == ModemSmsStatus.Unread)
+                .Select(kvp => new SetReadRequest() { Index = kvp.Value.Index })
+                .ToArray();
+
+            // TODO: Add error handling & logging to mute exceptions
+            foreach (var setReadRequest in setReadRequests)
+                await modemClient.PostAsync<SetReadRequest, SetReadResponse>(modem, setReadRequest, cancellationToken);
         }
 
         return ServiceDataResult<ModemSms[]>.Success([.. newSms, .. udpatedSms]);
     }
 
-    internal static ModemSms MapToSms(Guid id, Modem modem, SmsListMessage smsMesssage)
+    internal static ModemSms MapToSms(Modem modem, SmsListMessage smsMesssage)
     {
         var sms = new ModemSms()
         {

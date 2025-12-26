@@ -29,8 +29,13 @@ public partial class SmsPage
         EditContext.OnValidationRequested += OnValidationRequested!;
         ValidationMessageStore = new ValidationMessageStore(EditContext);
 
-        Sms = await DbContext.ModemSms.OrderByDescending(m => m.CreatedAt).ToArrayAsync();
-        ModemById = await DbContext.Modems.Include(m => m.Status).ToDictionaryAsync(m => m.Id, m => m);
+        Sms = await DbContext.ModemSms
+            .OrderByDescending(m => m.CreatedAt)
+            .ToArrayAsync();
+
+        ModemById = await DbContext.Modems
+            .Include(m => m.Status)
+            .ToDictionaryAsync(m => m.Id, m => m);
 
         await base.OnInitializedAsync();
     }

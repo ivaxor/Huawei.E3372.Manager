@@ -65,7 +65,7 @@ public class ModemSmsEntityTypeConfiguration : IEntityTypeConfiguration<ModemSms
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasIndex(s => new { s.ModemId, s.Index })
+            .HasIndex(s => new { s.ModemId, s.Index, s.CreatedAt })
             .IsUnique();
 
         builder
