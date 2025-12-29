@@ -34,7 +34,13 @@ public class ModemClient(
 
         using var response = await httpClient.SendAsync(request, cancellationToken);
         response.EnsureSuccessStatusCode();
+
         var responseText = await response.Content.ReadAsStringAsync(cancellationToken);
+        if (string.IsNullOrWhiteSpace(responseText))
+        {
+            logger.LogError("Failed to deserialize data from modem. Response: {Response}.", responseText);
+            throw new HttpRequestException("Failed to deserialize data from modem.", null, response.StatusCode);
+        }
 
         using var reader = new StringReader(responseText);
         using var xmlReader = XmlReader.Create(reader);
